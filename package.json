@@ -1,0 +1,38 @@
+{
+  "name": "porza_mobile_app_proxy_backend",
+  "version": "1.0.0",
+  "description": "Proxy backend for Porza mobile app (TypeScript)",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "node --loader ts-node/esm src/server.ts",
+    "dev:watch": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/server.ts\""
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "morgan": "^1.10.1",
+    "node-fetch": "^3.3.2",
+    "p-queue": "^9.0.0",
+    "pg": "^8.11.1",
+    "puppeteer": "^23.0.0",
+    "qs": "^6.12.0",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.11.0",
+    "@types/pg": "^8.11.0",
+    "@types/qs": "^6.9.14",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

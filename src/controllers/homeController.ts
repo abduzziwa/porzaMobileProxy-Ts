@@ -17,7 +17,7 @@ function formatCategories(newApiData: Record<string, unknown>): unknown[] {
 
 export async function homeController(req: Request, res: Response): Promise<Response> {
   try {
-    const { uniqueDeviceId, cartId, phpsessid } = req.body as Record<string, string>;
+    const { uniqueDeviceId, cartId, phpsessid, user_lang } = req.body as Record<string, string>;
     if (!uniqueDeviceId || !cartId || !phpsessid) {
       return res.status(400).json({ error: "Missing required fields", required: ["uniqueDeviceId", "cartId", "phpsessid"] });
     }
@@ -40,7 +40,7 @@ export async function homeController(req: Request, res: Response): Promise<Respo
     }
 
     console.log("♻️ Cache expired or missing, calling new API...");
-    const rawData = await API("/categories/byParent", "POST", { parent_id: 811, language: "nl", page: 1, limit: 100 });
+    const rawData = await API("/categories/byParent", "POST", { parent_id: 811, language: user_lang, page: 1, limit: 100 });
     const catalogData = formatCategories(rawData);
     return res.status(200).json({ success: true, data: catalogData, cached: false });
   } catch (error) {

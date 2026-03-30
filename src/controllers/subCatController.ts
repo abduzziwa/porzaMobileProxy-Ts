@@ -19,11 +19,13 @@ function formatSubCategories(newApiData: Record<string, unknown>): unknown[] {
 
 export async function subCatController(req: Request, res: Response): Promise<Response> {
   try {
-    const { phpsessid, cartId, uniqueDeviceId, resource, language = "nl" } = req.body as Record<string, string>;
+    const { phpsessid, cartId, uniqueDeviceId, resource, user_lang } = req.body as Record<string, string>;
     if (!cartId) return res.status(400).json({ success: false, error: "Missing cartId" });
     if (!uniqueDeviceId) return res.status(400).json({ success: false, error: "Missing uniqueDeviceId" });
     if (!resource) return res.status(400).json({ success: false, error: "Missing resource" });
     if (!phpsessid) return res.status(400).json({ success: false, error: "Missing phpsessid" });
+
+    const language = user_lang;
 
     const { rows } = await pgClient.query(
       `SELECT variable_value, created_at FROM request_logs WHERE cat_id=$1 AND variable_name=$2 AND language=$3 ORDER BY created_at DESC LIMIT 1`,

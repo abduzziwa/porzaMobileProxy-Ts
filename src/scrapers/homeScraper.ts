@@ -623,7 +623,7 @@ export async function getVariable(
 
         const serialized = JSON.stringify(value);
         await pgClient.query(
-          `INSERT INTO request_logs (url, cat_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
+          `INSERT INTO request_logs (url, cart_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
           [url, cartId, variableName, serialized, serialized.slice(0, 2000)],
         );
 
@@ -689,7 +689,7 @@ export async function getCheckoutData(
     const checkout: unknown = JSON.parse(match[1]);
     const serialized = JSON.stringify(checkout);
     await pgClient.query(
-      `INSERT INTO request_logs (url, cat_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
+      `INSERT INTO request_logs (url, cart_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
       [url, cartId, "checkout", serialized, serialized.slice(0, 2000)],
     );
 
@@ -736,7 +736,7 @@ export async function getApi(
 
     const serialized = JSON.stringify(data);
     await pgClient.query(
-      `INSERT INTO request_logs (url, cat_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
+      `INSERT INTO request_logs (url, cart_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
       [url, cartId, resource, serialized, serialized.slice(0, 2000)],
     );
 
@@ -864,7 +864,7 @@ export async function carSearchBy(
     parsedResponse.uniqueDeviceId = uniqueDeviceId;
 
     await pgClient.query(
-      `INSERT INTO request_logs (url, cat_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
+      `INSERT INTO request_logs (url, cart_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
       [
         url,
         cartId,
@@ -922,7 +922,7 @@ export async function postApi(
 
     const serialized = JSON.stringify(responseData);
     await pgClient.query(
-      `INSERT INTO request_logs (url, cat_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
+      `INSERT INTO request_logs (url, cart_id, variable_name, variable_value, response_snippet, created_at) VALUES ($1, $2, $3, $4, $5, NOW())`,
       [url, cartId, "POST_DATA", serialized, serialized.slice(0, 2000)],
     );
 

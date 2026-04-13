@@ -39,7 +39,7 @@ export const decrementProduct = async (
   const { rows } = await pgClient.query<CartItem>(
     `
     UPDATE cart_items
-    SET deleted = TRUE, deleted_at = NOW()
+    SET deleted = TRUE, deleted_at = NOW(), quantity = 0
     WHERE cart_id = $1 AND product_id = $2 AND quantity <= 0
     RETURNING *
   `,
@@ -56,7 +56,7 @@ export const deleteProduct = async (
   const { rows } = await pgClient.query<CartItem>(
     `
     UPDATE cart_items
-    SET deleted = TRUE, deleted_at = NOW()
+    SET deleted = TRUE, deleted_at = NOW(), quantity = 0
     WHERE cart_id = $1 AND product_id = $2
     RETURNING *
   `,

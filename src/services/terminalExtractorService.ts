@@ -59,7 +59,7 @@ export async function getVariable(
   if (!value) throw new Error(`Variable "${variableName}" not found on page`);
 
   await pgClient.query(
-    "INSERT INTO request_logs (url, cat_id, variable_name, variable_value, response_snippet) VALUES ($1, $2, $3, $4, $5)",
+    "INSERT INTO request_logs (url, cart_id, variable_name, variable_value, response_snippet) VALUES ($1, $2, $3, $4, $5)",
     [url, cartId, variableName, JSON.stringify(value), JSON.stringify(value).slice(0, 2000)]
   );
 

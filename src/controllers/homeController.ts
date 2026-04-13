@@ -24,7 +24,7 @@ export async function homeController(req: Request, res: Response): Promise<Respo
 
     const variableName = "catalogBackupJSON";
     const { rows } = await pgClient.query(
-      `SELECT variable_value, created_at FROM request_logs WHERE cat_id=$1 AND variable_name=$2 ORDER BY created_at DESC LIMIT 1`,
+      `SELECT variable_value, created_at FROM request_logs WHERE cart_id=$1 AND variable_name=$2 ORDER BY created_at DESC LIMIT 1`,
       [cartId, variableName]
     );
 

@@ -561,39 +561,44 @@ export async function dataCollector(req: Request, res: Response): Promise<Respon
       }
     }
 
-    // ── app_user_state init ────────────────────────────────────
-    // If email is provided (re-init after login), check if that email
-    // already has a canonical cart_id and use that instead
-    const { email: clientEmail } = req.body as Record<string, unknown>;
+    // ── Canonical cart_id via device email ────────────────────
+    // If this device has a user_email in device_logs, find the canonical
+    // cart_id linked to that email from session_logs on another device
     let canonicalCartId = cartId!;
 
-    if (clientEmail) {
-      try {
-        const { encrypt } = await import("../services/userFingerprintService.js");
-        const encEmail = encrypt(clientEmail as string);
+    try {
+      const emailRes = await pgClient.query<{ user_email: string }>(
+        `SELECT user_email FROM device_logs WHERE unique_device_id = $1 AND user_email IS NOT NULL LIMIT 1`,
+        [uniqueDeviceId]
+      );
 
-        const emailLookup = await pgClient.query<{ cart_id: string }>(
-          `SELECT cart_id FROM app_user_state
-           WHERE encrypted_email = $1
-           AND cart_id IS NOT NULL
-           AND unique_device_id != $2
+      if (emailRes.rows.length > 0) {
+        const userEmail = emailRes.rows[0].user_email;
+
+        const canonicalRes = await pgClient.query<{ cart_id: string }>(
+          `SELECT sl.cart_id
+           FROM device_logs dl
+           JOIN session_logs sl ON sl.unique_device_id = dl.unique_device_id
+           WHERE dl.user_email = $1
+           AND dl.unique_device_id != $2
+           AND sl.cart_id IS NOT NULL
+           ORDER BY sl.created_at ASC
            LIMIT 1`,
-          [encEmail, uniqueDeviceId]
+          [userEmail, uniqueDeviceId]
         );
 
-        if (emailLookup.rows.length > 0) {
-          canonicalCartId = emailLookup.rows[0].cart_id;
-          console.log(`[DataCollector] 🔗 Email match found — using canonical cart_id: ${canonicalCartId} for ${uniqueDeviceId as string}`);
+        if (canonicalRes.rows.length > 0) {
+          canonicalCartId = canonicalRes.rows[0].cart_id;
+          console.log(`[DataCollector] 🔗 Canonical cart_id found for ${userEmail}: ${canonicalCartId}`);
 
-          // Also update session_logs to use the canonical cart_id
           await pgClient.query(
             `UPDATE session_logs SET cart_id = $1, updated_at = NOW() WHERE unique_device_id = $2`,
             [canonicalCartId, uniqueDeviceId]
           );
         }
-      } catch (err) {
-        console.warn("⚠️ Email cart lookup failed (non-critical):", (err as Error).message);
       }
+    } catch (err) {
+      console.warn("⚠️ Canonical cart_id lookup failed (non-critical):", (err as Error).message);
     }
 
     try {

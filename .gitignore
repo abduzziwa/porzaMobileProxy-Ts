@@ -3,3 +3,13 @@ dist/
 .env
 logs/*.log
 *.log
+
+/scripts/*
+
+# Keys & private files
+*.pem
+private.pem
+public.pem
+
+# Claude
+CLAUDE.md

@@ -1,0 +1,5430 @@
+[
+  {
+    "id": "15",
+    "name": "Brakes",
+    "seo_path": "/spare-parts/brakes",
+    "subcategories": [
+      {
+        "id": "18",
+        "name": "ABS Sensor Ring",
+        "seo_path": "/spare-parts/brakes/abs-sensor-ring",
+        "subcategories": []
+      },
+      {
+        "id": "19",
+        "name": "ABS Wheel Speed Sensor",
+        "seo_path": "/spare-parts/brakes/abs-wheel-speed-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "20",
+        "name": "Brake Shoe Accessory Kit",
+        "seo_path": "/spare-parts/brakes/brake-shoe-accessory-kit",
+        "subcategories": []
+      },
+      {
+        "id": "21",
+        "name": "Drum Brake Adjuster",
+        "seo_path": "/spare-parts/brakes/drum-brake-adjuster",
+        "subcategories": []
+      },
+      {
+        "id": "22",
+        "name": "Brake Disc Bolt",
+        "seo_path": "/spare-parts/brakes/brake-disc-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "23",
+        "name": "Brake System Accumulator",
+        "seo_path": "/spare-parts/brakes/brake-system-pressure-accumulator",
+        "subcategories": []
+      },
+      {
+        "id": "24",
+        "name": "Parking Brake Cable",
+        "seo_path": "/spare-parts/brakes/parking-brake-cable",
+        "subcategories": []
+      },
+      {
+        "id": "25",
+        "name": "Guide sleeve set, brake caliper",
+        "seo_path": "/spare-parts/brakes/brake-caliper-gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "26",
+        "name": "Brake Caliper",
+        "seo_path": "/spare-parts/brakes/brake-caliper",
+        "subcategories": []
+      },
+      {
+        "id": "27",
+        "name": "Brake Disc Back Plate",
+        "seo_path": "/spare-parts/brakes/brake-disc-back-plate",
+        "subcategories": []
+      },
+      {
+        "id": "28",
+        "name": "Brake Discs",
+        "seo_path": "/spare-parts/brakes/brake-discs",
+        "subcategories": []
+      },
+      {
+        "id": "29",
+        "name": "Brake Drum",
+        "seo_path": "/spare-parts/brakes/brake-drum",
+        "subcategories": []
+      },
+      {
+        "id": "30",
+        "name": "Brake Fluid Reservoir",
+        "seo_path": "/spare-parts/brakes/brake-fluid-reservoir",
+        "subcategories": []
+      },
+      {
+        "id": "31",
+        "name": "Brake Hose",
+        "seo_path": "/spare-parts/brakes/brake-hose",
+        "subcategories": []
+      },
+      {
+        "id": "34",
+        "name": "Disc Brake Pad Accessory Kit",
+        "seo_path": "/spare-parts/brakes/disc-brake-pad-accessory-kit",
+        "subcategories": []
+      },
+      {
+        "id": "35",
+        "name": "Brake Pad Wear Sensor",
+        "seo_path": "/spare-parts/brakes/brake-pad-wear-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "36",
+        "name": "Brake Pads",
+        "seo_path": "/spare-parts/brakes/brake-pads",
+        "subcategories": []
+      },
+      {
+        "id": "39",
+        "name": "Brake Power Regulator",
+        "seo_path": "/spare-parts/brakes/brake-power-regulator",
+        "subcategories": []
+      },
+      {
+        "id": "40",
+        "name": "Brake Booster / Servo",
+        "seo_path": "/spare-parts/brakes/brake-booster",
+        "subcategories": []
+      },
+      {
+        "id": "43",
+        "name": "Brake Shoes",
+        "seo_path": "/spare-parts/brakes/brake-shoes",
+        "subcategories": []
+      },
+      {
+        "id": "44",
+        "name": "Brake Caliper holder",
+        "seo_path": "/spare-parts/brakes/brake-caliper-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "47",
+        "name": "Caliper Slide Pin",
+        "seo_path": "/spare-parts/brakes/caliper-slide-pin",
+        "subcategories": []
+      },
+      {
+        "id": "48",
+        "name": "Brake Caliper Guide Sleeve Kit",
+        "seo_path": "/spare-parts/brakes/brake-caliper-guide-sleeve-kit",
+        "subcategories": []
+      },
+      {
+        "id": "50",
+        "name": "Parking Brake Shoes",
+        "seo_path": "/spare-parts/brakes/parking-brake-shoes",
+        "subcategories": []
+      },
+      {
+        "id": "53",
+        "name": "Master Cylinder",
+        "seo_path": "/spare-parts/brakes/master-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "54",
+        "name": "Brake Caliper Piston",
+        "seo_path": "/spare-parts/brakes/brake-caliper-piston",
+        "subcategories": []
+      },
+      {
+        "id": "56",
+        "name": "Brake Master Cylinder Repair Kit",
+        "seo_path": "/spare-parts/brakes/brake-master-cylinder-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "58",
+        "name": "Wheel Brake Cylinder Repair Kit",
+        "seo_path": "/spare-parts/brakes/wheel-brake-cylinder-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "60",
+        "name": "Brake Vacuum Pump",
+        "seo_path": "/spare-parts/brakes/brake-vacuum-pump",
+        "subcategories": []
+      },
+      {
+        "id": "61",
+        "name": "Wheel Brake Cylinder",
+        "seo_path": "/spare-parts/brakes/wheel-brake-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "837",
+        "name": "Brake Adjuster",
+        "seo_path": "/spare-parts/brakes/brake-adjuster",
+        "subcategories": []
+      },
+      {
+        "id": "841",
+        "name": "Brake Caliper Repair Kit",
+        "seo_path": "/spare-parts/brakes/brake-caliper-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "843",
+        "name": "Brake shaft",
+        "seo_path": "/spare-parts/brakes/brake-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "859",
+        "name": "Diaphragm Brake Cylinder",
+        "seo_path": "/spare-parts/brakes/diaphragm-brake-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "860",
+        "name": "Slave Cylinder, Clutch",
+        "seo_path": "/spare-parts/brakes/slave-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "911",
+        "name": "Spring-loaded Cylinder",
+        "seo_path": "/spare-parts/brakes/spring-loaded-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "933",
+        "name": "Brake Caliper Bolt",
+        "seo_path": "/spare-parts/brakes/brake-caliper-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "964",
+        "name": "Brake Shaft Bush",
+        "seo_path": "/spare-parts/brakes/brake-shaft-bush",
+        "subcategories": []
+      },
+      {
+        "id": "977",
+        "name": "Brake fluid reservoir",
+        "seo_path": "/spare-parts/brakes/brake-fluid-reservoir-cap",
+        "subcategories": []
+      },
+      {
+        "id": "1052",
+        "name": "Brake Shoe Sleeve",
+        "seo_path": "/spare-parts/brakes/brake-shoe-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "1053",
+        "name": "Exhaust valve",
+        "seo_path": "/spare-parts/brakes/exhaust-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1054",
+        "name": "Camshaft Bearing",
+        "seo_path": "/spare-parts/brakes/camshaft-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1055",
+        "name": "Brake Adjuster Springs",
+        "seo_path": "/spare-parts/brakes/adjuster-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1072",
+        "name": "Drum Brake Lining",
+        "seo_path": "/spare-parts/brakes/drum-brake-lining",
+        "subcategories": []
+      },
+      {
+        "id": "1073",
+        "name": "Bolt, Brakeshoe ",
+        "seo_path": "/spare-parts/brakes/brake-shoe-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1160",
+        "name": "Brake Caliper Adjuster Rod",
+        "seo_path": "/spare-parts/brakes/brake-caliper-adjuster-rod",
+        "subcategories": []
+      },
+      {
+        "id": "1161",
+        "name": "Adjusting Bolt",
+        "seo_path": "/spare-parts/brakes/adjusting-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1162",
+        "name": "Air Filter Retarder",
+        "seo_path": "/spare-parts/brakes/air-filter-retarder",
+        "subcategories": []
+      },
+      {
+        "id": "1163",
+        "name": "Repair kit, brake caliper",
+        "seo_path": "/spare-parts/brakes/brake-caliper-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1164",
+        "name": "Brake Shaft / Equipment",
+        "seo_path": "/spare-parts/brakes/brakeshaft-equipment",
+        "subcategories": []
+      },
+      {
+        "id": "1166",
+        "name": "Brake Caliper Carrier",
+        "seo_path": "/spare-parts/brakes/brake-caliper-carrier",
+        "subcategories": []
+      },
+      {
+        "id": "1167",
+        "name": "Brake pipes",
+        "seo_path": "/spare-parts/brakes/brake-lines-set",
+        "subcategories": []
+      },
+      {
+        "id": "1168",
+        "name": "Brake Shoe Pin Set",
+        "seo_path": "/spare-parts/brakes/brake-shoe-pin-set",
+        "subcategories": []
+      },
+      {
+        "id": "1169",
+        "name": "Brake Caliper Chain",
+        "seo_path": "/spare-parts/brakes/brake-caliper-chain",
+        "subcategories": []
+      },
+      {
+        "id": "1170",
+        "name": "Wheel Speed Sensor Clamping Sleeve",
+        "seo_path": "/spare-parts/brakes/wheel-speed-sensor-clamping-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "1171",
+        "name": "ABS Sensor Cable",
+        "seo_path": "/spare-parts/brakes/abs-sensor-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1172",
+        "name": "Brake Line Holder",
+        "seo_path": "/spare-parts/brakes/brake-line-holder",
+        "subcategories": []
+      },
+      {
+        "id": "1173",
+        "name": "Brake Shaft Bearing",
+        "seo_path": "/spare-parts/brakes/brake-shaft-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1177",
+        "name": "Parking Brake Caliper",
+        "seo_path": "/spare-parts/brakes/parking-brake-caliper",
+        "subcategories": []
+      },
+      {
+        "id": "1178",
+        "name": "Brake Caliper Cover",
+        "seo_path": "/spare-parts/brakes/brake-caliper-cover",
+        "subcategories": []
+      },
+      {
+        "id": "1179",
+        "name": "Retarder Repair Set",
+        "seo_path": "/spare-parts/brakes/retarder-repair-set",
+        "subcategories": []
+      },
+      {
+        "id": "1180",
+        "name": "Engine Brake",
+        "seo_path": "/spare-parts/brakes/engine-brake",
+        "subcategories": []
+      },
+      {
+        "id": "1181",
+        "name": "Accessories, brake shoe",
+        "seo_path": "/spare-parts/brakes/brake-shoe-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1182",
+        "name": "Brake System Control Unit",
+        "seo_path": "/spare-parts/brakes/brake-system-control-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1183",
+        "name": "Brake Hose Holding Bracket",
+        "seo_path": "/spare-parts/brakes/brake-hose-holding-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "1184",
+        "name": "ABS Relay",
+        "seo_path": "/spare-parts/brakes/abs-relay",
+        "subcategories": []
+      },
+      {
+        "id": "1185",
+        "name": "Brake Camshaft",
+        "seo_path": "/spare-parts/brakes/brake-camshaft",
+        "subcategories": []
+      },
+      {
+        "id": "1186",
+        "name": "Parking Brake Crank",
+        "seo_path": "/spare-parts/brakes/parking-brake-crank",
+        "subcategories": []
+      },
+      {
+        "id": "1187",
+        "name": "Parking Brake Gas Spring",
+        "seo_path": "/spare-parts/brakes/parking-brake-gas-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1188",
+        "name": "Brake Padel Travel Sensor",
+        "seo_path": "/spare-parts/brakes/brake-padel-travel-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1189",
+        "name": "Park Brake Actuation",
+        "seo_path": "/spare-parts/brakes/parking-brake-actuation",
+        "subcategories": []
+      },
+      {
+        "id": "1378",
+        "name": "Brake Servo",
+        "seo_path": "/spare-parts/brakes/brake-servo",
+        "subcategories": []
+      },
+      {
+        "id": "1410",
+        "name": "Spring Brake Caliper",
+        "seo_path": "/spare-parts/brakes/spring-brake-caliper",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "62",
+    "name": "Filters",
+    "seo_path": "/spare-parts/filters",
+    "subcategories": [
+      {
+        "id": "63",
+        "name": "Air Filter",
+        "seo_path": "/spare-parts/filters/air-filter",
+        "subcategories": []
+      },
+      {
+        "id": "65",
+        "name": "Fuel Filter",
+        "seo_path": "/spare-parts/filters/fuel-filter",
+        "subcategories": []
+      },
+      {
+        "id": "66",
+        "name": "Holder, Air Filter Housing",
+        "seo_path": "/spare-parts/filters/holder-air-filter-housing",
+        "subcategories": []
+      },
+      {
+        "id": "68",
+        "name": "Oil Filter",
+        "seo_path": "/spare-parts/filters/oil-filter",
+        "subcategories": []
+      },
+      {
+        "id": "69",
+        "name": "Oil Filter Housing",
+        "seo_path": "/spare-parts/filters/oil-filter-housing",
+        "subcategories": []
+      },
+      {
+        "id": "70",
+        "name": "Cabin Filter",
+        "seo_path": "/spare-parts/filters/cabin-filter",
+        "subcategories": []
+      },
+      {
+        "id": "74",
+        "name": "Seal, Oil Filter Housing",
+        "seo_path": "/spare-parts/filters/seal-oil-filter-housing",
+        "subcategories": []
+      },
+      {
+        "id": "75",
+        "name": "Secondary Air Filter",
+        "seo_path": "/spare-parts/filters/secondary-air-filter",
+        "subcategories": []
+      },
+      {
+        "id": "77",
+        "name": "Service Kit & Filter Set",
+        "seo_path": "/spare-parts/filters/service-kit-filter-set",
+        "subcategories": []
+      },
+      {
+        "id": "78",
+        "name": "Performance Air Filter",
+        "seo_path": "/spare-parts/filters/performance-air-filter",
+        "subcategories": []
+      },
+      {
+        "id": "79",
+        "name": "Valve, Fuel Filter",
+        "seo_path": "/spare-parts/filters/valve-fuel-filter",
+        "subcategories": []
+      },
+      {
+        "id": "904",
+        "name": "Lid, Oil Filter Housing ",
+        "seo_path": "/spare-parts/filters/oil-filter-housing-lid",
+        "subcategories": []
+      },
+      {
+        "id": "942",
+        "name": "Oil Filter Cap",
+        "seo_path": "/spare-parts/filters/oil-filter-cap",
+        "subcategories": []
+      },
+      {
+        "id": "951",
+        "name": "Urea Filter",
+        "seo_path": "/spare-parts/filters/urea-filter",
+        "subcategories": []
+      },
+      {
+        "id": "974",
+        "name": "Transmission Oil Filter",
+        "seo_path": "/spare-parts/filters/transmission-oil-filter",
+        "subcategories": []
+      },
+      {
+        "id": "1007",
+        "name": "Fuel Filter Housing",
+        "seo_path": "/spare-parts/filters/fuel-filter-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1080",
+        "name": "Fuel Filter Set",
+        "seo_path": "/spare-parts/filters/fuel-filter-set",
+        "subcategories": []
+      },
+      {
+        "id": "1103",
+        "name": "Air Filter Rubber Buffer",
+        "seo_path": "/spare-parts/filters/air-filter-rubber-buffer",
+        "subcategories": []
+      },
+      {
+        "id": "1104",
+        "name": "Air Filters Seal Ring",
+        "seo_path": "/spare-parts/filters/air-filters-seal-ring",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "80",
+    "name": "Engine Parts",
+    "seo_path": "/spare-parts/engine-parts",
+    "subcategories": [
+      {
+        "id": "82",
+        "name": "Camshaft Kit",
+        "seo_path": "/spare-parts/engine-parts/camshaft-kit",
+        "subcategories": []
+      },
+      {
+        "id": "83",
+        "name": "Camshaft",
+        "seo_path": "/spare-parts/engine-parts/camshaft",
+        "subcategories": []
+      },
+      {
+        "id": "85",
+        "name": "Camshaft Adjuster",
+        "seo_path": "/spare-parts/engine-parts/camshaft-adjuster",
+        "subcategories": []
+      },
+      {
+        "id": "86",
+        "name": "Camshaft Adjustment Valve",
+        "seo_path": "/spare-parts/engine-parts/camshaft-adjustment-valve",
+        "subcategories": []
+      },
+      {
+        "id": "87",
+        "name": "Camshaft Bushes",
+        "seo_path": "/spare-parts/engine-parts/camshaft-bushes",
+        "subcategories": []
+      },
+      {
+        "id": "88",
+        "name": "Camshaft seal",
+        "seo_path": "/spare-parts/engine-parts/shaft-seal-camshaft",
+        "subcategories": []
+      },
+      {
+        "id": "89",
+        "name": "Connecting Rod",
+        "seo_path": "/spare-parts/engine-parts/connecting-rod",
+        "subcategories": []
+      },
+      {
+        "id": "90",
+        "name": "Connecting Rod Bolt / Nut",
+        "seo_path": "/spare-parts/engine-parts/connecting-rod-bolt-nut",
+        "subcategories": []
+      },
+      {
+        "id": "92",
+        "name": "Crankcase Gasket",
+        "seo_path": "/spare-parts/engine-parts/crankcase-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "93",
+        "name": "Engine Crankshaft",
+        "seo_path": "/spare-parts/engine-parts/engine-crankshaft",
+        "subcategories": []
+      },
+      {
+        "id": "95",
+        "name": "Crank Pulley",
+        "seo_path": "/spare-parts/engine-parts/crank-pulley",
+        "subcategories": []
+      },
+      {
+        "id": "96",
+        "name": "Crankshaft Oil Seal",
+        "seo_path": "/spare-parts/engine-parts/crankshaft-oil-seal",
+        "subcategories": []
+      },
+      {
+        "id": "97",
+        "name": "Engine Cylinder Head",
+        "seo_path": "/spare-parts/engine-parts/engine-cylinder-head",
+        "subcategories": []
+      },
+      {
+        "id": "98",
+        "name": "Head Gasket Set",
+        "seo_path": "/spare-parts/engine-parts/head-gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "99",
+        "name": "Cylinder Sleeve",
+        "seo_path": "/spare-parts/engine-parts/cylinder-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "101",
+        "name": "Oil Drain / Sump Plug",
+        "seo_path": "/spare-parts/engine-parts/oil-drain-plug",
+        "subcategories": []
+      },
+      {
+        "id": "105",
+        "name": "Engine Mount",
+        "seo_path": "/spare-parts/engine-parts/motor-mount",
+        "subcategories": []
+      },
+      {
+        "id": "107",
+        "name": "Engine Exhaust Valve",
+        "seo_path": "/spare-parts/engine-parts/engine-exhaust-valve",
+        "subcategories": []
+      },
+      {
+        "id": "109",
+        "name": "Camshaft Gear",
+        "seo_path": "/spare-parts/engine-parts/camshaft-gear",
+        "subcategories": []
+      },
+      {
+        "id": "111",
+        "name": "Cylinder Head Bolts",
+        "seo_path": "/spare-parts/engine-parts/cylinder-head-bolts",
+        "subcategories": []
+      },
+      {
+        "id": "112",
+        "name": "Cylinder Head Gasket",
+        "seo_path": "/spare-parts/engine-parts/cylinder-head-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "114",
+        "name": "Intake Valves",
+        "seo_path": "/spare-parts/engine-parts/intake-valves",
+        "subcategories": []
+      },
+      {
+        "id": "116",
+        "name": "Intake Manifold Gasket",
+        "seo_path": "/spare-parts/engine-parts/intake-manifold-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "117",
+        "name": "Intermediate / Balance Shaft",
+        "seo_path": "/spare-parts/engine-parts/intermediate-balance-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "118",
+        "name": "Main Bearing, crankshaft",
+        "seo_path": "/spare-parts/engine-parts/main-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "119",
+        "name": "Mounting Kit, Charger",
+        "seo_path": "/spare-parts/engine-parts/mounting-kit-charger",
+        "subcategories": []
+      },
+      {
+        "id": "120",
+        "name": "Oil Level Dipstick",
+        "seo_path": "/spare-parts/engine-parts/oil-level-dipstick",
+        "subcategories": []
+      },
+      {
+        "id": "123",
+        "name": "Oil Pressure Sensor",
+        "seo_path": "/spare-parts/engine-parts/oil-pressure-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "125",
+        "name": "Engine Oil Pump",
+        "seo_path": "/spare-parts/engine-parts/engine-oil-pump",
+        "subcategories": []
+      },
+      {
+        "id": "127",
+        "name": "Oil sump",
+        "seo_path": "/spare-parts/engine-parts/oil-pan",
+        "subcategories": []
+      },
+      {
+        "id": "128",
+        "name": "Oil Temp Sensor",
+        "seo_path": "/spare-parts/engine-parts/oil-temp-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "129",
+        "name": "Pistons",
+        "seo_path": "/spare-parts/engine-parts/engine-piston",
+        "subcategories": []
+      },
+      {
+        "id": "130",
+        "name": "Piston Ring Kit",
+        "seo_path": "/spare-parts/engine-parts/piston-ring-kit",
+        "subcategories": []
+      },
+      {
+        "id": "133",
+        "name": "Pressure Converter",
+        "seo_path": "/spare-parts/engine-parts/pressure-converter",
+        "subcategories": []
+      },
+      {
+        "id": "134",
+        "name": "Engine Rocker Arm",
+        "seo_path": "/spare-parts/engine-parts/engine-rocker-arm",
+        "subcategories": []
+      },
+      {
+        "id": "135",
+        "name": "Valve Cover",
+        "seo_path": "/spare-parts/engine-parts/valve-cover",
+        "subcategories": []
+      },
+      {
+        "id": "136",
+        "name": "Rocker Gasket",
+        "seo_path": "/spare-parts/engine-parts/rocker-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "137",
+        "name": "Rocker Cover Gasket Kit",
+        "seo_path": "/spare-parts/engine-parts/rocker-cover-gasket-kit",
+        "subcategories": []
+      },
+      {
+        "id": "138",
+        "name": "Seal, Crankcase Breather",
+        "seo_path": "/spare-parts/engine-parts/seal-crankcase-breather",
+        "subcategories": []
+      },
+      {
+        "id": "139",
+        "name": "Seal, Oil Filler Cap",
+        "seo_path": "/spare-parts/engine-parts/seal-oil-filler-cap",
+        "subcategories": []
+      },
+      {
+        "id": "141",
+        "name": "Small End Bushes",
+        "seo_path": "/spare-parts/engine-parts/small-end-bushes",
+        "subcategories": []
+      },
+      {
+        "id": "145",
+        "name": "Throttle Cable",
+        "seo_path": "/spare-parts/engine-parts/throttle-cable",
+        "subcategories": []
+      },
+      {
+        "id": "149",
+        "name": "Turbocharger Gasket",
+        "seo_path": "/spare-parts/engine-parts/turbocharger-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "150",
+        "name": "Turbocharger",
+        "seo_path": "/spare-parts/engine-parts/turbocharger",
+        "subcategories": []
+      },
+      {
+        "id": "152",
+        "name": "Valve Guide / Stem Seal / Parts",
+        "seo_path": "/spare-parts/engine-parts/valve-guide-stem-seal-parts",
+        "subcategories": []
+      },
+      {
+        "id": "153",
+        "name": "Valve Seals",
+        "seo_path": "/spare-parts/engine-parts/valve-seals",
+        "subcategories": []
+      },
+      {
+        "id": "154",
+        "name": "Vibration Damper, Timing Belt",
+        "seo_path": "/spare-parts/engine-parts/vibration-damper-timing-belt",
+        "subcategories": []
+      },
+      {
+        "id": "159",
+        "name": "Water Pump Gasket",
+        "seo_path": "/spare-parts/engine-parts/water-pump-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "831",
+        "name": "Tappet",
+        "seo_path": "/spare-parts/engine-parts/tappet",
+        "subcategories": []
+      },
+      {
+        "id": "836",
+        "name": "Oil sump gasket",
+        "seo_path": "/spare-parts/engine-parts/oil-sump-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "838",
+        "name": "Chain Oil Pump",
+        "seo_path": "/spare-parts/engine-parts/chain-oil-pump",
+        "subcategories": []
+      },
+      {
+        "id": "840",
+        "name": "Crankcase Breather",
+        "seo_path": "/spare-parts/engine-parts/crankcase-breather",
+        "subcategories": []
+      },
+      {
+        "id": "898",
+        "name": "Rocker Cover",
+        "seo_path": "/spare-parts/engine-parts/rocker-cover",
+        "subcategories": []
+      },
+      {
+        "id": "901",
+        "name": "Chain Set Oil Pump",
+        "seo_path": "/spare-parts/engine-parts/chain-set-oil-pump",
+        "subcategories": []
+      },
+      {
+        "id": "920",
+        "name": "Camshaft Brake Repair Kit",
+        "seo_path": "/spare-parts/engine-parts/camshaft-brake-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "928",
+        "name": "Intake Manifold",
+        "seo_path": "/spare-parts/engine-parts/intake-manifold",
+        "subcategories": []
+      },
+      {
+        "id": "935",
+        "name": "Crankshaft Gear",
+        "seo_path": "/spare-parts/engine-parts/crankshaft-gear",
+        "subcategories": []
+      },
+      {
+        "id": "937",
+        "name": "Piston Underside Cooling",
+        "seo_path": "/spare-parts/engine-parts/piston-underside-cooling",
+        "subcategories": []
+      },
+      {
+        "id": "947",
+        "name": "Oil Pressure Sender Unit",
+        "seo_path": "/spare-parts/engine-parts/oil-pressure-sender-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1011",
+        "name": "Engine Mounting",
+        "seo_path": "/spare-parts/engine-parts/adapter-mounting-device",
+        "subcategories": []
+      },
+      {
+        "id": "1019",
+        "name": "Engine Mount Buffer",
+        "seo_path": "/spare-parts/engine-parts/engine-mount-buffer",
+        "subcategories": []
+      },
+      {
+        "id": "1024",
+        "name": "Crankcase Breather Filter",
+        "seo_path": "/spare-parts/engine-parts/crankcase-breather-filter",
+        "subcategories": []
+      },
+      {
+        "id": "1042",
+        "name": "Crankcase Housing Cover",
+        "seo_path": "/spare-parts/engine-parts/crankcase-housing-cover",
+        "subcategories": []
+      },
+      {
+        "id": "1045",
+        "name": "Oil Pressure Valve",
+        "seo_path": "/spare-parts/engine-parts/oil-pressure-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1067",
+        "name": "Linkage Demper, Injection System",
+        "seo_path": "/spare-parts/engine-parts/linkage-demper-injection-system",
+        "subcategories": []
+      },
+      {
+        "id": "1079",
+        "name": "Timing Case Cover",
+        "seo_path": "/spare-parts/engine-parts/timing-case-cover",
+        "subcategories": []
+      },
+      {
+        "id": "1096",
+        "name": "Turbocharger Gasket Set",
+        "seo_path": "/spare-parts/engine-parts/turbocharger-gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "1098",
+        "name": "Turbocharger Oil Inlet Seal",
+        "seo_path": "/spare-parts/engine-parts/turbocharger-oil-inlet-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1099",
+        "name": "Throttle Control Linkage",
+        "seo_path": "/spare-parts/engine-parts/throttle-control-linkage",
+        "subcategories": []
+      },
+      {
+        "id": "1101",
+        "name": "Turbocharger Pressure Converter",
+        "seo_path": "/spare-parts/engine-parts/turbocharger-pressure-converter",
+        "subcategories": []
+      },
+      {
+        "id": "1107",
+        "name": "Suction Pipe Reverse Flap Sensor",
+        "seo_path": "/spare-parts/engine-parts/suction-pipe-reverse-flap-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1117",
+        "name": "Oil Pressure Switch",
+        "seo_path": "/spare-parts/engine-parts/oil-pressure-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1120",
+        "name": "Crankshaft Sensor",
+        "seo_path": "/spare-parts/engine-parts/crankshaft-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1190",
+        "name": "Actuator Throttle Blade",
+        "seo_path": "/spare-parts/engine-parts/actuator-throttle-blade",
+        "subcategories": []
+      },
+      {
+        "id": "1237",
+        "name": "crankcase breather Membrane",
+        "seo_path": "/spare-parts/engine-parts/crankcase-breather-membrane",
+        "subcategories": []
+      },
+      {
+        "id": "1238",
+        "name": "Crankcase Screw Plug",
+        "seo_path": "/spare-parts/engine-parts/crankcase-screw-plug",
+        "subcategories": []
+      },
+      {
+        "id": "1239",
+        "name": "Crankshaft Hub",
+        "seo_path": "/spare-parts/engine-parts/crankshaft-hub",
+        "subcategories": []
+      },
+      {
+        "id": "1240",
+        "name": "Crankshaft Thrust Washer",
+        "seo_path": "/spare-parts/engine-parts/crankshaft-thrust-washer",
+        "subcategories": []
+      },
+      {
+        "id": "1243",
+        "name": "Cylinder Head Cover Bush",
+        "seo_path": "/spare-parts/engine-parts/cylinder-head-cover-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1244",
+        "name": "intake manifold Gasket Set",
+        "seo_path": "/spare-parts/engine-parts/intake-manifold-gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "1245",
+        "name": "Crankcase Breather Oil Scraper Plate",
+        "seo_path": "/spare-parts/engine-parts/crankcase-breather-oil-scraper-plate",
+        "subcategories": []
+      },
+      {
+        "id": "1246",
+        "name": "Oil Filter Neck",
+        "seo_path": "/spare-parts/engine-parts/oil-filter-neck",
+        "subcategories": []
+      },
+      {
+        "id": "1247",
+        "name": "Cylinder Head Sleeve",
+        "seo_path": "/spare-parts/engine-parts/cylinder-head-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "1267",
+        "name": "Valve Clearance Adjusting Screw",
+        "seo_path": "/spare-parts/engine-parts/valve-clearance-adjusting-screw",
+        "subcategories": []
+      },
+      {
+        "id": "1268",
+        "name": "Camshaft Bracket",
+        "seo_path": "/spare-parts/engine-parts/camshaft-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "1269",
+        "name": "camshaft Adjustment Central Magnet",
+        "seo_path": "/spare-parts/engine-parts/camshaft-adjustment-central-magnet",
+        "subcategories": []
+      },
+      {
+        "id": "1272",
+        "name": "Impulse Generator Wheel",
+        "seo_path": "/spare-parts/engine-parts/impulse-generator-wheel",
+        "subcategories": []
+      },
+      {
+        "id": "1273",
+        "name": "Timing Chain Oil Jet",
+        "seo_path": "/spare-parts/engine-parts/timing-chain-oil-jet",
+        "subcategories": []
+      },
+      {
+        "id": "1274",
+        "name": "Push Rod",
+        "seo_path": "/spare-parts/engine-parts/push-rod",
+        "subcategories": []
+      },
+      {
+        "id": "1275",
+        "name": "Rocker Arm Bearing",
+        "seo_path": "/spare-parts/engine-parts/rocker-arm-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1276",
+        "name": "Rocker Arm Shaft",
+        "seo_path": "/spare-parts/engine-parts/rocker-arm-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "1277",
+        "name": "Eccentric Shaft Sensor",
+        "seo_path": "/spare-parts/engine-parts/eccentric-shaft-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1279",
+        "name": "Retainer Caps",
+        "seo_path": "/spare-parts/engine-parts/retainer-caps",
+        "subcategories": []
+      },
+      {
+        "id": "1280",
+        "name": "Valve Spring",
+        "seo_path": "/spare-parts/engine-parts/valve-spring",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "160",
+    "name": "Wiper and washer system-parts",
+    "seo_path": "/spare-parts/wiper-and-washer-system-parts",
+    "subcategories": [
+      {
+        "id": "164",
+        "name": "Sensor, Wash Water Level",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/sensor-wash-water-level",
+        "subcategories": []
+      },
+      {
+        "id": "165",
+        "name": "Washer Fluid Jet, Headlight Cleaning",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/washer-fluid-jet-headlight-cleaning",
+        "subcategories": []
+      },
+      {
+        "id": "166",
+        "name": "Water Pump, Headlight Cleaning",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/water-pump-headlight-cleaning",
+        "subcategories": []
+      },
+      {
+        "id": "168",
+        "name": "Windscreen Washer Jet",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windscreen-washer-jet",
+        "subcategories": []
+      },
+      {
+        "id": "170",
+        "name": "Windscreen Washer Reservoir",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windscreen-washer-reservoir",
+        "subcategories": []
+      },
+      {
+        "id": "171",
+        "name": "Windshield Washer Pump",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windshield-washer-pump",
+        "subcategories": []
+      },
+      {
+        "id": "172",
+        "name": "Windscreen Wiper Arm",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windscreen-wiper-arm",
+        "subcategories": []
+      },
+      {
+        "id": "174",
+        "name": "Wiper Blade Rubber",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wiper-blade-rubber",
+        "subcategories": []
+      },
+      {
+        "id": "175",
+        "name": "Wiper , Headlight Cleaning",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wiper-blade-headlight-cleaning",
+        "subcategories": []
+      },
+      {
+        "id": "177",
+        "name": "Wiper Blades",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wiper-blades",
+        "subcategories": []
+      },
+      {
+        "id": "179",
+        "name": "Wiper Linkage",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wiper-linkage",
+        "subcategories": []
+      },
+      {
+        "id": "839",
+        "name": "Wiper Motor",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wiper-motor",
+        "subcategories": []
+      },
+      {
+        "id": "1308",
+        "name": "Wiper Bearing",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wiper-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1334",
+        "name": "windscreen Washer Filter",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windscreen-washer-filter",
+        "subcategories": []
+      },
+      {
+        "id": "1336",
+        "name": "Windscreen Wiper Relay",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windscreen-wiper-relay",
+        "subcategories": []
+      },
+      {
+        "id": "1337",
+        "name": "Windscreen Washer Reservoir Cap",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/windscreen-washer-reservoir-cap",
+        "subcategories": []
+      },
+      {
+        "id": "1338",
+        "name": "Wipe Interval Control Switch",
+        "seo_path": "/spare-parts/wiper-and-washer-system-parts/wipe-interval-control-switch",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "181",
+    "name": "Ignition and preheating",
+    "seo_path": "/spare-parts/ignition-and-preheating",
+    "subcategories": [
+      {
+        "id": "182",
+        "name": "Camshaft Position Sensor",
+        "seo_path": "/spare-parts/ignition-and-preheating/camshaft-position-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "184",
+        "name": "Glow Plug Relay",
+        "seo_path": "/spare-parts/ignition-and-preheating/glow-plug-relay",
+        "subcategories": []
+      },
+      {
+        "id": "185",
+        "name": "Control Unit, Glow Plug System",
+        "seo_path": "/spare-parts/ignition-and-preheating/control-unit-glow-plug-system",
+        "subcategories": []
+      },
+      {
+        "id": "186",
+        "name": "Crankshaft Position Sensor",
+        "seo_path": "/spare-parts/ignition-and-preheating/crankshaft-position-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "189",
+        "name": "Distributor Cap",
+        "seo_path": "/spare-parts/ignition-and-preheating/distributor-cap",
+        "subcategories": []
+      },
+      {
+        "id": "190",
+        "name": "Ignition Distributor Rotor",
+        "seo_path": "/spare-parts/ignition-and-preheating/ignition-distributor-rotor",
+        "subcategories": []
+      },
+      {
+        "id": "192",
+        "name": "Diesel Glow Plugs",
+        "seo_path": "/spare-parts/ignition-and-preheating/diesel-glow-plugs",
+        "subcategories": []
+      },
+      {
+        "id": "194",
+        "name": "Ignition Cable",
+        "seo_path": "/spare-parts/ignition-and-preheating/ignition-cable",
+        "subcategories": []
+      },
+      {
+        "id": "195",
+        "name": "Ignition Module",
+        "seo_path": "/spare-parts/ignition-and-preheating/ignition-control-module",
+        "subcategories": []
+      },
+      {
+        "id": "196",
+        "name": "Engine Knock Sensor",
+        "seo_path": "/spare-parts/ignition-and-preheating/engine-knock-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "197",
+        "name": "Spark Plug",
+        "seo_path": "/spare-parts/ignition-and-preheating/plug-spark-plug",
+        "subcategories": []
+      },
+      {
+        "id": "201",
+        "name": "Timing case gasket",
+        "seo_path": "/spare-parts/ignition-and-preheating/timing-cover-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "825",
+        "name": "Ignition Coil",
+        "seo_path": "/spare-parts/ignition-and-preheating/ignition-coil",
+        "subcategories": []
+      },
+      {
+        "id": "1248",
+        "name": "Spark Plug Sealing Ring",
+        "seo_path": "/spare-parts/ignition-and-preheating/spark-plug-sealing-ring",
+        "subcategories": []
+      },
+      {
+        "id": "1249",
+        "name": "Spark Plug Pipe",
+        "seo_path": "/spare-parts/ignition-and-preheating/spark-plug-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "1278",
+        "name": "Timing Case",
+        "seo_path": "/spare-parts/ignition-and-preheating/timing-case",
+        "subcategories": []
+      },
+      {
+        "id": "1296",
+        "name": "Glow Plug Cable",
+        "seo_path": "/spare-parts/ignition-and-preheating/glow-plug-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1315",
+        "name": "Ignition System Control System",
+        "seo_path": "/spare-parts/ignition-and-preheating/ignition-system-control-system",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "203",
+    "name": "Suspension parts",
+    "seo_path": "/spare-parts/suspension-parts",
+    "subcategories": [
+      {
+        "id": "204",
+        "name": "Sway Bar",
+        "seo_path": "/spare-parts/suspension-parts/sway-bar",
+        "subcategories": []
+      },
+      {
+        "id": "205",
+        "name": "Anti-Roll Bar Stabilizer",
+        "seo_path": "/spare-parts/suspension-parts/anti-roll-bar-stabilizer",
+        "subcategories": []
+      },
+      {
+        "id": "206",
+        "name": "Axle  Bushes",
+        "seo_path": "/spare-parts/suspension-parts/axle-bushes",
+        "subcategories": []
+      },
+      {
+        "id": "208",
+        "name": "Ball Joint",
+        "seo_path": "/spare-parts/suspension-parts/suspension-ball-joint",
+        "subcategories": []
+      },
+      {
+        "id": "209",
+        "name": "Subframe",
+        "seo_path": "/spare-parts/suspension-parts/subframe",
+        "subcategories": []
+      },
+      {
+        "id": "210",
+        "name": "Bracket, Stabilizer Mounting",
+        "seo_path": "/spare-parts/suspension-parts/bracket-stabilizer-mounting",
+        "subcategories": []
+      },
+      {
+        "id": "211",
+        "name": "Bush, Stub Axle Pin",
+        "seo_path": "/spare-parts/suspension-parts/bush-stub-axle-pin",
+        "subcategories": []
+      },
+      {
+        "id": "213",
+        "name": "Driver Cab Suspension",
+        "seo_path": "/spare-parts/suspension-parts/driver-cab-suspension",
+        "subcategories": []
+      },
+      {
+        "id": "214",
+        "name": "Repair kit Kingpin",
+        "seo_path": "/spare-parts/suspension-parts/kingpin",
+        "subcategories": []
+      },
+      {
+        "id": "215",
+        "name": "Mounting Kit, Control ",
+        "seo_path": "/spare-parts/suspension-parts/mounting-kit-control-lever",
+        "subcategories": []
+      },
+      {
+        "id": "216",
+        "name": "Repair Kit, Support/Steering Link",
+        "seo_path": "/spare-parts/suspension-parts/repair-kit-support-steering-link",
+        "subcategories": []
+      },
+      {
+        "id": "217",
+        "name": "Repair Kit, Wheel Suspension",
+        "seo_path": "/spare-parts/suspension-parts/repair-kit-wheel-suspension",
+        "subcategories": []
+      },
+      {
+        "id": "218",
+        "name": "Stabilizer Bushes",
+        "seo_path": "/spare-parts/suspension-parts/stabilizer-bushes",
+        "subcategories": []
+      },
+      {
+        "id": "220",
+        "name": "Steering Knuckle",
+        "seo_path": "/spare-parts/suspension-parts/steering-knuckle",
+        "subcategories": []
+      },
+      {
+        "id": "222",
+        "name": "Control Arm",
+        "seo_path": "/spare-parts/suspension-parts/suspension-arm",
+        "subcategories": []
+      },
+      {
+        "id": "227",
+        "name": "Wheel Hub",
+        "seo_path": "/spare-parts/suspension-parts/wheel-stud",
+        "subcategories": []
+      },
+      {
+        "id": "228",
+        "name": "Wheel Bolt and Wheel Nuts",
+        "seo_path": "/spare-parts/suspension-parts/wheel-bolt-and-wheel-nuts",
+        "subcategories": []
+      },
+      {
+        "id": "710",
+        "name": "Wheel Bearing",
+        "seo_path": "/spare-parts/suspension-parts/wheel-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "815",
+        "name": "Arm Bush",
+        "seo_path": "/spare-parts/suspension-parts/arm-bush",
+        "subcategories": []
+      },
+      {
+        "id": "854",
+        "name": "Anti-roll bar bushes",
+        "seo_path": "/spare-parts/suspension-parts/anti-roll-bar-bushes",
+        "subcategories": []
+      },
+      {
+        "id": "855",
+        "name": "Mounting and Bolting Kit",
+        "seo_path": "/spare-parts/suspension-parts/mounting-and-bolting-kit",
+        "subcategories": []
+      },
+      {
+        "id": "944",
+        "name": "Spring Eye Bush",
+        "seo_path": "/spare-parts/suspension-parts/spring-eye-bush",
+        "subcategories": []
+      },
+      {
+        "id": "949",
+        "name": "Guide Strut Repair Kit",
+        "seo_path": "/spare-parts/suspension-parts/guide-strut-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "960",
+        "name": "Control Arm Repair Kit",
+        "seo_path": "/spare-parts/suspension-parts/control-arm-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "966",
+        "name": "Suspension Air Spring",
+        "seo_path": "/spare-parts/suspension-parts/suspension-air-spring",
+        "subcategories": []
+      },
+      {
+        "id": "985",
+        "name": "Mounting Bush, stub axle",
+        "seo_path": "/spare-parts/suspension-parts/mounting-bush-stub-axle",
+        "subcategories": []
+      },
+      {
+        "id": "990",
+        "name": "Link Set",
+        "seo_path": "/spare-parts/suspension-parts/link-set",
+        "subcategories": []
+      },
+      {
+        "id": "1000",
+        "name": "Tilt Cylinder Repair Kit",
+        "seo_path": "/spare-parts/suspension-parts/tilt-cylinder-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1003",
+        "name": "Kingpin Bush",
+        "seo_path": "/spare-parts/suspension-parts/kingpin-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1036",
+        "name": "Parabolic Spring Bush",
+        "seo_path": "/spare-parts/suspension-parts/parabolic-spring-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1047",
+        "name": "Spring Bracket Spring",
+        "seo_path": "/spare-parts/suspension-parts/spring-bracket-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1048",
+        "name": "Spring Bracket",
+        "seo_path": "/spare-parts/suspension-parts/spring-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "1071",
+        "name": "Control Lever Mounting Kit",
+        "seo_path": "/spare-parts/suspension-parts/control-lever-mounting-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1298",
+        "name": "Bearing Frame",
+        "seo_path": "/spare-parts/suspension-parts/bearing-frame",
+        "subcategories": []
+      },
+      {
+        "id": "1342",
+        "name": "Axle Beam Mounting",
+        "seo_path": "/spare-parts/suspension-parts/axle-beam-mounting",
+        "subcategories": []
+      },
+      {
+        "id": "1343",
+        "name": "Axle Beam Bracket",
+        "seo_path": "/spare-parts/suspension-parts/axle-beam-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "1345",
+        "name": "Connecting Rod Bush",
+        "seo_path": "/spare-parts/suspension-parts/connecting-rod-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1346",
+        "name": "Ball Joint Clamping Screw",
+        "seo_path": "/spare-parts/suspension-parts/ball-joint-clamping-screw",
+        "subcategories": []
+      },
+      {
+        "id": "1347",
+        "name": "Control Arm Support",
+        "seo_path": "/spare-parts/suspension-parts/control-arm-support",
+        "subcategories": []
+      },
+      {
+        "id": "1348",
+        "name": "Control Arm Fastening Bolt",
+        "seo_path": "/spare-parts/suspension-parts/control-arm-fastening-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1349",
+        "name": "Axle Cap",
+        "seo_path": "/spare-parts/suspension-parts/axle-cap",
+        "subcategories": []
+      },
+      {
+        "id": "1350",
+        "name": "Lift Axle Bush",
+        "seo_path": "/spare-parts/suspension-parts/lift-axle-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1351",
+        "name": "Axle Beam Repair Kit",
+        "seo_path": "/spare-parts/suspension-parts/axle-beam-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1355",
+        "name": "Bushes",
+        "seo_path": "/spare-parts/suspension-parts/bushes",
+        "subcategories": []
+      },
+      {
+        "id": "1360",
+        "name": "Pneumatic Suspension",
+        "seo_path": "/spare-parts/suspension-parts/pneumatic-suspension",
+        "subcategories": []
+      },
+      {
+        "id": "1362",
+        "name": "Spring Mounting Parts",
+        "seo_path": "/spare-parts/suspension-parts/spring-mounting-parts",
+        "subcategories": []
+      },
+      {
+        "id": "1365",
+        "name": "Pressure Disc",
+        "seo_path": "/spare-parts/suspension-parts/pressure-disc",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "234",
+    "name": "Electric parts",
+    "seo_path": "/spare-parts/electric-parts",
+    "subcategories": [
+      {
+        "id": "236",
+        "name": "Alternator",
+        "seo_path": "/spare-parts/electric-parts/alternator",
+        "subcategories": []
+      },
+      {
+        "id": "239",
+        "name": "Car Battery",
+        "seo_path": "/spare-parts/electric-parts/car-battery",
+        "subcategories": []
+      },
+      {
+        "id": "240",
+        "name": "Carbon Brush, Starter",
+        "seo_path": "/spare-parts/electric-parts/carbon-brush-starter",
+        "subcategories": []
+      },
+      {
+        "id": "243",
+        "name": "Freewheel Gear, Starter",
+        "seo_path": "/spare-parts/electric-parts/freewheel-gear-starter",
+        "subcategories": []
+      },
+      {
+        "id": "244",
+        "name": "Fuse",
+        "seo_path": "/spare-parts/electric-parts/fuse",
+        "subcategories": []
+      },
+      {
+        "id": "245",
+        "name": "Fuse Box/Holder",
+        "seo_path": "/spare-parts/electric-parts/fuse-box-holder",
+        "subcategories": []
+      },
+      {
+        "id": "246",
+        "name": "Electric Air Horn",
+        "seo_path": "/spare-parts/electric-parts/electric-air-horn",
+        "subcategories": []
+      },
+      {
+        "id": "249",
+        "name": "Ignition Switch",
+        "seo_path": "/spare-parts/electric-parts/ignition-switch",
+        "subcategories": []
+      },
+      {
+        "id": "250",
+        "name": "Rotating Beacon",
+        "seo_path": "/spare-parts/electric-parts/rotating-beacon",
+        "subcategories": []
+      },
+      {
+        "id": "251",
+        "name": "Starter Motor",
+        "seo_path": "/spare-parts/electric-parts/starter-motor",
+        "subcategories": []
+      },
+      {
+        "id": "252",
+        "name": "Starter Motor Parts",
+        "seo_path": "/spare-parts/electric-parts/starter-motor-parts",
+        "subcategories": []
+      },
+      {
+        "id": "253",
+        "name": "Starter Motor Solenoid",
+        "seo_path": "/spare-parts/electric-parts/starter-motor-solenoid",
+        "subcategories": []
+      },
+      {
+        "id": "254",
+        "name": "Wiring Loom - Harness",
+        "seo_path": "/spare-parts/electric-parts/wiring-loom",
+        "subcategories": []
+      },
+      {
+        "id": "830",
+        "name": "Alternator Freewheel",
+        "seo_path": "/spare-parts/electric-parts/alternator-freewheel",
+        "subcategories": []
+      },
+      {
+        "id": "835",
+        "name": "Reverse light switch",
+        "seo_path": "/spare-parts/electric-parts/reverse-light-switch",
+        "subcategories": []
+      },
+      {
+        "id": "912",
+        "name": "Headlight Switch",
+        "seo_path": "/spare-parts/electric-parts/headlight-switch",
+        "subcategories": []
+      },
+      {
+        "id": "921",
+        "name": "Door Cable Repair Set",
+        "seo_path": "/spare-parts/electric-parts/door-cable-repair-set",
+        "subcategories": []
+      },
+      {
+        "id": "932",
+        "name": "Alternator Regulator",
+        "seo_path": "/spare-parts/electric-parts/alternator-regulator",
+        "subcategories": []
+      },
+      {
+        "id": "936",
+        "name": "Xenon Light Sensor",
+        "seo_path": "/spare-parts/electric-parts/xenon-light-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "943",
+        "name": "Universal Plug",
+        "seo_path": "/spare-parts/electric-parts/universal-plug",
+        "subcategories": []
+      },
+      {
+        "id": "1056",
+        "name": "Boot Lid Cable Repair Set",
+        "seo_path": "/spare-parts/electric-parts/boot-lid-cable-repair-set",
+        "subcategories": []
+      },
+      {
+        "id": "1066",
+        "name": "Electric Filament Adaptor",
+        "seo_path": "/spare-parts/electric-parts/electric-filament-adaptor",
+        "subcategories": []
+      },
+      {
+        "id": "1141",
+        "name": "Main Switch",
+        "seo_path": "/spare-parts/electric-parts/main-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1194",
+        "name": "Central Electrics Repair Set",
+        "seo_path": "/spare-parts/electric-parts/central-electrics-repair-set",
+        "subcategories": []
+      },
+      {
+        "id": "1261",
+        "name": "Main Battery Switch",
+        "seo_path": "/spare-parts/electric-parts/main-battery-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1264",
+        "name": "Main Relay",
+        "seo_path": "/spare-parts/electric-parts/main-relay",
+        "subcategories": []
+      },
+      {
+        "id": "1265",
+        "name": "Universal Switch",
+        "seo_path": "/spare-parts/electric-parts/universal-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1310",
+        "name": "Harness Repair Kit",
+        "seo_path": "/spare-parts/electric-parts/harness-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1371",
+        "name": "Battery Connecter Cable",
+        "seo_path": "/spare-parts/electric-parts/battery-connecter-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1379",
+        "name": "Signal Unit",
+        "seo_path": "/spare-parts/electric-parts/signal-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1408",
+        "name": "Cable Repair Parking Sensor",
+        "seo_path": "/spare-parts/electric-parts/cable-repair-parking-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1412",
+        "name": "Earth Strap",
+        "seo_path": "/spare-parts/electric-parts/earth-strap",
+        "subcategories": []
+      },
+      {
+        "id": "1413",
+        "name": "Plug Housing",
+        "seo_path": "/spare-parts/electric-parts/plug-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1429",
+        "name": "Cable Repair Kit, camshaft adjuste",
+        "seo_path": "/spare-parts/electric-parts/cable-repair-kit-camshaft-adjuste",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "256",
+    "name": "Damping",
+    "seo_path": "/spare-parts/damping",
+    "subcategories": [
+      {
+        "id": "257",
+        "name": "Air Spring Strut",
+        "seo_path": "/spare-parts/damping/air-spring-strut",
+        "subcategories": []
+      },
+      {
+        "id": "258",
+        "name": "Air Suspension compressor",
+        "seo_path": "/spare-parts/damping/air-suspension-pump",
+        "subcategories": []
+      },
+      {
+        "id": "259",
+        "name": "Boot, Air Suspension",
+        "seo_path": "/spare-parts/damping/boot-air-suspension",
+        "subcategories": []
+      },
+      {
+        "id": "263",
+        "name": "Leaf Spring",
+        "seo_path": "/spare-parts/damping/leaf-spring",
+        "subcategories": []
+      },
+      {
+        "id": "264",
+        "name": "Mounting, Shock Absorbers",
+        "seo_path": "/spare-parts/damping/mounting-shock-absorbers",
+        "subcategories": []
+      },
+      {
+        "id": "266",
+        "name": "Shock absorber",
+        "seo_path": "/spare-parts/damping/shock-absorber",
+        "subcategories": []
+      },
+      {
+        "id": "267",
+        "name": "Bump Stops & Shock Absorber Dust Cover",
+        "seo_path": "/spare-parts/damping/bump-stops-shock-absorber-dust-cover",
+        "subcategories": []
+      },
+      {
+        "id": "268",
+        "name": "Shock Absorber Mounting Brackets",
+        "seo_path": "/spare-parts/damping/shock-absorber-mounting-brackets",
+        "subcategories": []
+      },
+      {
+        "id": "270",
+        "name": "Coil Springs",
+        "seo_path": "/spare-parts/damping/coil-springs",
+        "subcategories": []
+      },
+      {
+        "id": "271",
+        "name": "Strut Mount",
+        "seo_path": "/spare-parts/damping/strut-mount",
+        "subcategories": []
+      },
+      {
+        "id": "274",
+        "name": "Suspension Kit, /Shock Absorbers",
+        "seo_path": "/spare-parts/damping/suspension-kit-coil-springs-shock-absorbers",
+        "subcategories": []
+      },
+      {
+        "id": "275",
+        "name": "Suspension Accumulator",
+        "seo_path": "/spare-parts/damping/suspension-accumulator",
+        "subcategories": []
+      },
+      {
+        "id": "845",
+        "name": "Spring Clamp",
+        "seo_path": "/spare-parts/damping/spring-clamp",
+        "subcategories": []
+      },
+      {
+        "id": "919",
+        "name": "Spring Bolt",
+        "seo_path": "/spare-parts/damping/spring-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "924",
+        "name": "Leaf Spring Mount",
+        "seo_path": "/spare-parts/damping/leaf-spring-mount",
+        "subcategories": []
+      },
+      {
+        "id": "930",
+        "name": "Spring Cap",
+        "seo_path": "/spare-parts/damping/spring-cap",
+        "subcategories": []
+      },
+      {
+        "id": "940",
+        "name": "Suspension Stabilizer Repair Kit",
+        "seo_path": "/spare-parts/damping/suspension-stabilizer-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "979",
+        "name": "Spring Bolt Repair Kit",
+        "seo_path": "/spare-parts/damping/spring-bolt-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1012",
+        "name": "Tension Spring",
+        "seo_path": "/spare-parts/damping/tension-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1364",
+        "name": "Camber bolts",
+        "seo_path": "/spare-parts/damping/camber-bolts",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "277",
+    "name": "Timing belt- chains and rollers",
+    "seo_path": "/spare-parts/timing-belt-chains-and-rollers",
+    "subcategories": [
+      {
+        "id": "147",
+        "name": "Timing Chain Guides",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-chain-guides",
+        "subcategories": []
+      },
+      {
+        "id": "156",
+        "name": "Water Pump + Timingbelt kit",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/water-pump-serpentine-belt-kit",
+        "subcategories": []
+      },
+      {
+        "id": "281",
+        "name": "Deflection / guide pulley, v-ribbed belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/deflection-pulley",
+        "subcategories": []
+      },
+      {
+        "id": "282",
+        "name": "Flexible Coupling Sleeve",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/flexible-coupling-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "285",
+        "name": "Pulley Bolt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/pulley-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "287",
+        "name": "Tensioner Pulley, V-Belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-pulley-v-belt",
+        "subcategories": []
+      },
+      {
+        "id": "288",
+        "name": "Timing belt Tensioner Pulley",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-pulley",
+        "subcategories": []
+      },
+      {
+        "id": "289",
+        "name": "Tensioner, Timing Belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-timing-belt",
+        "subcategories": []
+      },
+      {
+        "id": "290",
+        "name": "Timing Belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-belt",
+        "subcategories": []
+      },
+      {
+        "id": "291",
+        "name": "Deflection Pulley, Timing Belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/deflection-guide-pulley-timing-belt",
+        "subcategories": []
+      },
+      {
+        "id": "292",
+        "name": "Timing Belt Kit",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-belt-kit",
+        "subcategories": []
+      },
+      {
+        "id": "295",
+        "name": "Timing Chain",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-chain",
+        "subcategories": []
+      },
+      {
+        "id": "296",
+        "name": "Timing Chain Set",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-chain-set",
+        "subcategories": []
+      },
+      {
+        "id": "298",
+        "name": "V-Belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/vee-belt",
+        "subcategories": []
+      },
+      {
+        "id": "299",
+        "name": "Vibration Damper, V-Ribbed Belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/vibration-damper-v-ribbed-belt",
+        "subcategories": []
+      },
+      {
+        "id": "806",
+        "name": "Tensnioner pulley, v-ribbed belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensnioner-pulley-v-ribbed-belt",
+        "subcategories": []
+      },
+      {
+        "id": "834",
+        "name": "Timing chain tensioner",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-chain-tensioner",
+        "subcategories": []
+      },
+      {
+        "id": "899",
+        "name": "V-belt Kit",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/v-belt-kit",
+        "subcategories": []
+      },
+      {
+        "id": "991",
+        "name": "Tensioner Lever, v-ribbed belt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-lever-v-ribbed-belt",
+        "subcategories": []
+      },
+      {
+        "id": "1005",
+        "name": "Timing Cover Gasket",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-cover-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "1142",
+        "name": "Tensioner Pulley Lever Bearing Journal",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-pulley-lever-bearing-journal",
+        "subcategories": []
+      },
+      {
+        "id": "1143",
+        "name": "V-ribbed Belt Tensioner Bearing",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/v-ribbed-belt-tensioner-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1144",
+        "name": "Tensioner Pulley Bolt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-pulley-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1145",
+        "name": "Tensioner Pulley Lever Bush",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/tensioner-pulley-lever-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1146",
+        "name": "Crankshaft Pulley Bolt",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/crankshaft-pulley-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1148",
+        "name": "Timing belt Cover",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-belt-cover",
+        "subcategories": []
+      },
+      {
+        "id": "1150",
+        "name": "Timing Belt Pulley Set",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-belt-pulley-set",
+        "subcategories": []
+      },
+      {
+        "id": "1270",
+        "name": "Timing Chain Lock",
+        "seo_path": "/spare-parts/timing-belt-chains-and-rollers/timing-chain-lock",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "300",
+    "name": "Engine cooling system",
+    "seo_path": "/spare-parts/engine-cooling-system",
+    "subcategories": [
+      {
+        "id": "301",
+        "name": "Control Unit, Electric Fan (Engine Cooling)",
+        "seo_path": "/spare-parts/engine-cooling-system/control-unit-electric-fan-engine-cooling",
+        "subcategories": []
+      },
+      {
+        "id": "303",
+        "name": "Coolant Temperature Sensor",
+        "seo_path": "/spare-parts/engine-cooling-system/coolant-temperature-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "304",
+        "name": "Radiator Fan",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-fan",
+        "subcategories": []
+      },
+      {
+        "id": "306",
+        "name": "Cowling, Radiator Fan",
+        "seo_path": "/spare-parts/engine-cooling-system/cowling-radiator-fan",
+        "subcategories": []
+      },
+      {
+        "id": "308",
+        "name": "Coolant Expansion Tank",
+        "seo_path": "/spare-parts/engine-cooling-system/coolant-expansion-tank",
+        "subcategories": []
+      },
+      {
+        "id": "309",
+        "name": "Coolant Reservoir Cap",
+        "seo_path": "/spare-parts/engine-cooling-system/coolant-reservoir-cap",
+        "subcategories": []
+      },
+      {
+        "id": "310",
+        "name": "Radiator Fan Clutch",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-fan-clutch",
+        "subcategories": []
+      },
+      {
+        "id": "311",
+        "name": "Fan Wheel, Engine Cooling",
+        "seo_path": "/spare-parts/engine-cooling-system/fan-wheel-engine-cooling",
+        "subcategories": []
+      },
+      {
+        "id": "312",
+        "name": "Freeze Plug",
+        "seo_path": "/spare-parts/engine-cooling-system/freeze-plug",
+        "subcategories": []
+      },
+      {
+        "id": "313",
+        "name": "Gasket, Coolant Flange",
+        "seo_path": "/spare-parts/engine-cooling-system/gasket-coolant-flange",
+        "subcategories": []
+      },
+      {
+        "id": "314",
+        "name": "Hose, Transmission Oil Cooler",
+        "seo_path": "/spare-parts/engine-cooling-system/hose-transmission-oil-cooler",
+        "subcategories": []
+      },
+      {
+        "id": "315",
+        "name": "Intercooler",
+        "seo_path": "/spare-parts/engine-cooling-system/turbo-intercooler",
+        "subcategories": []
+      },
+      {
+        "id": "316",
+        "name": "Engine Oil Cooler",
+        "seo_path": "/spare-parts/engine-cooling-system/engine-oil-cooler",
+        "subcategories": []
+      },
+      {
+        "id": "317",
+        "name": "Oil Thermostat",
+        "seo_path": "/spare-parts/engine-cooling-system/oil-thermostat",
+        "subcategories": []
+      },
+      {
+        "id": "318",
+        "name": "Radiator",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-engine-cooling",
+        "subcategories": []
+      },
+      {
+        "id": "319",
+        "name": "Radiator Cap",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-cap",
+        "subcategories": []
+      },
+      {
+        "id": "322",
+        "name": "Seal, Coolant Pipe",
+        "seo_path": "/spare-parts/engine-cooling-system/seal-coolant-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "324",
+        "name": "Sensor, Coolant pipe",
+        "seo_path": "/spare-parts/engine-cooling-system/sensor-coolant-level",
+        "subcategories": []
+      },
+      {
+        "id": "327",
+        "name": "Temperature Switch, Radiator Fan",
+        "seo_path": "/spare-parts/engine-cooling-system/temperature-switch-radiator-fan",
+        "subcategories": []
+      },
+      {
+        "id": "328",
+        "name": "Coolant Thermostat",
+        "seo_path": "/spare-parts/engine-cooling-system/coolant-thermostat",
+        "subcategories": []
+      },
+      {
+        "id": "330",
+        "name": "Thermostat Housing Gasket",
+        "seo_path": "/spare-parts/engine-cooling-system/thermostat-housing-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "807",
+        "name": "Waterpump",
+        "seo_path": "/spare-parts/engine-cooling-system/waterpump",
+        "subcategories": []
+      },
+      {
+        "id": "808",
+        "name": "Waterpump gasket",
+        "seo_path": "/spare-parts/engine-cooling-system/waterpump-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "814",
+        "name": "Radiator Hose",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-hose",
+        "subcategories": []
+      },
+      {
+        "id": "934",
+        "name": "Thermostat Housing",
+        "seo_path": "/spare-parts/engine-cooling-system/thermostat-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1032",
+        "name": "Coolant Filter",
+        "seo_path": "/spare-parts/engine-cooling-system/coolant-filter",
+        "subcategories": []
+      },
+      {
+        "id": "1095",
+        "name": "Air Control Intake Valve",
+        "seo_path": "/spare-parts/engine-cooling-system/air-control-intake-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1097",
+        "name": "Intercooler Gasket",
+        "seo_path": "/spare-parts/engine-cooling-system/intercooler-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "1226",
+        "name": "Radiator Fan Bearing",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-fan-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1230",
+        "name": "Radiator Fan Ring",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-fan-ring",
+        "subcategories": []
+      },
+      {
+        "id": "1233",
+        "name": "Coolant Tank Holder",
+        "seo_path": "/spare-parts/engine-cooling-system/coolant-tank-holder",
+        "subcategories": []
+      },
+      {
+        "id": "1236",
+        "name": "Radiator Fan Holder",
+        "seo_path": "/spare-parts/engine-cooling-system/radiator-fan-holder",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "331",
+    "name": "Body Components and Accessories",
+    "seo_path": "/spare-parts/auto-body-components-and-accessories",
+    "subcategories": [
+      {
+        "id": "332",
+        "name": "Battery Holder",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/battery-holder",
+        "subcategories": []
+      },
+      {
+        "id": "333",
+        "name": "Bonnet Struts",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/hood-struts",
+        "subcategories": []
+      },
+      {
+        "id": "334",
+        "name": "Tailgate gas springs",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tailgate-struts",
+        "subcategories": []
+      },
+      {
+        "id": "335",
+        "name": "Bumper",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bumper",
+        "subcategories": []
+      },
+      {
+        "id": "337",
+        "name": "Bumper Brackets",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bumper-brackets",
+        "subcategories": []
+      },
+      {
+        "id": "339",
+        "name": "Bumper Grill",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bumper-grill",
+        "subcategories": []
+      },
+      {
+        "id": "341",
+        "name": "Bumper Trim",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bumper-trim",
+        "subcategories": []
+      },
+      {
+        "id": "343",
+        "name": "Cover, Fog Light",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/cover-fog-light",
+        "subcategories": []
+      },
+      {
+        "id": "344",
+        "name": "Wing Mirror Covers",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/wing-mirror-covers",
+        "subcategories": []
+      },
+      {
+        "id": "345",
+        "name": "Bumper Reinforcement",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bumper-reinforcement",
+        "subcategories": []
+      },
+      {
+        "id": "348",
+        "name": "Rubber Door Seal",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/rubber-door-seal",
+        "subcategories": []
+      },
+      {
+        "id": "354",
+        "name": "Fender",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/fender",
+        "subcategories": []
+      },
+      {
+        "id": "360",
+        "name": "Fog Light Parts",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/fog-light-parts",
+        "subcategories": []
+      },
+      {
+        "id": "362",
+        "name": "Front Grill",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/front-grill",
+        "subcategories": []
+      },
+      {
+        "id": "363",
+        "name": "Front Splitter",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/front-splitter",
+        "subcategories": []
+      },
+      {
+        "id": "365",
+        "name": "Gas Spring, Folding Top",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/gas-spring-folding-top",
+        "subcategories": []
+      },
+      {
+        "id": "366",
+        "name": "Headlight Bulb",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/headlight-bulb",
+        "subcategories": []
+      },
+      {
+        "id": "371",
+        "name": "Headlights",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/headlights",
+        "subcategories": []
+      },
+      {
+        "id": "373",
+        "name": "Bonnet",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bonnet",
+        "subcategories": []
+      },
+      {
+        "id": "374",
+        "name": "Indicator Bulb",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/indicator-bulb",
+        "subcategories": []
+      },
+      {
+        "id": "376",
+        "name": "Licence Plate Holder/Bracket",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/licence-plate-holder-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "386",
+        "name": "Radiator Mounting",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/radiator-mounting",
+        "subcategories": []
+      },
+      {
+        "id": "387",
+        "name": "Radiator Support",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/radiator-support-frame",
+        "subcategories": []
+      },
+      {
+        "id": "388",
+        "name": "Tailgate",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tailgate",
+        "subcategories": []
+      },
+      {
+        "id": "390",
+        "name": "Rear Fog lights",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/rear-fog-lamp",
+        "subcategories": []
+      },
+      {
+        "id": "391",
+        "name": "Tail / rear Lights",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tail-lights",
+        "subcategories": []
+      },
+      {
+        "id": "393",
+        "name": "Rear-End Cowling",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/rear-end-cowling",
+        "subcategories": []
+      },
+      {
+        "id": "394",
+        "name": "Rearlight Parts",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/rearlight-parts",
+        "subcategories": []
+      },
+      {
+        "id": "395",
+        "name": "Reflectors",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/reflectors",
+        "subcategories": []
+      },
+      {
+        "id": "399",
+        "name": "Reverse Lights",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/reverse-lights",
+        "subcategories": []
+      },
+      {
+        "id": "401",
+        "name": "Side Indicator",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/side-indicator",
+        "subcategories": []
+      },
+      {
+        "id": "406",
+        "name": "Spotlight",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/spotlight",
+        "subcategories": []
+      },
+      {
+        "id": "407",
+        "name": "Bonnet lock",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bonnet-lock",
+        "subcategories": []
+      },
+      {
+        "id": "408",
+        "name": "Spotlight Bulb",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/spotlight-bulb",
+        "subcategories": []
+      },
+      {
+        "id": "411",
+        "name": "Brake Light Bulb",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/stop-light-bulb",
+        "subcategories": []
+      },
+      {
+        "id": "413",
+        "name": "Tailgate Lock",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tailgate-lock",
+        "subcategories": []
+      },
+      {
+        "id": "415",
+        "name": "Third Brake Light",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/third-brake-light",
+        "subcategories": []
+      },
+      {
+        "id": "419",
+        "name": "Wheel Arch Trim",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/wheel-arch-trim",
+        "subcategories": []
+      },
+      {
+        "id": "420",
+        "name": "Windscreen Seal",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/windscreen-seal",
+        "subcategories": []
+      },
+      {
+        "id": "424",
+        "name": "Side Mirror",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/side-mirror",
+        "subcategories": []
+      },
+      {
+        "id": "426",
+        "name": "Side Mirror Glass",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/side-mirror-glass",
+        "subcategories": []
+      },
+      {
+        "id": "428",
+        "name": "Headlight Ballast",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/headlight-ballast",
+        "subcategories": []
+      },
+      {
+        "id": "812",
+        "name": "Clips",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/clips",
+        "subcategories": []
+      },
+      {
+        "id": "844",
+        "name": "Sliding Doors",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/sliding-doors",
+        "subcategories": []
+      },
+      {
+        "id": "922",
+        "name": "Jack Support Plate",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/jack-support-plate",
+        "subcategories": []
+      },
+      {
+        "id": "923",
+        "name": "Wide-angle mirror",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/wide-angle-mirror",
+        "subcategories": []
+      },
+      {
+        "id": "926",
+        "name": "Mudflap",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/mudflap",
+        "subcategories": []
+      },
+      {
+        "id": "945",
+        "name": "Retaining Clip",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/retaining-clip",
+        "subcategories": []
+      },
+      {
+        "id": "950",
+        "name": "Front Panel Gas Spring",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/front-panel-gas-spring",
+        "subcategories": []
+      },
+      {
+        "id": "958",
+        "name": "Worklight",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/worklight",
+        "subcategories": []
+      },
+      {
+        "id": "970",
+        "name": "Tailgate Hatch Release",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tailgate-hatch-release",
+        "subcategories": []
+      },
+      {
+        "id": "976",
+        "name": "Bulb Socket",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bulb-socket",
+        "subcategories": []
+      },
+      {
+        "id": "986",
+        "name": "Gas Spring, rear windscreen",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/gas-spring-rear-windscreen",
+        "subcategories": []
+      },
+      {
+        "id": "988",
+        "name": "Front Cover Lock",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/front-cover-lock",
+        "subcategories": []
+      },
+      {
+        "id": "999",
+        "name": "Mirror Holder",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/mirror-holder",
+        "subcategories": []
+      },
+      {
+        "id": "1008",
+        "name": "Outline Lamp",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/outline-lamp",
+        "subcategories": []
+      },
+      {
+        "id": "1009",
+        "name": "Door Release Cable",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/door-release-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1016",
+        "name": "Wing - Mounting Parts",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/wing-mounting-parts",
+        "subcategories": []
+      },
+      {
+        "id": "1033",
+        "name": "Air Deflector Gas Spring",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/air-deflector-gas-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1034",
+        "name": "Fuel Filter Cover",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/fuel-filter-cover",
+        "subcategories": []
+      },
+      {
+        "id": "1038",
+        "name": "Door Hinge",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/door-hinge",
+        "subcategories": []
+      },
+      {
+        "id": "1039",
+        "name": "Silencing Material",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/silencing-material",
+        "subcategories": []
+      },
+      {
+        "id": "1154",
+        "name": "Bonnet Release",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bonnet-release",
+        "subcategories": []
+      },
+      {
+        "id": "1155",
+        "name": "Bonnet Buffer",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bonnet-buffer",
+        "subcategories": []
+      },
+      {
+        "id": "1156",
+        "name": "Engine Cover Buffer",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/engine-cover-buffer",
+        "subcategories": []
+      },
+      {
+        "id": "1158",
+        "name": "Mirror Cable Set",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/mirror-cable-set",
+        "subcategories": []
+      },
+      {
+        "id": "1174",
+        "name": "Bonnet Hinge",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bonnet-hinge",
+        "subcategories": []
+      },
+      {
+        "id": "1210",
+        "name": "Mirror Control Element",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/mirror-control-element",
+        "subcategories": []
+      },
+      {
+        "id": "1211",
+        "name": "Tailgate Motor",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tailgate-motor",
+        "subcategories": []
+      },
+      {
+        "id": "1214",
+        "name": "Antenna Repair kit",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/antenna-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1251",
+        "name": "Bonnet Cable",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/bonnet-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1252",
+        "name": "Cab Damper Mounting",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/cab-damper-mounting",
+        "subcategories": []
+      },
+      {
+        "id": "1253",
+        "name": "Front Mirror",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/front-mirror",
+        "subcategories": []
+      },
+      {
+        "id": "1256",
+        "name": "Cab Stabiliser",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/cab-stabiliser",
+        "subcategories": []
+      },
+      {
+        "id": "1301",
+        "name": "Door trim",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/door-trim",
+        "subcategories": []
+      },
+      {
+        "id": "1304",
+        "name": "Gas Spring, Tool Box Compartiment",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/gas-spring-tool-box-compartiment",
+        "subcategories": []
+      },
+      {
+        "id": "1305",
+        "name": "Marker Pole",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/marker-pole",
+        "subcategories": []
+      },
+      {
+        "id": "1329",
+        "name": "Side Marker Light",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/side-marker-light",
+        "subcategories": []
+      },
+      {
+        "id": "1330",
+        "name": "Headlight Base",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/headlight-base",
+        "subcategories": []
+      },
+      {
+        "id": "1331",
+        "name": "Lights Control Unit",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/lights-control-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1333",
+        "name": "Side Marker Light Holder",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/side-marker-light-holder",
+        "subcategories": []
+      },
+      {
+        "id": "1339",
+        "name": "Wheel Covers",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/wheel-covers",
+        "subcategories": []
+      },
+      {
+        "id": "1401",
+        "name": "Tailgate Handle",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/tailgate-handle",
+        "subcategories": []
+      },
+      {
+        "id": "1402",
+        "name": "Licence Plate Light",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/licence-plate-light",
+        "subcategories": []
+      },
+      {
+        "id": "1403",
+        "name": "Position Light",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/position-light",
+        "subcategories": []
+      },
+      {
+        "id": "1417",
+        "name": "Daytime Running Light",
+        "seo_path": "/spare-parts/auto-body-components-and-accessories/daytime-running-light",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "430",
+    "name": "Heating and Ventilation Components",
+    "seo_path": "/spare-parts/heating-and-ventilation-components",
+    "subcategories": [
+      {
+        "id": "432",
+        "name": "Auxiliary Water Pump",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/auxiliary-water-pump",
+        "subcategories": []
+      },
+      {
+        "id": "433",
+        "name": "Heater Blower Motor",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/heater-blower-motor",
+        "subcategories": []
+      },
+      {
+        "id": "434",
+        "name": "Blower Motor Resistor",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/blower-motor-resistor",
+        "subcategories": []
+      },
+      {
+        "id": "435",
+        "name": "Blower Control Unit",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/blower-control-unit",
+        "subcategories": []
+      },
+      {
+        "id": "436",
+        "name": "Control, Blending Flap",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/control-blending-flap",
+        "subcategories": []
+      },
+      {
+        "id": "438",
+        "name": "Glow Plug, Parking Heater",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/glow-plug-parking-heater",
+        "subcategories": []
+      },
+      {
+        "id": "439",
+        "name": "Heater exchanger / matrix",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/heater-matrix",
+        "subcategories": []
+      },
+      {
+        "id": "440",
+        "name": "Heater Control Valve",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/heater-control-valve",
+        "subcategories": []
+      },
+      {
+        "id": "443",
+        "name": "Ambient Temperature Sensor",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/ambient-temperature-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "998",
+        "name": "Water Pump Repair Kit",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/water-pump-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1041",
+        "name": "Water Pump Housing",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/water-pump-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1081",
+        "name": "Water pump traction battery",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/water-pump-traction-battery",
+        "subcategories": []
+      },
+      {
+        "id": "1228",
+        "name": "Water Pump Pulley",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/water-pump-pulley",
+        "subcategories": []
+      },
+      {
+        "id": "1309",
+        "name": "Blower Switch",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/blower-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1311",
+        "name": "Change-Over Valve Ventilation Covers",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/change-over-valve-ventilation-covers",
+        "subcategories": []
+      },
+      {
+        "id": "1313",
+        "name": "Regulator Passenger Compartment",
+        "seo_path": "/spare-parts/heating-and-ventilation-components/regulator-passenger-compartment",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "444",
+    "name": "Sealing Components and Gaskets.",
+    "seo_path": "/spare-parts/sealing-components-and-gaskets.",
+    "subcategories": [
+      {
+        "id": "445",
+        "name": "O-Ring Set, Cylinder Sleeve",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./o-ring-set-cylinder-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "446",
+        "name": "Oil Cooler Seal",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./oil-cooler-seal",
+        "subcategories": []
+      },
+      {
+        "id": "447",
+        "name": "Oil Cooler Gasket",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./oil-cooler-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "449",
+        "name": "Seal Ring, Radiator Cap Bolt",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./seal-ring-radiator-cap-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "451",
+        "name": "Seal, Fuel Filter",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./seal-fuel-filter",
+        "subcategories": []
+      },
+      {
+        "id": "454",
+        "name": "Seal, Timing Chain Tensioner",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./seal-timing-chain-tensioner",
+        "subcategories": []
+      },
+      {
+        "id": "455",
+        "name": "Shaft Seal, Intermediate Shaft",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./shaft-seal-intermediate-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "829",
+        "name": "Crankshaft Seal",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./crankshaft-seal",
+        "subcategories": []
+      },
+      {
+        "id": "832",
+        "name": "Seal Ring",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./seal-ring",
+        "subcategories": []
+      },
+      {
+        "id": "1377",
+        "name": "Spacer Ring",
+        "seo_path": "/spare-parts/sealing-components-and-gaskets./spacer-ring",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "456",
+    "name": "Exhaust System Components and Accessories",
+    "seo_path": "/spare-parts/exhaust-system-components-and-accessories",
+    "subcategories": [
+      {
+        "id": "457",
+        "name": "Catalytic Converter",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/cat-converter",
+        "subcategories": []
+      },
+      {
+        "id": "458",
+        "name": "Catalytic Converter Mounting Kit",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/catalytic-converter-mounting-kit",
+        "subcategories": []
+      },
+      {
+        "id": "460",
+        "name": "Clamp, Silencer",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/clamp-silencer",
+        "subcategories": []
+      },
+      {
+        "id": "461",
+        "name": "DPF (Diesel Particulate Filter)",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/dpf-diesel-particulate-filter",
+        "subcategories": []
+      },
+      {
+        "id": "463",
+        "name": "EGR valve",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/egr-exhaust-gas-recirculation",
+        "subcategories": []
+      },
+      {
+        "id": "464",
+        "name": "EGR Cooler",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/egr-cooler",
+        "subcategories": []
+      },
+      {
+        "id": "465",
+        "name": "EGR Valve Gasket",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/egr-valve-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "467",
+        "name": "Exhaust Pipe Connector",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-pipe-connector",
+        "subcategories": []
+      },
+      {
+        "id": "468",
+        "name": "Exhaust Gas Door",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-gas-door",
+        "subcategories": []
+      },
+      {
+        "id": "469",
+        "name": "Holder, Exhaust System",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/holder-exhaust-system",
+        "subcategories": []
+      },
+      {
+        "id": "472",
+        "name": "Exhaust Manifold",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-manifold",
+        "subcategories": []
+      },
+      {
+        "id": "473",
+        "name": "Exhaust Manifold Mounting Kit",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-manifold-mounting-kit",
+        "subcategories": []
+      },
+      {
+        "id": "474",
+        "name": "Exhaust Pipe Gaskets",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-gaskets",
+        "subcategories": []
+      },
+      {
+        "id": "475",
+        "name": "Exhaust Pipes",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-pipes",
+        "subcategories": []
+      },
+      {
+        "id": "477",
+        "name": "Exhaust Pressure Sensor",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-pressure-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "479",
+        "name": "Exhaust Silencer",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-silencer",
+        "subcategories": []
+      },
+      {
+        "id": "482",
+        "name": "Flex Hose, Exhaust System",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/flex-hose-exhaust-system",
+        "subcategories": []
+      },
+      {
+        "id": "485",
+        "name": "Lambda Sensor",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/oxygen-sensor-lambda-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "486",
+        "name": "Middle Exhaust silencer",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/middle-exhaust",
+        "subcategories": []
+      },
+      {
+        "id": "490",
+        "name": "Secondary Air Pump",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/secondary-air-injection-pump",
+        "subcategories": []
+      },
+      {
+        "id": "492",
+        "name": "Exhaust Gas Temperature Sensor",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-gas-temperature-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "809",
+        "name": "Exhaust manifold gasket",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-manifold-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "908",
+        "name": "Corrugated Pipe",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/corrugated-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "971",
+        "name": "Urea Injection Cap",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/urea-injection-cap",
+        "subcategories": []
+      },
+      {
+        "id": "978",
+        "name": "Bolt",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1001",
+        "name": "Exhaust Clamp",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-clamp",
+        "subcategories": []
+      },
+      {
+        "id": "1025",
+        "name": "Silencer Buffer Rubber",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/silencer-buffer-rubber",
+        "subcategories": []
+      },
+      {
+        "id": "1094",
+        "name": "EGR Valve control",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/egr-valve-control",
+        "subcategories": []
+      },
+      {
+        "id": "1282",
+        "name": "Silencer Holding Bracket",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/silencer-holding-bracket",
+        "subcategories": []
+      },
+      {
+        "id": "1283",
+        "name": "Adblue tank",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/urea-injection-delivery-module",
+        "subcategories": []
+      },
+      {
+        "id": "1284",
+        "name": "Gasket Set",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "1286",
+        "name": "Exhaust Pipe Holder",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-pipe-holder",
+        "subcategories": []
+      },
+      {
+        "id": "1287",
+        "name": "Urea Injection Injector",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/urea-injection-injector",
+        "subcategories": []
+      },
+      {
+        "id": "1288",
+        "name": "Exhaust Pipe Mounting Kit",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/exhaust-pipe-mounting-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1416",
+        "name": "Particle Sensor",
+        "seo_path": "/spare-parts/exhaust-system-components-and-accessories/particle-sensor",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "495",
+    "name": "Interior and Comfort Accessories and Components",
+    "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components",
+    "subcategories": [
+      {
+        "id": "497",
+        "name": "Accelerator Pedal",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/accelerator-pedal",
+        "subcategories": []
+      },
+      {
+        "id": "501",
+        "name": "Boot",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/boot",
+        "subcategories": []
+      },
+      {
+        "id": "504",
+        "name": "Central Locking System",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/central-locking-system",
+        "subcategories": []
+      },
+      {
+        "id": "508",
+        "name": "Cylinder Lock",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/cylinder-lock",
+        "subcategories": []
+      },
+      {
+        "id": "509",
+        "name": "Door Handles",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/door-handles",
+        "subcategories": []
+      },
+      {
+        "id": "511",
+        "name": "Door Lock Mechanism",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/door-lock-mechanism",
+        "subcategories": []
+      },
+      {
+        "id": "512",
+        "name": "Window Motor",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/window-motor",
+        "subcategories": []
+      },
+      {
+        "id": "520",
+        "name": "Indicator Relay",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/indicator-relay",
+        "subcategories": []
+      },
+      {
+        "id": "526",
+        "name": "Dashboard Bulbs",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/dashboard-bulbs",
+        "subcategories": []
+      },
+      {
+        "id": "528",
+        "name": "Locking Knob",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/locking-knob",
+        "subcategories": []
+      },
+      {
+        "id": "529",
+        "name": "Mirror Adjustment Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/mirror-adjustment-switch",
+        "subcategories": []
+      },
+      {
+        "id": "532",
+        "name": "Parking Sensors",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/parking-sensors",
+        "subcategories": []
+      },
+      {
+        "id": "534",
+        "name": "Pedals and Pedal Covers",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/pedals-and-pedal-covers",
+        "subcategories": []
+      },
+      {
+        "id": "536",
+        "name": "Rain Sensor",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/rain-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "540",
+        "name": "Seat Adjustment",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/seat-adjustment",
+        "subcategories": []
+      },
+      {
+        "id": "542",
+        "name": "Speedometer Cable",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/speedometer-cable",
+        "subcategories": []
+      },
+      {
+        "id": "544",
+        "name": "Steering Column Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/steering-column-switch",
+        "subcategories": []
+      },
+      {
+        "id": "546",
+        "name": "Switch, Door Contact",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/switch-door-contact",
+        "subcategories": []
+      },
+      {
+        "id": "549",
+        "name": "Switch, Hazard Light",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/switch-hazard-light",
+        "subcategories": []
+      },
+      {
+        "id": "552",
+        "name": "Window Crank",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/window-crank",
+        "subcategories": []
+      },
+      {
+        "id": "554",
+        "name": "Window Regulator",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/window-regulator",
+        "subcategories": []
+      },
+      {
+        "id": "556",
+        "name": "Window Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/window-switch",
+        "subcategories": []
+      },
+      {
+        "id": "913",
+        "name": "Airbag Clockspring",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/airbag-clockspring",
+        "subcategories": []
+      },
+      {
+        "id": "917",
+        "name": "Driver Cab Buffer Rubber",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/driver-cab-buffer-rubber",
+        "subcategories": []
+      },
+      {
+        "id": "1021",
+        "name": "Interior Temperature Sensor",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/interior-temperature-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1043",
+        "name": "Clutch Control Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/clutch-control-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1318",
+        "name": "Oil pressure Gauge",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/oil-pressure-gauge",
+        "subcategories": []
+      },
+      {
+        "id": "1324",
+        "name": "Cup holders",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/cup-holders",
+        "subcategories": []
+      },
+      {
+        "id": "1327",
+        "name": "seat adjustment Gas Spring",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/seat-adjustment-gas-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1328",
+        "name": "Seat Adjustment Control",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/seat-adjustment-control",
+        "subcategories": []
+      },
+      {
+        "id": "1332",
+        "name": "Interior Light Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/interior-light-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1368",
+        "name": "steering wheel Cover",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/steering-wheel-cover",
+        "subcategories": []
+      },
+      {
+        "id": "1380",
+        "name": "Horn Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/horn-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1400",
+        "name": "Door Lock Switch",
+        "seo_path": "/spare-parts/interior-and-comfort-accessories-and-components/door-lock-switch",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "557",
+    "name": "Fuel System and Accessories",
+    "seo_path": "/spare-parts/fuel-system-components-and-accessories",
+    "subcategories": [
+      {
+        "id": "558",
+        "name": "Carburetor Flange",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/carburetor-flange",
+        "subcategories": []
+      },
+      {
+        "id": "559",
+        "name": "Carburetor and Parts",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/carburetor-and-parts",
+        "subcategories": []
+      },
+      {
+        "id": "562",
+        "name": "Fuel Tank Cap",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-tank-cap",
+        "subcategories": []
+      },
+      {
+        "id": "563",
+        "name": "Fuel Cut-off, Injection System",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-cut-off-injection-system",
+        "subcategories": []
+      },
+      {
+        "id": "564",
+        "name": "Fuel level sensor",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-tank-sender-unit",
+        "subcategories": []
+      },
+      {
+        "id": "565",
+        "name": "Pressure Control Valve Common Rail System",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/pressure-control-valve-common-rail-system",
+        "subcategories": []
+      },
+      {
+        "id": "567",
+        "name": "Fuel Pump Relay",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-pump-relay",
+        "subcategories": []
+      },
+      {
+        "id": "568",
+        "name": "Fuel Pump Repair Kit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-pump-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "569",
+        "name": "Fuel pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-pump",
+        "subcategories": []
+      },
+      {
+        "id": "574",
+        "name": "Gasket, Fuel Pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/gasket-fuel-pump",
+        "subcategories": []
+      },
+      {
+        "id": "575",
+        "name": "Heat Shield, Injection System",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/heat-shield-injection-system",
+        "subcategories": []
+      },
+      {
+        "id": "576",
+        "name": "Fuel Injection Pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-injection-pump",
+        "subcategories": []
+      },
+      {
+        "id": "580",
+        "name": "Idle Control Valve Air Supply",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/idle-control-valve-air-supply",
+        "subcategories": []
+      },
+      {
+        "id": "583",
+        "name": "Injector Seal Ring",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injector-seal-ring",
+        "subcategories": []
+      },
+      {
+        "id": "584",
+        "name": "Injector Seals",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injector-seals",
+        "subcategories": []
+      },
+      {
+        "id": "585",
+        "name": "Pump and Nozzle Unit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/pump-and-nozzle-unit",
+        "subcategories": []
+      },
+      {
+        "id": "586",
+        "name": "Injectors",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injectors",
+        "subcategories": []
+      },
+      {
+        "id": "587",
+        "name": "Air Flow Meter",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/air-flow-meter",
+        "subcategories": []
+      },
+      {
+        "id": "589",
+        "name": "Pressure Tank, Fuel Supply",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/pressure-tank-fuel-supply",
+        "subcategories": []
+      },
+      {
+        "id": "591",
+        "name": "Repair Kit, Injection Nozzle",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/repair-kit-injection-nozzle",
+        "subcategories": []
+      },
+      {
+        "id": "592",
+        "name": "Seal, Fuel Line",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/seal-fuel-line",
+        "subcategories": []
+      },
+      {
+        "id": "593",
+        "name": "Seal, Fuel Sender Unit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/seal-fuel-sender-unit",
+        "subcategories": []
+      },
+      {
+        "id": "594",
+        "name": "Seal, Injection Pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/seal-injection-pump",
+        "subcategories": []
+      },
+      {
+        "id": "596",
+        "name": "Sensor, Fuel Pressure",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/sensor-fuel-pressure",
+        "subcategories": []
+      },
+      {
+        "id": "598",
+        "name": "Fuel Temperature Sensor",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-temperature-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "600",
+        "name": "Throttle Body",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/throttle-body",
+        "subcategories": []
+      },
+      {
+        "id": "601",
+        "name": "Throttle Position Sensor",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/throttle-position-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "963",
+        "name": "Nozzle Holder Sleeve",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/nozzle-holder-sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "1015",
+        "name": "Valves Fuel Supply",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/valves-fuel-supply",
+        "subcategories": []
+      },
+      {
+        "id": "1044",
+        "name": "Fuel Tank Breather Valve",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-tank-breather-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1068",
+        "name": "Injector Holder Repair Kit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injector-holder-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1082",
+        "name": "Throttle Body Seal",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/throttle-body-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1093",
+        "name": "Air Supply Control Adapter Cable",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/air-supply-control-adapter-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1193",
+        "name": "Fuel Line Connection Piece",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-line-connection-piece",
+        "subcategories": []
+      },
+      {
+        "id": "1212",
+        "name": "Fuel Preheater",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-preheater",
+        "subcategories": []
+      },
+      {
+        "id": "1285",
+        "name": "Tank Unit Heating",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/tank-unit-heating",
+        "subcategories": []
+      },
+      {
+        "id": "1289",
+        "name": "Tank Breather Carbon Filter",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/tank-breather-carbon-filter",
+        "subcategories": []
+      },
+      {
+        "id": "1290",
+        "name": "Fuel Pump Control Unit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-pump-control-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1291",
+        "name": "Fuel Feed Unit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-feed-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1292",
+        "name": "Fuel Tank Bleeding",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-tank-bleeding",
+        "subcategories": []
+      },
+      {
+        "id": "1293",
+        "name": "Fuel Pressure Regulator",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-pressure-regulator",
+        "subcategories": []
+      },
+      {
+        "id": "1294",
+        "name": "Hand Feed Pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/hand-feed-pump",
+        "subcategories": []
+      },
+      {
+        "id": "1306",
+        "name": "Fuel Pump Valve",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-pump-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1307",
+        "name": "Activated Carbon Filter Valve",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/activated-carbon-filter-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1381",
+        "name": "Cable / Linkages",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/cable-linkages",
+        "subcategories": []
+      },
+      {
+        "id": "1382",
+        "name": "Injector Cable",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injector-cable",
+        "subcategories": []
+      },
+      {
+        "id": "1383",
+        "name": "High pressure fuel pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/high-pressure-fuel-pump",
+        "subcategories": []
+      },
+      {
+        "id": "1384",
+        "name": "Flange, central injection",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/flange-central-injection",
+        "subcategories": []
+      },
+      {
+        "id": "1385",
+        "name": "injection pump Gear",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injection-pump-gear",
+        "subcategories": []
+      },
+      {
+        "id": "1386",
+        "name": "Fuel Rail",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-rail",
+        "subcategories": []
+      },
+      {
+        "id": "1387",
+        "name": "Fuel Distributor",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/fuel-distributor",
+        "subcategories": []
+      },
+      {
+        "id": "1388",
+        "name": "Injection System Valve",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injection-system-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1409",
+        "name": "Injector Repair Kit",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/injector-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1411",
+        "name": "Repair Kit Common Rail",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/repair-kit-common-rail",
+        "subcategories": []
+      },
+      {
+        "id": "1415",
+        "name": "Filler Pipe Fuel Tank",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/filler-pipe-fuel-tank",
+        "subcategories": []
+      },
+      {
+        "id": "1430",
+        "name": "Pressure Accumulator, fuel pressure",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/pressure-accumulator-fuel-pressure",
+        "subcategories": []
+      },
+      {
+        "id": "1431",
+        "name": "Swirl Pot Fuel Pump",
+        "seo_path": "/spare-parts/fuel-system-components-and-accessories/swirl-pot-fuel-pump",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "602",
+    "name": "Steering System Components",
+    "seo_path": "/spare-parts/steering-system-components-and-accessories",
+    "subcategories": [
+      {
+        "id": "603",
+        "name": "Bushing, Drop Arm Shaft",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/bushing-drop-arm-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "604",
+        "name": "Centre Rod Assembly",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/centre-rod-assembly",
+        "subcategories": []
+      },
+      {
+        "id": "608",
+        "name": "Hydraulic Oil Expansion Tank",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/hydraulic-oil-expansion-tank",
+        "subcategories": []
+      },
+      {
+        "id": "609",
+        "name": "Inner Track Rod ",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/inner-track-rod-end",
+        "subcategories": []
+      },
+      {
+        "id": "610",
+        "name": "Joint, Steering Column",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/joint-steering-column",
+        "subcategories": []
+      },
+      {
+        "id": "612",
+        "name": "Power steering Pump",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-pump",
+        "subcategories": []
+      },
+      {
+        "id": "613",
+        "name": "Pulley, Power Steering Pump",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/pulley-power-steering-pump",
+        "subcategories": []
+      },
+      {
+        "id": "614",
+        "name": "Repair Kit, Steering Gear",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/repair-kit-steering-gear",
+        "subcategories": []
+      },
+      {
+        "id": "615",
+        "name": "Repair Kit, Tie Rod End",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/repair-kit-tie-rod-end",
+        "subcategories": []
+      },
+      {
+        "id": "618",
+        "name": "Steering Hose",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/power-steering-hose",
+        "subcategories": []
+      },
+      {
+        "id": "619",
+        "name": "Steering linkage",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-linkage",
+        "subcategories": []
+      },
+      {
+        "id": "622",
+        "name": "Steering Rack",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-rack",
+        "subcategories": []
+      },
+      {
+        "id": "624",
+        "name": "Steering Rack Boot",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-rack-boot",
+        "subcategories": []
+      },
+      {
+        "id": "625",
+        "name": "Steering Rack Oil Pressure Switch",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-rack-oil-pressure-switch",
+        "subcategories": []
+      },
+      {
+        "id": "626",
+        "name": "Steering Shaft",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "628",
+        "name": "Track Rod end",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/track-rod",
+        "subcategories": []
+      },
+      {
+        "id": "630",
+        "name": "Tie Rod ",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/tie-rod",
+        "subcategories": []
+      },
+      {
+        "id": "918",
+        "name": "Steering Gear Gasket Set",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-gear-gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "939",
+        "name": "Idler Arm",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/idler-arm",
+        "subcategories": []
+      },
+      {
+        "id": "968",
+        "name": "Steering Lock",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-lock",
+        "subcategories": []
+      },
+      {
+        "id": "969",
+        "name": "Power Steering Slave Cylinder",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/power-steering-slave-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "1020",
+        "name": "Steering Mounting Gear",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-mounting-gear",
+        "subcategories": []
+      },
+      {
+        "id": "1026",
+        "name": "Pitman Arm",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/pitman-arm",
+        "subcategories": []
+      },
+      {
+        "id": "1069",
+        "name": "Reversing Lever Repair Kit",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/reversing-lever-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1084",
+        "name": "Steering Angle Sensor",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-angle-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1130",
+        "name": "Inner Tie Rod",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/inner-tie-rod",
+        "subcategories": []
+      },
+      {
+        "id": "1366",
+        "name": "Steering Shaft, Column, Joints",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-shaft-column-joints",
+        "subcategories": []
+      },
+      {
+        "id": "1370",
+        "name": "Steering Column Adjustment Ga Spring",
+        "seo_path": "/spare-parts/steering-system-components-and-accessories/steering-column-adjustment-ga-spring",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "632",
+    "name": "Clutch System",
+    "seo_path": "/spare-parts/clutch-system",
+    "subcategories": [
+      {
+        "id": "635",
+        "name": "Clutch Cable",
+        "seo_path": "/spare-parts/clutch-system/clutch-cable",
+        "subcategories": []
+      },
+      {
+        "id": "636",
+        "name": "Clutch Hose",
+        "seo_path": "/spare-parts/clutch-system/clutch-hose",
+        "subcategories": []
+      },
+      {
+        "id": "637",
+        "name": "Clutch Set / Kit",
+        "seo_path": "/spare-parts/clutch-system/clutch-set",
+        "subcategories": []
+      },
+      {
+        "id": "638",
+        "name": "Clutch Master Cylinder",
+        "seo_path": "/spare-parts/clutch-system/clutch-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "639",
+        "name": "Clutch plate",
+        "seo_path": "/spare-parts/clutch-system/clutch-disc",
+        "subcategories": []
+      },
+      {
+        "id": "641",
+        "name": "Clutch release Bearing",
+        "seo_path": "/spare-parts/clutch-system/clutch-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "643",
+        "name": "Flywheel",
+        "seo_path": "/spare-parts/clutch-system/flywheel",
+        "subcategories": []
+      },
+      {
+        "id": "644",
+        "name": "Flywheel Bolt",
+        "seo_path": "/spare-parts/clutch-system/flywheel-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "645",
+        "name": "Pilot Bearing",
+        "seo_path": "/spare-parts/clutch-system/pilot-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "646",
+        "name": "Release Fork",
+        "seo_path": "/spare-parts/clutch-system/release-fork",
+        "subcategories": []
+      },
+      {
+        "id": "648",
+        "name": " Repair kit, clutch slave cylinder",
+        "seo_path": "/spare-parts/clutch-system/repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "650",
+        "name": "Sleeve",
+        "seo_path": "/spare-parts/clutch-system/sleeve",
+        "subcategories": []
+      },
+      {
+        "id": "817",
+        "name": "Clutch Disk",
+        "seo_path": "/spare-parts/clutch-system/clutch-disk",
+        "subcategories": []
+      },
+      {
+        "id": "833",
+        "name": "Clutch Booster",
+        "seo_path": "/spare-parts/clutch-system/clutch-booster",
+        "subcategories": []
+      },
+      {
+        "id": "856",
+        "name": "Slave Cylinder Clutch",
+        "seo_path": "/spare-parts/clutch-system/slave-cylinder-clutch",
+        "subcategories": []
+      },
+      {
+        "id": "907",
+        "name": "Central Slave Cylinder",
+        "seo_path": "/spare-parts/clutch-system/central-slave-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "954",
+        "name": "Flywheel Gear Ring",
+        "seo_path": "/spare-parts/clutch-system/flywheel-gear-ring",
+        "subcategories": []
+      },
+      {
+        "id": "981",
+        "name": "Release Fork Bolt",
+        "seo_path": "/spare-parts/clutch-system/release-fork-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1018",
+        "name": "Flywheel Repair Kit",
+        "seo_path": "/spare-parts/clutch-system/flywheel-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1040",
+        "name": "Clutch Adjustment Repair Kit",
+        "seo_path": "/spare-parts/clutch-system/clutch-adjustment-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1070",
+        "name": "Pressure Plate Screw",
+        "seo_path": "/spare-parts/clutch-system/pressure-plate-screw",
+        "subcategories": []
+      },
+      {
+        "id": "1075",
+        "name": "Releaser Repair Kit",
+        "seo_path": "/spare-parts/clutch-system/releaser-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1125",
+        "name": "Multi-plate Clutch Spring Seat",
+        "seo_path": "/spare-parts/clutch-system/multi-plate-clutch-spring-seat",
+        "subcategories": []
+      },
+      {
+        "id": "1199",
+        "name": "Clutch Repair Kit",
+        "seo_path": "/spare-parts/clutch-system/clutch-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1200",
+        "name": "Thrust Rolles Release Fork",
+        "seo_path": "/spare-parts/clutch-system/thrust-rolles-release-fork",
+        "subcategories": []
+      },
+      {
+        "id": "1201",
+        "name": "Clutch Lever Bearing",
+        "seo_path": "/spare-parts/clutch-system/clutch-lever-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1202",
+        "name": "Clutch Housing Gasket",
+        "seo_path": "/spare-parts/clutch-system/clutch-housing-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "1205",
+        "name": "Releaser Shaft",
+        "seo_path": "/spare-parts/clutch-system/releaser-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "1206",
+        "name": "Actuator",
+        "seo_path": "/spare-parts/clutch-system/actuator",
+        "subcategories": []
+      },
+      {
+        "id": "1207",
+        "name": "Clutch Pedal",
+        "seo_path": "/spare-parts/clutch-system/clutch-pedal",
+        "subcategories": []
+      },
+      {
+        "id": "1208",
+        "name": "Shuttle Valve",
+        "seo_path": "/spare-parts/clutch-system/shuttle-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1218",
+        "name": "Fork Head",
+        "seo_path": "/spare-parts/clutch-system/fork-head",
+        "subcategories": []
+      },
+      {
+        "id": "1242",
+        "name": "Clutch Switch",
+        "seo_path": "/spare-parts/clutch-system/clutch-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1427",
+        "name": "Bolt Kit Clutch",
+        "seo_path": "/spare-parts/clutch-system/bolt-kit-clutch",
+        "subcategories": []
+      },
+      {
+        "id": "1428",
+        "name": "Membran Clutch",
+        "seo_path": "/spare-parts/clutch-system/membran-clutch",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "652",
+    "name": "Drive shaft and cv joint",
+    "seo_path": "/spare-parts/drive-shaft-and-cv-joint",
+    "subcategories": [
+      {
+        "id": "653",
+        "name": "Bolt, Propshaft Flange",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/bolt-propshaft-flange",
+        "subcategories": []
+      },
+      {
+        "id": "654",
+        "name": "Drive Shaft",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/drive-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "657",
+        "name": "CV Boot",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/cv-boot",
+        "subcategories": []
+      },
+      {
+        "id": "659",
+        "name": "CV Joint",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/cv-joint",
+        "subcategories": []
+      },
+      {
+        "id": "660",
+        "name": "Intermediate Bearing, Drive Shaft",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/intermediate-bearing-drive-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "661",
+        "name": "Nut, Stub Axle",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/nut-stub-axle",
+        "subcategories": []
+      },
+      {
+        "id": "662",
+        "name": "Seal, Drive Shaft",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/seal-drive-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "663",
+        "name": "Tripod Hub Drive Shaft",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/tripod-hub-drive-shaft",
+        "subcategories": []
+      },
+      {
+        "id": "925",
+        "name": "Stub Axle Seal Ring",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/stub-axle-seal-ring",
+        "subcategories": []
+      },
+      {
+        "id": "980",
+        "name": "Drive Shaft Axle Bolt",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/drive-shaft-axle-bolt",
+        "subcategories": []
+      },
+      {
+        "id": "1134",
+        "name": "Propshaft Drive Flange",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/propshaft-drive-flange",
+        "subcategories": []
+      },
+      {
+        "id": "1357",
+        "name": "Planetary Gearbox Components",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/planetary-gearbox-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1358",
+        "name": "Packing Plate",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/packing-plate",
+        "subcategories": []
+      },
+      {
+        "id": "1422",
+        "name": "Bellow Drive Shaft - CV Joint",
+        "seo_path": "/spare-parts/drive-shaft-and-cv-joint/bellow-drive-shaft-cv-joint",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "664",
+    "name": "Towbar and parts",
+    "seo_path": "/spare-parts/towbar-and-parts",
+    "subcategories": [
+      {
+        "id": "665",
+        "name": "Cover, Towhook",
+        "seo_path": "/spare-parts/towbar-and-parts/cover-towhook",
+        "subcategories": []
+      },
+      {
+        "id": "666",
+        "name": "Pedestal, Trailer Hitch",
+        "seo_path": "/spare-parts/towbar-and-parts/pedestal-trailer-hitch",
+        "subcategories": []
+      },
+      {
+        "id": "670",
+        "name": "Towbar Electric Kit",
+        "seo_path": "/spare-parts/towbar-and-parts/towbar-electric-kit",
+        "subcategories": []
+      },
+      {
+        "id": "956",
+        "name": "Connector Plug",
+        "seo_path": "/spare-parts/towbar-and-parts/connector-plug",
+        "subcategories": []
+      },
+      {
+        "id": "962",
+        "name": "Coiled Cable",
+        "seo_path": "/spare-parts/towbar-and-parts/coiled-cable",
+        "subcategories": []
+      },
+      {
+        "id": "995",
+        "name": "Socket",
+        "seo_path": "/spare-parts/towbar-and-parts/socket",
+        "subcategories": []
+      },
+      {
+        "id": "1359",
+        "name": "Fifth Wheel Coupling",
+        "seo_path": "/spare-parts/towbar-and-parts/fifth-wheel-coupling",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "671",
+    "name": "Transmission and Gearbox Components",
+    "seo_path": "/spare-parts/transmission-and-gearbox-components",
+    "subcategories": [
+      {
+        "id": "673",
+        "name": "Transmission Oil Cooler",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transmission-oil-cooler",
+        "subcategories": []
+      },
+      {
+        "id": "674",
+        "name": "Gearbox Bearings",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/bearing-manual-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "675",
+        "name": "Shifter / Gear Cable",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shifter-cable",
+        "subcategories": []
+      },
+      {
+        "id": "676",
+        "name": "Control Unit, Automatic Transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/control-unit-automatic-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "677",
+        "name": "Flange Lid, Manual - Automatic Transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/flange-lid-manual-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "678",
+        "name": "Gear Lever Repair Kit",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gear-lever-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "679",
+        "name": "Transmission Mount / Support",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transmission-mount",
+        "subcategories": []
+      },
+      {
+        "id": "682",
+        "name": "Repair Kit, Manual Transmission Flange",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/repair-kit-manual-transmission-flange",
+        "subcategories": []
+      },
+      {
+        "id": "684",
+        "name": "Seal, Automatic Transmission Oil Pan",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/seal-automatic-transmission-oil-pan",
+        "subcategories": []
+      },
+      {
+        "id": "685",
+        "name": "Transmission Gasket Kit",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transmission-gasket-kit",
+        "subcategories": []
+      },
+      {
+        "id": "686",
+        "name": "Shaft Seal, Manual Transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shaft-seal-manual-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "687",
+        "name": "Shift Valve, Automatic Transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shift-valve-automatic-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "690",
+        "name": "Transmission Oil Pan Gasket",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transmission-pan",
+        "subcategories": []
+      },
+      {
+        "id": "691",
+        "name": "Transmission Oil Pan",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transmission-oil-pan",
+        "subcategories": []
+      },
+      {
+        "id": "813",
+        "name": "Hydraulic Filter",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/hydraulic-filter",
+        "subcategories": []
+      },
+      {
+        "id": "909",
+        "name": "Gear lever gaiter",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gear-lever-gaiter",
+        "subcategories": []
+      },
+      {
+        "id": "910",
+        "name": "Ball head, gearshift linkage",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/ball-head-gearshift-linkage",
+        "subcategories": []
+      },
+      {
+        "id": "916",
+        "name": "Lining Disc, automatic transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/lining-disc",
+        "subcategories": []
+      },
+      {
+        "id": "938",
+        "name": "Gearbox Service Kit",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gearbox-service-kit",
+        "subcategories": []
+      },
+      {
+        "id": "948",
+        "name": "Gearbox Splitter",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gearbox-splitter",
+        "subcategories": []
+      },
+      {
+        "id": "952",
+        "name": "Shift Cylinder",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shift-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "965",
+        "name": "Selector- / Shift Rod",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/selector-shift-rod",
+        "subcategories": []
+      },
+      {
+        "id": "972",
+        "name": "Shift Rod Bush",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shift-rod-bush",
+        "subcategories": []
+      },
+      {
+        "id": "989",
+        "name": "Transmission Gasket Set",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gasket-set",
+        "subcategories": []
+      },
+      {
+        "id": "994",
+        "name": "Gasket, manual transmission housing",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gasket-manual-transmission-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1046",
+        "name": "Shift Cylinder Repair Kit",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shift-cylinder-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1049",
+        "name": "Filling Adapter Set, transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/filling-adapter-set-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "1111",
+        "name": "Automatic Transmission Repair Kit",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/automatic-transmission-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1113",
+        "name": "Hydraulic Filter Housing",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/hydraulic-filter-hausing",
+        "subcategories": []
+      },
+      {
+        "id": "1114",
+        "name": "Dipstick Locking Pin",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/dipstick-locking-pin",
+        "subcategories": []
+      },
+      {
+        "id": "1115",
+        "name": "Automatic Transmission Mechatronic",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/automatic-transmission-mechatronic",
+        "subcategories": []
+      },
+      {
+        "id": "1118",
+        "name": "Automatic Transmission Oil Seal",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/automatic-transmission-oil-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1119",
+        "name": "Automatic Transmission Control Unit Plug Housing",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/automatic-transmission-control-unit-plug-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1121",
+        "name": "Transmission Housing Screw",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transmission-housing-screw",
+        "subcategories": []
+      },
+      {
+        "id": "1122",
+        "name": "Hydraulic Filter Seal",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/hydraulic-filter-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1123",
+        "name": "Selector Lever Shift",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/selector-lever-shift",
+        "subcategories": []
+      },
+      {
+        "id": "1126",
+        "name": "Transfer Case Actuator",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/transfer-case-actuator",
+        "subcategories": []
+      },
+      {
+        "id": "1389",
+        "name": "Anti-Rotation Actuator Manual Transmission",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/anti-rotation-actuator-manual-transmission",
+        "subcategories": []
+      },
+      {
+        "id": "1391",
+        "name": "Manual Transmission Control Unit",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/manual-transmission-control-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1392",
+        "name": "Shift Lever",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shift-lever",
+        "subcategories": []
+      },
+      {
+        "id": "1394",
+        "name": "Oil Pump",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/oil-pump",
+        "subcategories": []
+      },
+      {
+        "id": "1396",
+        "name": "Switch Module Sensor",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/switch-module-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1397",
+        "name": "Shift Selector Lever",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/shift-selector-lever",
+        "subcategories": []
+      },
+      {
+        "id": "1398",
+        "name": "Tension Spring",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/tension-spring",
+        "subcategories": []
+      },
+      {
+        "id": "1399",
+        "name": "Gear Lever Valve",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/gear-lever-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1414",
+        "name": "Torque Converter",
+        "seo_path": "/spare-parts/transmission-and-gearbox-components/torque-converter",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "692",
+    "name": "Air Conditioning Components",
+    "seo_path": "/spare-parts/air-conditioning-components",
+    "subcategories": [
+      {
+        "id": "694",
+        "name": "Air Conditioner Compressor",
+        "seo_path": "/spare-parts/air-conditioning-components/air-conditioner-compressor",
+        "subcategories": []
+      },
+      {
+        "id": "697",
+        "name": "Compressor Clutch",
+        "seo_path": "/spare-parts/air-conditioning-components/compressor-clutch",
+        "subcategories": []
+      },
+      {
+        "id": "698",
+        "name": "Condenser",
+        "seo_path": "/spare-parts/air-conditioning-components/ac-condenser",
+        "subcategories": []
+      },
+      {
+        "id": "701",
+        "name": "Evaporator",
+        "seo_path": "/spare-parts/air-conditioning-components/evaporator",
+        "subcategories": []
+      },
+      {
+        "id": "703",
+        "name": "Expansion Valve AC",
+        "seo_path": "/spare-parts/air-conditioning-components/expansion-valve",
+        "subcategories": []
+      },
+      {
+        "id": "704",
+        "name": "AC Pressure Switch",
+        "seo_path": "/spare-parts/air-conditioning-components/ac-pressure-switch",
+        "subcategories": []
+      },
+      {
+        "id": "818",
+        "name": "AC Compressor Repai Kit",
+        "seo_path": "/spare-parts/air-conditioning-components/ac-compressor-repai-kit",
+        "subcategories": []
+      },
+      {
+        "id": "927",
+        "name": "Dryer",
+        "seo_path": "/spare-parts/air-conditioning-components/dryer",
+        "subcategories": []
+      },
+      {
+        "id": "941",
+        "name": "Compressor Seal",
+        "seo_path": "/spare-parts/air-conditioning-components/compressor-seal",
+        "subcategories": []
+      },
+      {
+        "id": "953",
+        "name": "AC Relay Valve",
+        "seo_path": "/spare-parts/air-conditioning-components/relay-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1085",
+        "name": "Air Conditioning Actuator",
+        "seo_path": "/spare-parts/air-conditioning-components/air-conditioning-actuator",
+        "subcategories": []
+      },
+      {
+        "id": "1086",
+        "name": "Compressor Connecting Flange",
+        "seo_path": "/spare-parts/air-conditioning-components/compressor-connecting-flange",
+        "subcategories": []
+      },
+      {
+        "id": "1087",
+        "name": "Air Conditioning Control Unit",
+        "seo_path": "/spare-parts/air-conditioning-components/air-conditioning-control-unit",
+        "subcategories": []
+      },
+      {
+        "id": "1089",
+        "name": "Condenser Fan",
+        "seo_path": "/spare-parts/air-conditioning-components/condenser-fan",
+        "subcategories": []
+      },
+      {
+        "id": "1090",
+        "name": "Compressor Freewheel",
+        "seo_path": "/spare-parts/air-conditioning-components/compressor-freewheel",
+        "subcategories": []
+      },
+      {
+        "id": "1406",
+        "name": "Compressor Lid",
+        "seo_path": "/spare-parts/air-conditioning-components/compressor-lid",
+        "subcategories": []
+      },
+      {
+        "id": "1424",
+        "name": "Bearing Compresser Shaft AC",
+        "seo_path": "/spare-parts/air-conditioning-components/bearing-compresser-shaft-ac",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "711",
+    "name": "Drivetrain Components",
+    "seo_path": "/spare-parts/drivetrain-components",
+    "subcategories": [
+      {
+        "id": "714",
+        "name": "Drive Shaft Coupling",
+        "seo_path": "/spare-parts/drivetrain-components/drive-shaft-coupling",
+        "subcategories": []
+      },
+      {
+        "id": "715",
+        "name": "Mounting, Transfer Gear",
+        "seo_path": "/spare-parts/drivetrain-components/mounting-transfer-gear",
+        "subcategories": []
+      },
+      {
+        "id": "717",
+        "name": "Propshaft",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft",
+        "subcategories": []
+      },
+      {
+        "id": "718",
+        "name": "Propshaft - Cardan Bearing",
+        "seo_path": "/spare-parts/drivetrain-components/propeller-shaft-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "720",
+        "name": "Differential - Shaft Seal",
+        "seo_path": "/spare-parts/drivetrain-components/differential-seal",
+        "subcategories": []
+      },
+      {
+        "id": "915",
+        "name": "Differential Mounting",
+        "seo_path": "/spare-parts/drivetrain-components/differential-mounting",
+        "subcategories": []
+      },
+      {
+        "id": "1050",
+        "name": "Propshaft Repair Kit",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1051",
+        "name": "Propshaft Screw",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft-screw",
+        "subcategories": []
+      },
+      {
+        "id": "1127",
+        "name": "Bearing, differential shaft",
+        "seo_path": "/spare-parts/drivetrain-components/differential-shaft-bearing",
+        "subcategories": []
+      },
+      {
+        "id": "1128",
+        "name": "Propshaft Bellow",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft-bellow",
+        "subcategories": []
+      },
+      {
+        "id": "1129",
+        "name": "Differential Lock",
+        "seo_path": "/spare-parts/drivetrain-components/differential-lock",
+        "subcategories": []
+      },
+      {
+        "id": "1131",
+        "name": "Differential Housing",
+        "seo_path": "/spare-parts/drivetrain-components/differential-housing",
+        "subcategories": []
+      },
+      {
+        "id": "1132",
+        "name": "Axle Load Limitation Pressure Switch",
+        "seo_path": "/spare-parts/drivetrain-components/axle-load-limitation-pressure-switch",
+        "subcategories": []
+      },
+      {
+        "id": "1135",
+        "name": "Differential Gasket",
+        "seo_path": "/spare-parts/drivetrain-components/differential-gasket",
+        "subcategories": []
+      },
+      {
+        "id": "1136",
+        "name": "Axle Drive Screw Plug",
+        "seo_path": "/spare-parts/drivetrain-components/axle-drive-screw-plug",
+        "subcategories": []
+      },
+      {
+        "id": "1137",
+        "name": "Propshaft Mounting Kit",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft-mounting-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1138",
+        "name": "Propshaft Vibration Damper",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft-vibration-damper",
+        "subcategories": []
+      },
+      {
+        "id": "1139",
+        "name": "Propshaft Centering Bush",
+        "seo_path": "/spare-parts/drivetrain-components/propshaft-centering-bush",
+        "subcategories": []
+      },
+      {
+        "id": "1241",
+        "name": "Crankshaft Vibration Damper",
+        "seo_path": "/spare-parts/drivetrain-components/crankshaft-vibration-damper",
+        "subcategories": []
+      },
+      {
+        "id": "1259",
+        "name": "Differential Pressure Switch",
+        "seo_path": "/spare-parts/drivetrain-components/differential-pressure-switch",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "723",
+    "name": "Sensors and Control Units",
+    "seo_path": "/spare-parts/sensors-and-control-units",
+    "subcategories": [
+      {
+        "id": "724",
+        "name": "Sensor, accelerator position",
+        "seo_path": "/spare-parts/sensors-and-control-units/sensor-accelerator-position",
+        "subcategories": []
+      },
+      {
+        "id": "726",
+        "name": "Boost pressure sensor",
+        "seo_path": "/spare-parts/sensors-and-control-units/boost-pressure-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "727",
+        "name": "Control unit, central locking system",
+        "seo_path": "/spare-parts/sensors-and-control-units/control-unit-central-locking-system",
+        "subcategories": []
+      },
+      {
+        "id": "731",
+        "name": "Sensor, intake manifold pressure MAP",
+        "seo_path": "/spare-parts/sensors-and-control-units/sensor-intake-manifold-pressure",
+        "subcategories": []
+      },
+      {
+        "id": "732",
+        "name": "Multifunction relay",
+        "seo_path": "/spare-parts/sensors-and-control-units/multifunction-relay",
+        "subcategories": []
+      },
+      {
+        "id": "740",
+        "name": "Sender unit, intake air temperature",
+        "seo_path": "/spare-parts/sensors-and-control-units/sender-unit-intake-air-temperature",
+        "subcategories": []
+      },
+      {
+        "id": "741",
+        "name": "Engine oil level sensor",
+        "seo_path": "/spare-parts/sensors-and-control-units/engine-oil-level-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "744",
+        "name": "Headlight motor",
+        "seo_path": "/spare-parts/sensors-and-control-units/headlight-motor",
+        "subcategories": []
+      },
+      {
+        "id": "747",
+        "name": "Tyre pressure control system TPMS",
+        "seo_path": "/spare-parts/sensors-and-control-units/tyre-pressure-control-system",
+        "subcategories": []
+      },
+      {
+        "id": "748",
+        "name": "Water sensor, fuel system",
+        "seo_path": "/spare-parts/sensors-and-control-units/water-sensor-fuel-system",
+        "subcategories": []
+      },
+      {
+        "id": "857",
+        "name": "Solenoid Valve",
+        "seo_path": "/spare-parts/sensors-and-control-units/solenoid-valve",
+        "subcategories": []
+      },
+      {
+        "id": "858",
+        "name": "Seal Kit Multi-valve",
+        "seo_path": "/spare-parts/sensors-and-control-units/seal-kit-multi-valve",
+        "subcategories": []
+      },
+      {
+        "id": "900",
+        "name": "NOx Sensor",
+        "seo_path": "/spare-parts/sensors-and-control-units/nox-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1013",
+        "name": "Control, swirl covers (Induction Pipe)",
+        "seo_path": "/spare-parts/sensors-and-control-units/control-swirl-covers-induction-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "1297",
+        "name": "RPM Sensor",
+        "seo_path": "/spare-parts/sensors-and-control-units/rpm-sensor",
+        "subcategories": []
+      },
+      {
+        "id": "1404",
+        "name": "Relay, Spotlight",
+        "seo_path": "/spare-parts/sensors-and-control-units/relay-spotlight",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "749",
+    "name": "Repair Kits",
+    "seo_path": "/spare-parts/repair-kits",
+    "subcategories": [
+      {
+        "id": "750",
+        "name": "Alternator parts",
+        "seo_path": "/spare-parts/repair-kits/alternator-parts",
+        "subcategories": []
+      },
+      {
+        "id": "751",
+        "name": "Gasket set, hydraulic pump",
+        "seo_path": "/spare-parts/repair-kits/gasket-set-hydraulic-pump",
+        "subcategories": []
+      },
+      {
+        "id": "753",
+        "name": "Repair kit, automatic adjustment",
+        "seo_path": "/spare-parts/repair-kits/repair-kit-automatic-adjustment",
+        "subcategories": []
+      },
+      {
+        "id": "754",
+        "name": "Repair kit, clutch master cylinder",
+        "seo_path": "/spare-parts/repair-kits/repair-kit-clutch-master-cylinder",
+        "subcategories": []
+      },
+      {
+        "id": "755",
+        "name": "Repair set, crankcase breather",
+        "seo_path": "/spare-parts/repair-kits/repair-set-crankcase-breather",
+        "subcategories": []
+      },
+      {
+        "id": "756",
+        "name": "Valve, engine block breather",
+        "seo_path": "/spare-parts/repair-kits/valve-engine-block-breather",
+        "subcategories": []
+      },
+      {
+        "id": "1395",
+        "name": "Manual Transmission",
+        "seo_path": "/spare-parts/repair-kits/manual-transmission",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "757",
+    "name": "Pipes and hoses",
+    "seo_path": "/spare-parts/pipes-and-hoses",
+    "subcategories": [
+      {
+        "id": "758",
+        "name": "Air conditioning pipe",
+        "seo_path": "/spare-parts/pipes-and-hoses/air-conditioning-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "759",
+        "name": "Breather hose, fuel tank",
+        "seo_path": "/spare-parts/pipes-and-hoses/breather-hose-fuel-tank",
+        "subcategories": []
+      },
+      {
+        "id": "760",
+        "name": "Connector, washer-fluid pipe",
+        "seo_path": "/spare-parts/pipes-and-hoses/connector-washer-fluid-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "762",
+        "name": "Coolant flange",
+        "seo_path": "/spare-parts/pipes-and-hoses/coolant-flange",
+        "subcategories": []
+      },
+      {
+        "id": "763",
+        "name": "Crankcase breather pipe",
+        "seo_path": "/spare-parts/pipes-and-hoses/crankcase-breather-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "764",
+        "name": "Fuel hose",
+        "seo_path": "/spare-parts/pipes-and-hoses/fuel-hose",
+        "subcategories": []
+      },
+      {
+        "id": "765",
+        "name": "Hose, fuel overflow",
+        "seo_path": "/spare-parts/pipes-and-hoses/hose-fuel-overflow",
+        "subcategories": []
+      },
+      {
+        "id": "766",
+        "name": "Hose, heat exchange heating",
+        "seo_path": "/spare-parts/pipes-and-hoses/hose-heat-exchange-heating",
+        "subcategories": []
+      },
+      {
+        "id": "767",
+        "name": "Hose, valve cover breather",
+        "seo_path": "/spare-parts/pipes-and-hoses/hose-valve-cover-breather",
+        "subcategories": []
+      },
+      {
+        "id": "768",
+        "name": "Air intake pipe",
+        "seo_path": "/spare-parts/pipes-and-hoses/air-intake-pipe",
+        "subcategories": []
+      },
+      {
+        "id": "769",
+        "name": "Oil hose",
+        "seo_path": "/spare-parts/pipes-and-hoses/oil-hose",
+        "subcategories": []
+      },
+      {
+        "id": "771",
+        "name": "Coolant hose - pipe",
+        "seo_path": "/spare-parts/pipes-and-hoses/coolant-hose",
+        "subcategories": []
+      },
+      {
+        "id": "774",
+        "name": "Brake booster vacuum hose",
+        "seo_path": "/spare-parts/pipes-and-hoses/brake-booster-vacuum-hose",
+        "subcategories": []
+      },
+      {
+        "id": "816",
+        "name": "Charger intake",
+        "seo_path": "/spare-parts/pipes-and-hoses/charger-intake",
+        "subcategories": []
+      },
+      {
+        "id": "822",
+        "name": "High Pressure Pipe injection system",
+        "seo_path": "/spare-parts/pipes-and-hoses/high-pressure-pipe-injection-system",
+        "subcategories": []
+      },
+      {
+        "id": "823",
+        "name": "Connection pieces hose line",
+        "seo_path": "/spare-parts/pipes-and-hoses/connection-pieces-hose-line",
+        "subcategories": []
+      },
+      {
+        "id": "824",
+        "name": "Connector Compressed Air",
+        "seo_path": "/spare-parts/pipes-and-hoses/connector-compressed-air",
+        "subcategories": []
+      },
+      {
+        "id": "946",
+        "name": "Spiral Hose",
+        "seo_path": "/spare-parts/pipes-and-hoses/spiral-hose",
+        "subcategories": []
+      },
+      {
+        "id": "1010",
+        "name": "Pipes Connector",
+        "seo_path": "/spare-parts/pipes-and-hoses/pipes-connector",
+        "subcategories": []
+      },
+      {
+        "id": "1022",
+        "name": "Air Supply Hose",
+        "seo_path": "/spare-parts/pipes-and-hoses/air-supply-hose",
+        "subcategories": []
+      },
+      {
+        "id": "1105",
+        "name": "Turbocharger air hose seal",
+        "seo_path": "/spare-parts/pipes-and-hoses/turbocharger-air-hose-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1231",
+        "name": "Coolant Tube Seal",
+        "seo_path": "/spare-parts/pipes-and-hoses/coolant-tube-seal",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "846",
+    "name": "Fasteners",
+    "seo_path": "/spare-parts/fasteners",
+    "subcategories": [
+      {
+        "id": "847",
+        "name": "Clamps",
+        "seo_path": "/spare-parts/fasteners/clamps",
+        "subcategories": []
+      },
+      {
+        "id": "848",
+        "name": "Screws",
+        "seo_path": "/spare-parts/fasteners/screws",
+        "subcategories": []
+      },
+      {
+        "id": "849",
+        "name": "Bolts",
+        "seo_path": "/spare-parts/fasteners/bolts",
+        "subcategories": []
+      },
+      {
+        "id": "850",
+        "name": "Nut",
+        "seo_path": "/spare-parts/fasteners/nut",
+        "subcategories": []
+      },
+      {
+        "id": "851",
+        "name": "Buffer",
+        "seo_path": "/spare-parts/fasteners/buffer",
+        "subcategories": []
+      },
+      {
+        "id": "852",
+        "name": "Rivet",
+        "seo_path": "/spare-parts/fasteners/rivet",
+        "subcategories": []
+      },
+      {
+        "id": "853",
+        "name": "Bearing",
+        "seo_path": "/spare-parts/fasteners/bearing",
+        "subcategories": []
+      },
+      {
+        "id": "959",
+        "name": "Circlip",
+        "seo_path": "/spare-parts/fasteners/circlip",
+        "subcategories": []
+      },
+      {
+        "id": "1004",
+        "name": "Gasket / Seal",
+        "seo_path": "/spare-parts/fasteners/gasket-seal",
+        "subcategories": []
+      },
+      {
+        "id": "1372",
+        "name": "Sets",
+        "seo_path": "/spare-parts/fasteners/sets",
+        "subcategories": []
+      },
+      {
+        "id": "1374",
+        "name": "Cable Tie",
+        "seo_path": "/spare-parts/fasteners/cable-tie",
+        "subcategories": []
+      },
+      {
+        "id": "1376",
+        "name": "Protection Plugs",
+        "seo_path": "/spare-parts/fasteners/protection-plugs",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "902",
+    "name": "Compressed Air System",
+    "seo_path": "/spare-parts/compressed-air-system",
+    "subcategories": [
+      {
+        "id": "903",
+        "name": "Air Tank",
+        "seo_path": "/spare-parts/compressed-air-system/air-tank",
+        "subcategories": []
+      },
+      {
+        "id": "905",
+        "name": "Sensor Compressed Air System",
+        "seo_path": "/spare-parts/compressed-air-system/sensor-compressed-air-system",
+        "subcategories": []
+      },
+      {
+        "id": "906",
+        "name": "Air Spring Valve",
+        "seo_path": "/spare-parts/compressed-air-system/air-spring-valve",
+        "subcategories": []
+      },
+      {
+        "id": "967",
+        "name": "Coupling Head",
+        "seo_path": "/spare-parts/compressed-air-system/coupling-head",
+        "subcategories": []
+      },
+      {
+        "id": "973",
+        "name": "Directional Control Valve Block",
+        "seo_path": "/spare-parts/compressed-air-system/directional-control-valve-block",
+        "subcategories": []
+      },
+      {
+        "id": "982",
+        "name": "Multiple-Circuit Protection Valve",
+        "seo_path": "/spare-parts/compressed-air-system/multiple-circuit-protection-valve",
+        "subcategories": []
+      },
+      {
+        "id": "983",
+        "name": "Ride-Height Sender, pneumatic suspension",
+        "seo_path": "/spare-parts/compressed-air-system/ride-height-sender-pneumatic-suspension",
+        "subcategories": []
+      },
+      {
+        "id": "987",
+        "name": "Connecting Rod",
+        "seo_path": "/spare-parts/compressed-air-system/connecting-rod",
+        "subcategories": []
+      },
+      {
+        "id": "992",
+        "name": "Pressure Limiting Valve",
+        "seo_path": "/spare-parts/compressed-air-system/pressure-limiting-valve",
+        "subcategories": []
+      },
+      {
+        "id": "993",
+        "name": "Valve Plate, Air Compression",
+        "seo_path": "/spare-parts/compressed-air-system/valve-plate-air-compression",
+        "subcategories": []
+      },
+      {
+        "id": "997",
+        "name": "Overflow Valve",
+        "seo_path": "/spare-parts/compressed-air-system/overflow-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1014",
+        "name": "Air Dryer / Cartridge",
+        "seo_path": "/spare-parts/compressed-air-system/air-dryer-cartridge",
+        "subcategories": []
+      },
+      {
+        "id": "1017",
+        "name": "Brake Valve",
+        "seo_path": "/spare-parts/compressed-air-system/brake-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1031",
+        "name": "Multiport Valve",
+        "seo_path": "/spare-parts/compressed-air-system/multiport-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1062",
+        "name": "Trailer Control Valve",
+        "seo_path": "/spare-parts/compressed-air-system/trailer-control-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1063",
+        "name": "Air Compressor Gear",
+        "seo_path": "/spare-parts/compressed-air-system/air-compressor-gear",
+        "subcategories": []
+      },
+      {
+        "id": "1064",
+        "name": "Air Compressor Pressure Hose",
+        "seo_path": "/spare-parts/compressed-air-system/air-compressor-pressure-hose",
+        "subcategories": []
+      },
+      {
+        "id": "1065",
+        "name": "ABS Regulation Valve",
+        "seo_path": "/spare-parts/compressed-air-system/abs-regulation-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1077",
+        "name": "Coupling Repair Kit",
+        "seo_path": "/spare-parts/compressed-air-system/coupling-repair-kit",
+        "subcategories": []
+      },
+      {
+        "id": "1078",
+        "name": "Pneumatic System Valve",
+        "seo_path": "/spare-parts/compressed-air-system/pneumatic-system-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1215",
+        "name": "Other Valves",
+        "seo_path": "/spare-parts/compressed-air-system/other-valves",
+        "subcategories": []
+      },
+      {
+        "id": "1217",
+        "name": "Brake Power Control",
+        "seo_path": "/spare-parts/compressed-air-system/brake-power-control",
+        "subcategories": []
+      },
+      {
+        "id": "1219",
+        "name": "Hoses / Connector Pipes",
+        "seo_path": "/spare-parts/compressed-air-system/hoses-connector-pipes",
+        "subcategories": []
+      },
+      {
+        "id": "1220",
+        "name": "Non-return Valve",
+        "seo_path": "/spare-parts/compressed-air-system/non-return-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1221",
+        "name": "Water Drain Valve",
+        "seo_path": "/spare-parts/compressed-air-system/water-drain-valve",
+        "subcategories": []
+      },
+      {
+        "id": "1222",
+        "name": "Test Connection",
+        "seo_path": "/spare-parts/compressed-air-system/test-connection",
+        "subcategories": []
+      },
+      {
+        "id": "1223",
+        "name": "Silencer",
+        "seo_path": "/spare-parts/compressed-air-system/silencer",
+        "subcategories": []
+      },
+      {
+        "id": "1235",
+        "name": "Relay",
+        "seo_path": "/spare-parts/compressed-air-system/relay",
+        "subcategories": []
+      }
+    ]
+  }
+]

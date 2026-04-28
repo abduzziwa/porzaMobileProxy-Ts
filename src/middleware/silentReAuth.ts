@@ -125,10 +125,10 @@ export async function silentReAuthController(req: Request, res: Response): Promi
       return res.status(200).json({ success: false, reason: "no_credentials" });
     }
 
-    // ── Decrypt email and password ─────────────────────────────
-    let email: string, password: string;
+    // ── Get email and decrypt password ────────────────────────
+    const email = row.encrypted_email;
+    let password: string;
     try {
-      email = decrypt(row.encrypted_email);
       password = decrypt(row.pass_wd);
     } catch {
       return res.status(200).json({ success: false, reason: "decrypt_failed" });

@@ -91,6 +91,7 @@ import express, {
 } from "express";
 import morgan from "morgan";
 import homeRoutes from "./routes/homeRoutes.js";
+import v3Routes from "./routes/v3Routes.js";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -169,6 +170,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/", homeRoutes);
+app.use("/", v3Routes);
 
 app.listen(3000, "0.0.0.0", () => {
   console.log("Server running on port 3000");

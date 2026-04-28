@@ -96,7 +96,7 @@
 //   const row = res.rows[0];
 //   return {
 //     ...row,
-//     email: row.encrypted_email ? decrypt(row.encrypted_email) : null,
+//     email: row.encrypted_email ?? null,
 //     address: row.encrypted_address ? JSON.parse(decrypt(row.encrypted_address)) : null,
 //   };
 // }
@@ -161,34 +161,36 @@ interface UpsertParams {
 export async function update_or_insert_in_column(params: UpsertParams) {
   const { udi, ene, cid, address, isLoggedIn, isLive, selectedCar, isInit = false, pwd } = params;
 
-  const encEmail = ene ? encrypt(ene) : null;
+  const email = ene ?? null;
   const encAddress = address ? encrypt(JSON.stringify(address)) : null;
   const encPassword = pwd ? encrypt(pwd) : null;
 
+  if (!udi) throw new Error("udi required");
+
   if (isInit) {
-    if (!udi) throw new Error("udi required for Init");
     const query = `
       INSERT INTO app_user_state (unique_device_id, encrypted_email, cart_id, encrypted_address, is_logged_in, is_live, selected_car)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       ON CONFLICT (unique_device_id) DO UPDATE SET last_updated_at = NOW() RETURNING *;
     `;
-    const res = await pgClient.query(query, [udi, encEmail, cid, encAddress, isLoggedIn ?? false, isLive ?? false, selectedCar]);
+    const res = await pgClient.query(query, [udi, email, cid, encAddress, isLoggedIn ?? false, isLive ?? false, selectedCar]);
     return res.rows[0];
   } else {
     const query = `
-      UPDATE app_user_state SET
-        encrypted_email = COALESCE($1, encrypted_email),
-        cart_id = COALESCE($2, cart_id),
-        encrypted_address = COALESCE($3, encrypted_address),
-        is_logged_in = COALESCE($4, is_logged_in),
-        is_live = COALESCE($5, is_live),
-        selected_car = COALESCE($6, selected_car),
-        pass_wd = COALESCE($8, pass_wd),
+      INSERT INTO app_user_state (unique_device_id, encrypted_email, cart_id, encrypted_address, is_logged_in, is_live, selected_car, pass_wd)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (unique_device_id) DO UPDATE SET
+        encrypted_email = COALESCE(EXCLUDED.encrypted_email, app_user_state.encrypted_email),
+        cart_id = COALESCE(EXCLUDED.cart_id, app_user_state.cart_id),
+        encrypted_address = COALESCE(EXCLUDED.encrypted_address, app_user_state.encrypted_address),
+        is_logged_in = COALESCE(EXCLUDED.is_logged_in, app_user_state.is_logged_in),
+        is_live = COALESCE(EXCLUDED.is_live, app_user_state.is_live),
+        selected_car = COALESCE(EXCLUDED.selected_car, app_user_state.selected_car),
+        pass_wd = COALESCE(EXCLUDED.pass_wd, app_user_state.pass_wd),
         last_updated_at = NOW()
-      WHERE unique_device_id = $7 OR encrypted_email = $1 OR cart_id = $2
       RETURNING *;
     `;
-    const res = await pgClient.query(query, [encEmail, cid, encAddress, isLoggedIn, isLive, selectedCar, udi, encPassword]);
+    const res = await pgClient.query(query, [udi, email, cid, encAddress, isLoggedIn, isLive, selectedCar, encPassword]);
     return res.rows[0];
   }
 }
@@ -203,7 +205,7 @@ export async function get_user_data(searchId: string) {
   const row = res.rows[0];
   return {
     ...row,
-    email: row.encrypted_email ? decrypt(row.encrypted_email) : null,
+    email: row.encrypted_email ?? null,
     address: row.encrypted_address ? JSON.parse(decrypt(row.encrypted_address)) : null,
   };
 }

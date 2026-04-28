@@ -96,7 +96,7 @@
 
 import type { Request, Response } from "express";
 import { getApiWithParamsLogin } from "../scrapers/homeScraper.js";
-import { update_or_insert_in_column, encrypt } from "../services/userFingerprintService.js";
+import { update_or_insert_in_column } from "../services/userFingerprintService.js";
 import pgClient from "../services/db.js";
 import dotenv from "dotenv";
 import * as crypto from "crypto";
@@ -123,34 +123,43 @@ export async function Login(req: Request, res: Response): Promise<Response> {
     let data: unknown = await getApiWithParamsLogin(url, cartId, uniqueDeviceId, cookie, resource);
     if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
 
-    const dataObj = data as Record<string, Record<string, string>> | null;
-    const loginSuccess = dataObj?.data?.login === "success" || dataObj?.data?.status === "success";
+    const dataObj = data as Record<string, string> | null;
+    console.log(dataObj)
+    const loginSuccess = dataObj?.login === "success" || dataObj?.status === "success";
 
     if (loginSuccess) {
       sessionEmailStore.set(cartId, username);
 
-      // ── Check if this email already has a cart_id from another device ──
-      // If yes: return that cart_id so all devices share the same cart
-      const encEmail = encrypt(username);
-
+      // ── Check device_logs for an existing cart_id linked to this email ──
       const existing = await pgClient.query<{ cart_id: string }>(
-        `SELECT cart_id FROM app_user_state
-         WHERE encrypted_email = $1
-         AND cart_id IS NOT NULL
-         AND unique_device_id != $2
+        `SELECT sl.cart_id
+         FROM device_logs dl
+         JOIN session_logs sl ON sl.unique_device_id = dl.unique_device_id
+         WHERE dl.user_email = $1
+         AND dl.unique_device_id != $2
+         AND sl.cart_id IS NOT NULL
+         ORDER BY sl.created_at ASC
          LIMIT 1`,
-        [encEmail, uniqueDeviceId]
+        [username, uniqueDeviceId]
       );
 
-      const canonicalCartId = existing.rows.length > 0
-        ? existing.rows[0].cart_id   // reuse existing cart for this email
-        : cartId;                     // first login — keep current cart
+      let canonicalCartId: string;
 
       if (existing.rows.length > 0) {
-        console.log(`[LOGIN] 🔗 Email already has cart_id ${canonicalCartId} — reusing for ${uniqueDeviceId}`);
+        // Email already exists — just reuse that cart_id, no DB writes needed
+        canonicalCartId = existing.rows[0].cart_id;
+        console.log(`[LOGIN] 🔗 Email found — reusing cart_id ${canonicalCartId} for ${uniqueDeviceId}`);
+      } else {
+        // First time this email is seen — stamp it on this device
+        canonicalCartId = cartId;
+        await pgClient.query(
+          `UPDATE device_logs SET user_email = $1 WHERE unique_device_id = $2`,
+          [username, uniqueDeviceId]
+        );
+        console.log(`[LOGIN] ✅ New email stamped on device ${uniqueDeviceId} — cart_id: ${canonicalCartId}`);
       }
 
-      // Save to app_user_state with the canonical cart_id + encrypted credentials
+      // Save to app_user_state for silent re-auth
       await update_or_insert_in_column({
         udi: uniqueDeviceId,
         ene: username,
@@ -158,10 +167,8 @@ export async function Login(req: Request, res: Response): Promise<Response> {
         isLoggedIn: true,
         isLive: true,
         isInit: false,
-        pwd: password, // stored encrypted in pass_wd for silent re-auth on app open
+        pwd: password,
       });
-
-      console.log(`[LOGIN] ✅ app_user_state saved for ${uniqueDeviceId} — email: ${username} — cartId: ${canonicalCartId}`);
 
       return res.status(200).json({ success: true, cartId: canonicalCartId, uniqueDeviceId, resource, data });
     }

@@ -3,9 +3,12 @@ import { deviceCheck } from "../controllers/v3DeviceController.js";
 import { authLogin, forgotPassword } from "../controllers/v3AuthController.js";
 import { getVehicle, selectVehicle, removeVehicle } from "../controllers/v3CarController.js";
 import { v3Search } from "../controllers/v3SearchController.js";
+import { v3Analytics } from "../middleware/v3AnalyticsMiddleware.js";
 import v3Pool from "../db/v3Client.js";
 
 const router = express.Router();
+
+router.use(v3Analytics);
 
 async function validateSession(req: Request, res: Response, next: NextFunction): Promise<void> {
   const { device_id, user_id } = req.body as { device_id?: string; user_id?: number };

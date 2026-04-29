@@ -8,6 +8,8 @@ const PATH_EVENT_MAP: Record<string, string> = {
   "/v3/car/get": "vehicle_view",
   "/v3/car/select": "vehicle_search",
   "/v3/car/remove": "vehicle_remove",
+  "/v3/categories": "category_view",
+  "/v3/categories/sub": "category_view",
 };
 
 export function v3Analytics(req: Request, res: Response, next: NextFunction): void {

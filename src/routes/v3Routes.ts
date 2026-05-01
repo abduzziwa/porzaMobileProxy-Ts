@@ -6,11 +6,13 @@ import { v3Search } from "../controllers/v3SearchController.js";
 import { getCategories, getSubCategories } from "../controllers/v3CategoriesController.js";
 import { v3Analytics } from "../middleware/v3AnalyticsMiddleware.js";
 import { v3Session } from "../middleware/v3SessionMiddleware.js";
+import v3ProductsRouter from "./v3Products.js";
 
 const router = express.Router();
 
 router.use(v3Analytics);
 router.use(v3Session);
+router.use("/", v3ProductsRouter);
 
 // ─── Device ──────────────────────────────────────────────
 router.post("/v3/device/check", deviceCheck);

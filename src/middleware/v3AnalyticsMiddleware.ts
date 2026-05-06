@@ -13,6 +13,18 @@ const PATH_EVENT_MAP: Record<string, string> = {
   "/v3/products": "product_search",
   "/v3/products/data": "product_view",
   "/v3/products/filters": "product_filter",
+  "/v3/products/relevant": "relevant_view",
+  "/v3/brands/logos": "brand_logos",
+  "/v3/cart/add": "cart_add",
+  "/v3/cart/remove": "cart_remove",
+  "/v3/cart/update": "cart_update",
+  "/v3/cart/get": "cart_view",
+  "/v3/cart/clear": "cart_clear",
+  "/v3/last-seen/add": "product_view",
+  "/v3/last-seen/get": "last_seen_view",
+  "/v3/liked/toggle": "product_like",
+  "/v3/liked/get": "wishlist_view",
+  "/v3/liked/check": "wishlist_check",
 };
 
 export function v3Analytics(req: Request, res: Response, next: NextFunction): void {

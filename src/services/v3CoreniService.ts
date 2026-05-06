@@ -106,15 +106,15 @@ export interface CorenioProduct {
   externalStock?: number;
   brand?: { id?: unknown; name?: string; logo?: string };
   images?: { id?: number; url?: string; url_thumb?: string }[];
-  oe_numbers?: { manufacturer: string; number: string }[];
-  usage_numbers?: { usage_number: string; usagenumber_type: string }[];
+  oenumbers?: { manufacturer: string; number: string }[];
+  usageNumbers?: { usage_number: string; usagenumber_type: string }[];
   categories?: { category: { id?: unknown; pid?: unknown; name?: string; seo_path?: string } }[];
 }
 
 export interface CorenioFilterGroup {
   id: string;
   title: string;
-  filters: { id: number; title: string; count: number }[];
+  filters: { id: number; title: string; count: number; icon?: string }[];
 }
 
 export async function fetchProductSearch(
@@ -173,9 +173,9 @@ export async function fetchProductFilters(
   filters: Record<string, unknown>,
   language: string
 ): Promise<Record<string, CorenioFilterGroup>> {
-  const res = await corenioClient.post<Record<string, CorenioFilterGroup>>(
+  const res = await corenioClient.post<{ filters?: Record<string, CorenioFilterGroup> }>(
     "/api/v1.0/products/search/filters",
     { filters, language, page: 1, limit: 10 }
   );
-  return res.data;
+  return res.data.filters ?? {};
 }

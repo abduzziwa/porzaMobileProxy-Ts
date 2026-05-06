@@ -1,10 +1,57 @@
 import type { Request, Response } from "express";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import {
   fetchProductSearch,
   fetchProductsData,
   fetchProductFilters,
   type CorenioProduct,
+  type CorenioFilterGroup,
 } from "../services/v3CoreniService.js";
+import v3Pool from "../db/v3Client.js";
+
+// ─── Brand logo maps ──────────────────────────────────────
+const LOGOS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../src/public/brand_manu_logs");
+const brandLogoMap = new Map<number, string>();        // id   → url
+const brandNameMap = new Map<string, string>();        // name (lowercase) → url
+
+try {
+  fs.readdirSync(LOGOS_DIR).forEach((file) => {
+    const match = file.match(/^(.+)_(\d+)\.(png|jpg|webp)$/i);
+    if (match) {
+      const name = match[1].toLowerCase();
+      const id   = Number(match[2]);
+      const url  = `/public/brand_manu_logs/${file}`;
+      brandLogoMap.set(id, url);
+      brandNameMap.set(name, url);
+    }
+  });
+  console.log(`[v3Products] Loaded ${brandLogoMap.size} brand logos`);
+} catch (err) {
+  console.warn(`[v3Products] Could not load brand logos from ${LOGOS_DIR}:`, err);
+}
+
+// ─── getBrandLogos ────────────────────────────────────────
+
+export function getBrandLogos(req: Request, res: Response): Response {
+  const { name } = req.body as { name?: string };
+
+  // Name search — regex, case-insensitive, partial match
+  if (name) {
+    const pattern = new RegExp(name.trim(), "i");
+    const matches: Record<string, string> = {};
+    brandNameMap.forEach((url, key) => {
+      if (pattern.test(key)) matches[key] = url;
+    });
+    return res.json({ success: true, logos: matches });
+  }
+
+  // No name — return all logos keyed by brand ID
+  const logos: Record<string, string> = {};
+  brandLogoMap.forEach((url, id) => { logos[id] = url; });
+  return res.json({ success: true, logos });
+}
 
 // ─── searchProducts ───────────────────────────────────────
 
@@ -75,7 +122,7 @@ function transformProduct(raw: CorenioProduct) {
     brand: {
       id: raw.brand?.id ?? "",
       name: raw.brand?.name ?? "",
-      logo: raw.brand?.logo ?? "",
+      logo: brandNameMap.get((raw.brand?.name ?? "").toLowerCase()) ?? "",
     },
     price_ex_vat: priceExVat,
     price_inc_vat: priceIncVat,
@@ -85,8 +132,8 @@ function transformProduct(raw: CorenioProduct) {
     external_stock: raw.externalStock ?? 0,
     image: raw.images?.[0]?.url_thumb ?? null,
     images: (raw.images ?? []).map((img) => ({ id: img.id, url: img.url, url_thumb: img.url_thumb })),
-    oe_numbers: (raw.oe_numbers ?? []).map((oe) => ({ manufacturer: oe.manufacturer, number: oe.number })),
-    usage_numbers: (raw.usage_numbers ?? []).map((u) => ({ usage_number: u.usage_number, usagenumber_type: u.usagenumber_type })),
+    oe_numbers: (raw.oenumbers ?? []).map((oe) => ({ manufacturer: oe.manufacturer, number: oe.number })),
+    usage_numbers: (raw.usageNumbers ?? []).map((u) => ({ usage_number: u.usage_number, usagenumber_type: u.usagenumber_type })),
     categories: (raw.categories ?? []).map((c) => ({
       id: c.category?.id,
       pid: c.category?.pid,
@@ -140,25 +187,36 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
 
   try {
     const raw = await fetchProductFilters(filters, language as string);
-    console.log("[getProductsFilters] RAW from Corenio:", JSON.stringify(raw, null, 2));
-    const groups = Object.values(raw);
 
-    let brands: { title: string; options: { title: string; id: number; count: number }[] } | null = null;
-    const priorityMap = new Map<string, { id: string; title: string; options: { title: string; id: number; count: number }[] }>();
-    const rest: { id: string; title: string; options: { title: string; id: number; count: number }[] }[] = [];
+    type FilterOption = { title: string; id: number; count: number; icon: string };
+    type FilterGroup  = { id: string; title: string; options: FilterOption[] };
+
+    // Corenio mixes filter groups with pagination fields at root level — only keep valid groups
+    const groups = Object.values(raw).filter(
+      (g): g is CorenioFilterGroup =>
+        typeof g === "object" && g !== null && "id" in g && Array.isArray((g as CorenioFilterGroup).filters)
+    );
+
+    let brands: { title: string; options: FilterOption[] } | null = null;
+    const priorityMap = new Map<string, FilterGroup>();
+    const rest: FilterGroup[] = [];
 
     for (const group of groups) {
       const options = group.filters
-        .filter((f) => f.count > 0)
-        .sort((a, b) => b.count - a.count)
-        .map((f) => ({ title: f.title, id: f.id, count: f.count }));
+        .filter((f: CorenioFilterGroup["filters"][0]) => f.count > 0)
+        .sort((a: CorenioFilterGroup["filters"][0], b: CorenioFilterGroup["filters"][0]) => b.count - a.count)
+        .map((f: CorenioFilterGroup["filters"][0]) => ({ title: f.title, id: f.id, count: f.count, icon: f.icon ?? "" }));
 
       if (!options.length) continue;
 
-      const cleaned = { id: group.id, title: group.title, options };
+      const cleaned: FilterGroup = { id: group.id, title: group.title, options };
 
       if (group.id === "brands") {
-        brands = { title: group.title, options };
+        const brandOptions = options.map((o) => ({
+          ...o,
+          logo: brandLogoMap.get(o.id) ?? brandNameMap.get(o.title.toLowerCase()) ?? "",
+        }));
+        brands = { title: group.title, options: brandOptions };
       } else if (PRIORITY_PROPERTIES.includes(group.id)) {
         priorityMap.set(group.id, cleaned);
       } else {
@@ -174,6 +232,100 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
     return res.json({ success: true, brands, properties });
   } catch (err) {
     console.error("[getProductsFilters] Error:", err);
+    return res.status(500).json({ success: false, error: "Internal server error" });
+  }
+}
+
+// ─── getRelevantProducts ──────────────────────────────────
+
+export async function getRelevantProducts(req: Request, res: Response): Promise<Response> {
+  const { device_id, user_id, ktype_ids, limit = 10 } = req.body as {
+    device_id?: string;
+    user_id?: number;
+    ktype_ids?: number[];
+    limit?: number;
+  };
+
+  const safeLimit = Math.min(Math.max(1, Number(limit)), 50);
+
+  try {
+    // Step 1 — Get context from DB in parallel
+    const [lastSeenResult, likedResult, cartResult] = await Promise.all([
+      device_id
+        ? v3Pool.query(`SELECT product_id FROM v3_last_seen WHERE device_id = $1 ORDER BY seen_at DESC LIMIT 20`, [device_id])
+        : Promise.resolve({ rows: [] as { product_id: number }[] }),
+      user_id
+        ? v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1`, [user_id])
+        : Promise.resolve({ rows: [] as { product_id: number }[] }),
+      user_id
+        ? v3Pool.query(`SELECT product_id FROM v3_cart WHERE user_id = $1`, [user_id])
+        : Promise.resolve({ rows: [] as { product_id: number }[] }),
+    ]);
+
+    const lastSeenIds: number[] = lastSeenResult.rows.map((r: { product_id: number }) => r.product_id);
+    const likedIds: number[]    = likedResult.rows.map((r: { product_id: number }) => r.product_id);
+    const cartIds: number[]     = cartResult.rows.map((r: { product_id: number }) => r.product_id);
+    const excludeIds = new Set([...lastSeenIds, ...likedIds, ...cartIds]);
+    const contextIds = [...new Set([...lastSeenIds, ...likedIds])];
+
+    const hasVehicle = Array.isArray(ktype_ids) && ktype_ids.length > 0;
+
+    // Fallback — no context and no vehicle
+    if (contextIds.length === 0 && !hasVehicle) {
+      const fallbackSearch = await fetchProductSearch({ category_ids: [36] }, "en", 1, safeLimit);
+      const fallbackProducts = fallbackSearch.product_ids?.length
+        ? (await fetchProductsData(fallbackSearch.product_ids, "en"))
+            .map(transformProduct)
+            .filter((p) => p.internal_stock > 0 || p.external_stock > 0)
+        : [];
+      return res.json({ success: true, products: fallbackProducts.slice(0, safeLimit), based_on: "popular" });
+    }
+
+    // Step 2 — Get top 3 category_ids from context products
+    let categoryIds: number[] = [];
+    if (contextIds.length > 0) {
+      const productData = await fetchProductsData(contextIds, "en");
+      const categoryCount = new Map<number, number>();
+      for (const p of productData) {
+        for (const c of p.categories ?? []) {
+          const id = Number(c.category?.id);
+          if (id) categoryCount.set(id, (categoryCount.get(id) ?? 0) + 1);
+        }
+      }
+      categoryIds = [...categoryCount.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([id]) => id);
+    }
+
+    // Step 3 — Search Corenio
+    let based_on: "vehicle" | "history" | "popular" = "history";
+    const searchFilters: Record<string, unknown> = {};
+    if (categoryIds.length) searchFilters.category_ids = categoryIds;
+    if (hasVehicle) {
+      searchFilters.ktype_ids = ktype_ids;
+      based_on = "vehicle";
+    }
+
+    const searchResult = await fetchProductSearch(searchFilters, "en", 1, 30);
+
+    // Step 4 — Exclude already seen / liked / in cart
+    const filteredIds = (searchResult.product_ids ?? [])
+      .filter((id) => !excludeIds.has(id))
+      .slice(0, safeLimit);
+
+    if (!filteredIds.length) {
+      return res.json({ success: true, products: [], based_on });
+    }
+
+    // Step 5 — Fetch full product data
+    const products = (await fetchProductsData(filteredIds, "en"))
+      .map(transformProduct)
+      .filter((p) => p.internal_stock > 0 || p.external_stock > 0);
+
+    return res.json({ success: true, products, based_on });
+  } catch (err) {
+    console.error("[getRelevantProducts] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

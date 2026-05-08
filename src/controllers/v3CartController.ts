@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
 import v3Pool from "../db/v3Client.js";
+import { fetchProductsData } from "../services/v3CoreniService.js";
+import { transformProduct } from "./v3ProductsController.js";
 
 export async function addToCart(req: Request, res: Response): Promise<Response> {
   const { user_id, product_id, quantity = 1 } = req.body as { user_id?: number; product_id?: number; quantity?: number };
@@ -66,24 +68,41 @@ export async function updateCart(req: Request, res: Response): Promise<Response>
 }
 
 export async function getCart(req: Request, res: Response): Promise<Response> {
-  const { user_id } = req.body as { user_id?: number };
+  const { user_id, language = "en" } = req.body as { user_id?: number; language?: string };
 
   if (!user_id) return res.status(400).json({ success: false, error: "Missing user_id" });
 
   try {
     const result = await v3Pool.query(
-      `SELECT product_id, quantity, added_at, updated_at
-       FROM v3_cart WHERE user_id = $1 ORDER BY updated_at DESC`,
+      `SELECT product_id, quantity FROM v3_cart WHERE user_id = $1 ORDER BY updated_at DESC`,
       [user_id]
     );
-    const total_quantity = result.rows.reduce(
-      (sum: number, row: { quantity: unknown }) => sum + Number(row.quantity),
-      0
+
+    if (!result.rows.length) {
+      return res.json({ success: true, items: [], total_items: 0, total_quantity: 0 });
+    }
+
+    const quantityMap = new Map<number, number>(
+      result.rows.map((r: { product_id: number; quantity: number }) => [r.product_id, Number(r.quantity)])
     );
+    const product_ids = result.rows.map((r: { product_id: number }) => r.product_id);
+
+    const [raw, likedResult] = await Promise.all([
+      fetchProductsData(product_ids, language),
+      v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`, [user_id, product_ids]),
+    ]);
+    const likedIds = new Set(likedResult.rows.map((r: { product_id: number }) => r.product_id));
+    const items = raw.map((p) => ({
+      ...transformProduct(p, likedIds),
+      quantity: quantityMap.get(Number(p.product_id)) ?? 1,
+    }));
+
+    const total_quantity = items.reduce((sum, item) => sum + item.quantity, 0);
+
     return res.json({
       success: true,
-      items: result.rows,
-      total_items: result.rowCount ?? 0,
+      items,
+      total_items: items.length,
       total_quantity,
     });
   } catch (err) {

@@ -1,7 +1,4 @@
 import type { Request, Response } from "express";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import {
   fetchProductSearch,
   fetchProductsData,
@@ -11,45 +8,28 @@ import {
 } from "../services/v3CoreniService.js";
 import v3Pool from "../db/v3Client.js";
 
-// ─── Brand logo maps ──────────────────────────────────────
-const LOGOS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../src/public/brand_manu_logs");
-const brandLogoMap = new Map<number, string>();        // id   → url
-const brandNameMap = new Map<string, string>();        // name (lowercase) → url
+// ─── Brand logo URL ───────────────────────────────────────
+const BRAND_LOGO_URL = process.env.BRAND_LOGO_URL || "";
+const CUSTOMER_CARE_NUMBER = process.env.CUSTOMER_CARE_NUMBER || null;
+console.log(`[v3Products] BRAND_LOGO_URL: ${BRAND_LOGO_URL || "NOT SET"}`);
+console.log(`[v3Products] CUSTOMER_CARE_NUMBER: ${CUSTOMER_CARE_NUMBER || "NOT SET"}`);
 
-try {
-  fs.readdirSync(LOGOS_DIR).forEach((file) => {
-    const match = file.match(/^(.+)_(\d+)\.(png|jpg|webp)$/i);
-    if (match) {
-      const name = match[1].toLowerCase();
-      const id   = Number(match[2]);
-      const url  = `/public/brand_manu_logs/${file}`;
-      brandLogoMap.set(id, url);
-      brandNameMap.set(name, url);
-    }
-  });
-  console.log(`[v3Products] Loaded ${brandLogoMap.size} brand logos`);
-} catch (err) {
-  console.warn(`[v3Products] Could not load brand logos from ${LOGOS_DIR}:`, err);
+function brandLogoUrl(id: unknown): string {
+  if (!BRAND_LOGO_URL || !id) return "";
+  return BRAND_LOGO_URL.replace("[BRAND_ID]", String(id));
 }
 
 // ─── getBrandLogos ────────────────────────────────────────
 
 export function getBrandLogos(req: Request, res: Response): Response {
-  const { name } = req.body as { name?: string };
+  const { brand_ids } = req.body as { brand_ids?: number[] };
 
-  // Name search — regex, case-insensitive, partial match
-  if (name) {
-    const pattern = new RegExp(name.trim(), "i");
-    const matches: Record<string, string> = {};
-    brandNameMap.forEach((url, key) => {
-      if (pattern.test(key)) matches[key] = url;
-    });
-    return res.json({ success: true, logos: matches });
+  if (!Array.isArray(brand_ids) || brand_ids.length === 0) {
+    return res.status(400).json({ success: false, error: "Provide brand_ids array" });
   }
 
-  // No name — return all logos keyed by brand ID
-  const logos: Record<string, string> = {};
-  brandLogoMap.forEach((url, id) => { logos[id] = url; });
+  const logos: Record<number, string> = {};
+  brand_ids.forEach((id) => { logos[id] = brandLogoUrl(id); });
   return res.json({ success: true, logos });
 }
 
@@ -59,7 +39,7 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
   const {
     category_ids, categories, productnumbers, eancodes,
     brands, brand_ids, producttype_ids, vehicle_ids,
-    ktype_ids, property_ids,
+    ktype_ids, property_ids, user_id,
     language = "en", page = 1, limit = 20,
   } = req.body as Record<string, unknown>;
 
@@ -81,10 +61,19 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
     const searchData = await fetchProductSearch(filters, language as string, page as number, limit as number);
     console.log("[searchProducts] IDs from Corenio:", searchData.product_ids, "total:", searchData.total_items);
 
+    let likedIds = new Set<number>();
+    if (user_id && searchData.product_ids?.length) {
+      const likedResult = await v3Pool.query(
+        `SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`,
+        [user_id, searchData.product_ids]
+      );
+      likedIds = new Set(likedResult.rows.map((r: { product_id: number }) => r.product_id));
+    }
+
     const products = searchData.product_ids?.length
       ? (await fetchProductsData(searchData.product_ids, language as string).then((raw) =>
           Array.isArray(raw)
-            ? raw.map(transformProduct).filter((p) => p.internal_stock > 0 || p.external_stock > 0)
+            ? raw.map((p) => transformProduct(p, likedIds))
             : []
         ))
       : [];
@@ -107,7 +96,7 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
 
 // ─── getProductsData ──────────────────────────────────────
 
-function transformProduct(raw: CorenioProduct) {
+export function transformProduct(raw: CorenioProduct, likedIds: Set<number> = new Set()) {
   const priceExVat = parseFloat(raw.prices?.consumer_ex_vat ?? "0") || 0;
   const vatPct = Number(raw.vat_percentage ?? 0);
   const priceIncVat = Math.round(priceExVat * (1 + vatPct / 100) * 100) / 100;
@@ -122,7 +111,7 @@ function transformProduct(raw: CorenioProduct) {
     brand: {
       id: raw.brand?.id ?? "",
       name: raw.brand?.name ?? "",
-      logo: brandNameMap.get((raw.brand?.name ?? "").toLowerCase()) ?? "",
+      logo: brandLogoUrl(raw.brand?.id),
     },
     price_ex_vat: priceExVat,
     price_inc_vat: priceIncVat,
@@ -130,6 +119,8 @@ function transformProduct(raw: CorenioProduct) {
     in_stock: (raw.internalStock ?? 0) > 0 || (raw.externalStock ?? 0) > 0,
     internal_stock: raw.internalStock ?? 0,
     external_stock: raw.externalStock ?? 0,
+    call_to_order: ((raw.internalStock ?? 0) === 0 && (raw.externalStock ?? 0) === 0) || priceExVat === 0 ? CUSTOMER_CARE_NUMBER : null,
+    favourite: likedIds.has(Number(raw.product_id)),
     image: raw.images?.[0]?.url_thumb ?? null,
     images: (raw.images ?? []).map((img) => ({ id: img.id, url: img.url, url_thumb: img.url_thumb })),
     oe_numbers: (raw.oenumbers ?? []).map((oe) => ({ manufacturer: oe.manufacturer, number: oe.number })),
@@ -144,7 +135,7 @@ function transformProduct(raw: CorenioProduct) {
 }
 
 export async function getProductsData(req: Request, res: Response): Promise<Response> {
-  const { product_ids, language = "en" } = req.body as { product_ids?: number[]; language?: string };
+  const { product_ids, user_id, language = "en" } = req.body as { product_ids?: number[]; user_id?: number; language?: string };
 
   if (!Array.isArray(product_ids) || product_ids.length === 0) {
     return res.status(400).json({ success: false, error: "Missing product_ids" });
@@ -153,9 +144,15 @@ export async function getProductsData(req: Request, res: Response): Promise<Resp
   console.log("[getProductsData] REQUEST product_ids:", product_ids, "language:", language);
 
   try {
-    const raw = await fetchProductsData(product_ids, language);
+    const [raw, likedResult] = await Promise.all([
+      fetchProductsData(product_ids, language),
+      user_id
+        ? v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`, [user_id, product_ids])
+        : Promise.resolve({ rows: [] as { product_id: number }[] }),
+    ]);
+    const likedIds = new Set(likedResult.rows.map((r: { product_id: number }) => r.product_id));
     console.log("[getProductsData] RAW from Corenio:", JSON.stringify(raw, null, 2));
-    const products = Array.isArray(raw) ? raw.map(transformProduct) : [];
+    const products = Array.isArray(raw) ? raw.map((p) => transformProduct(p, likedIds)) : [];
     console.log("[getProductsData] RESPONSE products count:", products.length);
     return res.json({ success: true, products });
   } catch (err) {
@@ -214,7 +211,7 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
       if (group.id === "brands") {
         const brandOptions = options.map((o) => ({
           ...o,
-          logo: brandLogoMap.get(o.id) ?? brandNameMap.get(o.title.toLowerCase()) ?? "",
+          logo: brandLogoUrl(o.id),
         }));
         brands = { title: group.title, options: brandOptions };
       } else if (PRIORITY_PROPERTIES.includes(group.id)) {
@@ -272,11 +269,11 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
 
     // Fallback — no context and no vehicle
     if (contextIds.length === 0 && !hasVehicle) {
+      const likedSet = new Set(likedIds);
       const fallbackSearch = await fetchProductSearch({ category_ids: [36] }, "en", 1, safeLimit);
       const fallbackProducts = fallbackSearch.product_ids?.length
         ? (await fetchProductsData(fallbackSearch.product_ids, "en"))
-            .map(transformProduct)
-            .filter((p) => p.internal_stock > 0 || p.external_stock > 0)
+            .map((p) => transformProduct(p, likedSet))
         : [];
       return res.json({ success: true, products: fallbackProducts.slice(0, safeLimit), based_on: "popular" });
     }
@@ -319,9 +316,9 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
     }
 
     // Step 5 — Fetch full product data
+    const likedSet = new Set(likedIds);
     const products = (await fetchProductsData(filteredIds, "en"))
-      .map(transformProduct)
-      .filter((p) => p.internal_stock > 0 || p.external_stock > 0);
+      .map((p) => transformProduct(p, likedSet));
 
     return res.json({ success: true, products, based_on });
   } catch (err) {

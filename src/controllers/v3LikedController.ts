@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
 import v3Pool from "../db/v3Client.js";
+import { fetchProductsData } from "../services/v3CoreniService.js";
+import { transformProduct } from "./v3ProductsController.js";
 
 export async function toggleLiked(req: Request, res: Response): Promise<Response> {
   const { user_id, product_id } = req.body as { user_id?: number; product_id?: number };
@@ -26,20 +28,26 @@ export async function toggleLiked(req: Request, res: Response): Promise<Response
 }
 
 export async function getLiked(req: Request, res: Response): Promise<Response> {
-  const { user_id } = req.body as { user_id?: number };
+  const { user_id, language = "en" } = req.body as { user_id?: number; language?: string };
 
   if (!user_id) return res.status(400).json({ success: false, error: "Missing user_id" });
 
   try {
     const result = await v3Pool.query(
-      `SELECT product_id, added_at FROM v3_liked_products WHERE user_id = $1 ORDER BY added_at DESC`,
+      `SELECT product_id FROM v3_liked_products WHERE user_id = $1 ORDER BY added_at DESC`,
       [user_id]
     );
-    return res.json({
-      success: true,
-      product_ids: result.rows.map((r: { product_id: number }) => r.product_id),
-      total: result.rowCount ?? 0,
-    });
+
+    if (!result.rows.length) {
+      return res.json({ success: true, products: [], total: 0 });
+    }
+
+    const product_ids = result.rows.map((r: { product_id: number }) => r.product_id);
+    const likedIds = new Set(product_ids);
+    const raw = await fetchProductsData(product_ids, language);
+    const products = raw.map((p) => transformProduct(p, likedIds));
+
+    return res.json({ success: true, products, total: products.length });
   } catch (err) {
     console.error("[getLiked] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });

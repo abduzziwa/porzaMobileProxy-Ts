@@ -6,6 +6,7 @@ import { v3Search } from "../controllers/v3SearchController.js";
 import { getCategories, getSubCategories } from "../controllers/v3CategoriesController.js";
 import { v3Analytics } from "../middleware/v3AnalyticsMiddleware.js";
 import { v3Session } from "../middleware/v3SessionMiddleware.js";
+import { v3Cache } from "../middleware/v3CacheMiddleware.js";
 import v3ProductsRouter from "./v3Products.js";
 import v3CartRouter from "./v3Cart.js";
 import v3LastSeenRouter from "./v3LastSeen.js";
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.use(v3Analytics);
 router.use(v3Session);
+router.use(v3Cache);
 router.use("/", v3ProductsRouter);
 router.use("/", v3CartRouter);
 router.use("/", v3LastSeenRouter);

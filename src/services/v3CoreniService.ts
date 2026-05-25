@@ -54,7 +54,7 @@ export async function corenioWhoami(token: string): Promise<{ user_id: number; e
   const res = await corenioClient.post<{ user_id: number; email: string; firstname: string; lastname: string }>(
     "/api/v1.0/users/auth/whoami",
     {},
-    { headers: { Authorization: `Bearer ${token}` } }
+    { headers: { "api-key": API_KEY, bearer: token } }
   );
   return res.data;
 }

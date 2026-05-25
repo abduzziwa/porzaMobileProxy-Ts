@@ -30,6 +30,26 @@ CREATE TABLE IF NOT EXISTS v3_device_sessions (
   UNIQUE (device_id, user_id)
 );
 
+CREATE TABLE IF NOT EXISTS v3_addresses (
+  id             SERIAL PRIMARY KEY,
+  user_id        INT NOT NULL REFERENCES v3_users(user_id) UNIQUE,
+  encrypted_data TEXT NOT NULL,
+  updated_at     TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS v3_orders (
+  id                SERIAL PRIMARY KEY,
+  user_id           INT NOT NULL REFERENCES v3_users(user_id),
+  device_id         VARCHAR NOT NULL,
+  corenio_order_id  BIGINT,
+  external_order_id VARCHAR,
+  status            VARCHAR DEFAULT 'pending',
+  total_quantity    INT DEFAULT 0,
+  items             JSONB,
+  encrypted_address TEXT,
+  created_at        TIMESTAMP DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS v3_device_analytics (
   id           SERIAL PRIMARY KEY,
   device_id    VARCHAR NOT NULL REFERENCES v3_devices(device_id),

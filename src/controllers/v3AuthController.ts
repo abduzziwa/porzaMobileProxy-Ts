@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import v3Pool from "../db/v3Client.js";
 import { decryptProxyKey } from "../services/v3CryptoService.js";
-import { corenioLogin, corenioForgotPassword } from "../services/v3CoreniService.js";
+import { corenioLogin, corenioForgotPassword, corenioWhoami, corenioLogout } from "../services/v3CoreniService.js";
+import redis from "../services/v3RedisService.js";
 import axios from "axios";
 
 export async function authLogin(req: Request, res: Response): Promise<Response> {
@@ -69,6 +70,117 @@ export async function authLogin(req: Request, res: Response): Promise<Response> 
     }
     console.error("[authLogin] Error:", err);
     return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function getMe(req: Request, res: Response): Promise<Response> {
+  const { user_id, device_id } = req.body as { user_id?: number; device_id?: string };
+
+  if (!user_id || !device_id) return res.status(400).json({ success: false, error: "Missing user_id or device_id" });
+
+  try {
+    const result = await v3Pool.query(
+      `SELECT corenio_token FROM v3_users WHERE user_id = $1`,
+      [user_id]
+    );
+
+    if (!result.rows.length || !result.rows[0].corenio_token) {
+      return res.status(401).json({ success: false, error: "User not found or not authorised" });
+    }
+
+    const data = await corenioWhoami(result.rows[0].corenio_token as string);
+    return res.json({ success: true, user: data });
+  } catch (err) {
+    console.error("[getMe] Error:", err);
+    return res.status(500).json({ success: false, error: "Internal server error" });
+  }
+}
+
+export async function getActiveSessions(req: Request, res: Response): Promise<Response> {
+  const { user_id, device_id } = req.body as { user_id?: number; device_id?: string };
+
+  if (!user_id || !device_id) return res.status(400).json({ success: false, error: "Missing user_id or device_id" });
+
+  try {
+    const result = await v3Pool.query(
+      `SELECT
+         ds.device_id,
+         ds.authorised,
+         ds.last_auth,
+         ds.created_at  AS session_created,
+         d.platform,
+         d.app_version,
+         d.last_seen
+       FROM v3_device_sessions ds
+       JOIN v3_devices d ON d.device_id = ds.device_id
+       WHERE ds.user_id = $1
+       ORDER BY d.last_seen DESC`,
+      [user_id]
+    );
+
+    const sessions = result.rows.map((row: {
+      device_id: string;
+      authorised: boolean;
+      last_auth: string;
+      session_created: string;
+      platform: string;
+      app_version: string;
+      last_seen: string;
+    }) => ({
+      device_id: row.device_id,
+      is_current: row.device_id === device_id,
+      platform: row.platform ?? null,
+      app_version: row.app_version ?? null,
+      authorised: row.authorised,
+      last_seen: row.last_seen,
+      last_auth: row.last_auth,
+      session_created: row.session_created,
+    }));
+
+    return res.json({ success: true, total: sessions.length, sessions });
+  } catch (err) {
+    console.error("[getActiveSessions] Error:", err);
+    return res.status(500).json({ success: false, error: "Internal server error" });
+  }
+}
+
+export async function authLogout(req: Request, res: Response): Promise<Response> {
+  const { user_id, device_id, logout_all = false } = req.body as {
+    user_id?: number;
+    device_id?: string;
+    logout_all?: boolean;
+  };
+
+  if (!user_id || !device_id) return res.status(400).json({ success: false, error: "Missing user_id or device_id" });
+
+  try {
+    const userResult = await v3Pool.query(
+      `SELECT corenio_token FROM v3_users WHERE user_id = $1`,
+      [user_id]
+    );
+
+    // Call Corenio logout if we have a token — fire and forget, don't block on failure
+    if (userResult.rows.length && userResult.rows[0].corenio_token) {
+      corenioLogout(userResult.rows[0].corenio_token as string).catch((err) =>
+        console.error("[authLogout] Corenio logout failed (non-blocking):", err)
+      );
+    }
+
+    // Clear session(s) from DB
+    if (logout_all) {
+      await v3Pool.query(`DELETE FROM v3_device_sessions WHERE user_id = $1`, [user_id]);
+    } else {
+      await v3Pool.query(`DELETE FROM v3_device_sessions WHERE device_id = $1 AND user_id = $2`, [device_id, user_id]);
+    }
+
+    // Clear Redis cache for this device
+    const keys = await redis.keys(`v3cache:${device_id}:*`);
+    if (keys.length) await redis.del(...keys);
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("[authLogout] Error:", err);
+    return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
 

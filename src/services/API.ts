@@ -17,7 +17,9 @@ export async function API(
   });
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status} ${response.statusText}`);
+    const errorBody = await response.text();
+    console.error(`[API] ${method} ${endpoint} → ${response.status}`, errorBody);
+    throw new Error(`API error: ${response.status} ${response.statusText} — ${errorBody}`);
   }
 
   return (await response.json()) as Record<string, unknown>;

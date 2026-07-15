@@ -13,3 +13,5 @@ public.pem
 
 # Claude
 CLAUDE.md
+.claude/
+graphify-out/

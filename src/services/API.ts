@@ -1,17 +1,19 @@
+import { corenioHeaders } from "./v3CoreniService.js";
+
 export async function API(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "POST",
   body: Record<string, unknown> = {},
+  userToken?: string | null,
 ): Promise<Record<string, unknown>> {
-  const apiKey = process.env.API_KEY;
   const baseUrl = "https://api.corenio.com/api/v1.0";
 
   const response = await fetch(`${baseUrl}${endpoint}`, {
     method,
     headers: {
       accept: "*/*",
-      Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
+      ...corenioHeaders(userToken),
     },
     body: method !== "GET" ? JSON.stringify(body) : undefined,
   });

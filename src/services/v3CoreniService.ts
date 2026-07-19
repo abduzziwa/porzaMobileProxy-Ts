@@ -15,6 +15,22 @@ const corenioClient = axios.create({
   },
 });
 
+// Single source of truth for Corenio auth headers — every call in this file
+// (and API.ts, the legacy fetch-based client) routes through this. Purely
+// additive: Authorization: Bearer <API_KEY> is always kept (proven to work
+// today), api-key is added alongside it for consistency with Corenio's own
+// convention (seen on whoami), and when the call is made on behalf of a
+// specific logged-in user, their own Corenio session token is attached too —
+// in addition to, never instead of, the API key.
+export function corenioHeaders(userToken?: string | null): Record<string, string> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${API_KEY}`,
+    "api-key": API_KEY,
+  };
+  if (userToken) headers.bearer = userToken;
+  return headers;
+}
+
 export interface CorenioLoginResult {
   token: string;
   user_id: number;
@@ -26,7 +42,11 @@ export interface CorenioRefreshResult {
 }
 
 export async function corenioLogin(username: string, password: string): Promise<CorenioLoginResult> {
-  const res = await corenioClient.post<CorenioLoginResult>("/api/v1.0/users/auth/login", { username, password });
+  const res = await corenioClient.post<CorenioLoginResult>(
+    "/api/v1.0/users/auth/login",
+    { username, password },
+    { headers: corenioHeaders() }
+  );
   if (!res.data || !(res.data as unknown as Record<string, unknown>).token) {
     throw Object.assign(new Error("invalid_credentials"), { isInvalidCredentials: true });
   }
@@ -37,7 +57,7 @@ export async function corenioRefresh(token: string): Promise<CorenioRefreshResul
   const res = await corenioClient.post<CorenioRefreshResult>(
     "/api/v1.0/users/auth/refresh",
     {},
-    { headers: { Authorization: `Bearer ${token}` } }
+    { headers: corenioHeaders(token) }
   );
   return res.data;
 }
@@ -46,7 +66,7 @@ export async function corenioLogout(token: string): Promise<void> {
   await corenioClient.post(
     "/api/v1.0/users/auth/logout",
     {},
-    { headers: { Authorization: `Bearer ${token}` } }
+    { headers: corenioHeaders(token) }
   );
 }
 
@@ -54,13 +74,35 @@ export async function corenioWhoami(token: string): Promise<{ user_id: number; e
   const res = await corenioClient.post<{ user_id: number; email: string; firstname: string; lastname: string }>(
     "/api/v1.0/users/auth/whoami",
     {},
-    { headers: { "api-key": API_KEY, bearer: token } }
+    { headers: corenioHeaders(token) }
   );
   return res.data;
 }
 
 export async function corenioForgotPassword(email: string): Promise<void> {
-  await corenioClient.post("/api/v1.0/users/auth/forgot-password", { email });
+  await corenioClient.post("/api/v1.0/users/auth/forgot-password", { email }, { headers: corenioHeaders() });
+}
+
+export interface CorenioSignupPayload {
+  username: string;
+  email: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  country?: string;
+  phone?: string;
+}
+
+export interface CorenioSignupResult {
+  id: number;
+  success: boolean;
+}
+
+export async function corenioSignup(payload: CorenioSignupPayload): Promise<CorenioSignupResult> {
+  const res = await corenioClient.post<CorenioSignupResult>("/api/v1.0/users/create", payload, {
+    headers: corenioHeaders(),
+  });
+  return res.data;
 }
 
 export interface RawCategory {
@@ -70,17 +112,35 @@ export interface RawCategory {
   image?: { url_thumb?: string };
 }
 
-export async function fetchCategoriesByParent(parentId: number, language: string): Promise<RawCategory[]> {
-  const res = await corenioClient.post<Record<string, unknown>>("/api/v1.0/categories/byParent", {
-    parent_id: parentId,
-    language,
-    page: 1,
-    limit: 100,
-  });
+export async function fetchCategoriesByParent(
+  parentId: number,
+  language: string,
+  userToken?: string | null
+): Promise<RawCategory[]> {
+  const res = await corenioClient.post<Record<string, unknown>>(
+    "/api/v1.0/categories/byParent",
+    { parent_id: parentId, language, page: 1, limit: 100 },
+    { headers: corenioHeaders(userToken) }
+  );
   return Object.values(res.data).filter(
     (item): item is RawCategory =>
       typeof item === "object" && item !== null && !!(item as RawCategory).id
   );
+}
+
+// ─── Vehicles ─────────────────────────────────────────────
+
+export async function searchVehicleByPlate(
+  plate: string,
+  country: string,
+  userToken?: string | null
+): Promise<Record<string, Record<string, unknown>>> {
+  const res = await corenioClient.post<{ success?: boolean; vehicles?: Record<string, Record<string, unknown>> }>(
+    "/api/v1.0/vehicles/search",
+    { filters: { licenseplates: [plate] }, language: "en", page: 1, limit: 1, country },
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data?.vehicles ?? {};
 }
 
 // ─── Products ─────────────────────────────────────────────
@@ -121,15 +181,15 @@ export async function fetchProductSearch(
   filters: Record<string, unknown>,
   language: string,
   page: number,
-  limit: number
+  limit: number,
+  userToken?: string | null
 ): Promise<CorenioProductSearchResponse> {
   console.log("[fetchProductSearch] SENDING to Corenio:", JSON.stringify({ filters, language, page, limit }, null, 2));
-  const res = await corenioClient.post<Record<string, unknown>>("/api/v1.0/products/search", {
-    filters,
-    language,
-    page,
-    limit,
-  });
+  const res = await corenioClient.post<Record<string, unknown>>(
+    "/api/v1.0/products/search",
+    { filters, language, page, limit },
+    { headers: corenioHeaders(userToken) }
+  );
   console.log("[fetchProductSearch] RAW Corenio response:", JSON.stringify(res.data, null, 2));
 
   // Corenio uses hyphens and inconsistent naming — normalise here
@@ -144,7 +204,8 @@ export async function fetchProductSearch(
 
 export async function fetchProductsData(
   product_ids: number[],
-  language: string
+  language: string,
+  userToken?: string | null
 ): Promise<CorenioProduct[]> {
   const res = await corenioClient.post<{ products?: Record<string, CorenioProduct> }>(
     "/api/v1.0/products/data",
@@ -163,7 +224,8 @@ export async function fetchProductsData(
       },
       page: 1,
       limit: product_ids.length,
-    }
+    },
+    { headers: corenioHeaders(userToken) }
   );
   console.log("[fetchProductsData] RAW Corenio response:", JSON.stringify(res.data, null, 2));
   return Object.values(res.data?.products ?? {});
@@ -171,11 +233,13 @@ export async function fetchProductsData(
 
 export async function fetchProductFilters(
   filters: Record<string, unknown>,
-  language: string
+  language: string,
+  userToken?: string | null
 ): Promise<Record<string, CorenioFilterGroup>> {
   const res = await corenioClient.post<{ filters?: Record<string, CorenioFilterGroup> }>(
     "/api/v1.0/products/search/filters",
-    { filters, language, page: 1, limit: 10 }
+    { filters, language, page: 1, limit: 10 },
+    { headers: corenioHeaders(userToken) }
   );
   return res.data.filters ?? {};
 }

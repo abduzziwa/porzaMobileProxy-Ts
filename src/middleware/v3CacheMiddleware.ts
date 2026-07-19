@@ -6,10 +6,14 @@ const TTL_MAP: Record<string, number> = {
   "/v3/products":          300,    // 5 min — stock/price sensitive
   "/v3/products/data":     300,    // 5 min — stock/price sensitive
   "/v3/products/relevant": 300,    // 5 min — stock-dependent
-  "/v3/products/filters":  86400,  // 24 hours — static filter options
+  // /v3/products/filters is NOT here on purpose — it has its own shared,
+  // DB-backed cache (v3_filters_cache) keyed by category/ktype/language only,
+  // not per-device, since the facet list is identical for every caller.
   "/v3/categories":        86400,  // 24 hours — never changes
   "/v3/categories/sub":    86400,  // 24 hours — never changes
   "/v3/auth/me":           86400,  // 24 hours — user profile rarely changes
+  "/v3/liked/get":         60,     // 1 min — invalidated immediately on toggle anyway
+  "/v3/last-seen/get":     60,     // 1 min — invalidated immediately on add anyway
 };
 
 export async function v3Cache(req: Request, res: Response, next: NextFunction): Promise<void> {

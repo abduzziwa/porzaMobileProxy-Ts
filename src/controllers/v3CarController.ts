@@ -1,12 +1,10 @@
 import type { Request, Response } from "express";
-import axios from "axios";
 import v3Pool from "../db/v3Client.js";
+import { searchVehicleByPlate } from "../services/v3CoreniService.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const CORENIO_BASE_URL = process.env.CORENIO_BASE_URL || "https://api.corenio.com";
-const CORENIO_API_KEY = process.env.CORENIO_API_KEY || process.env.API_KEY || "";
 const SERVER_URL = process.env.SERVER_URL ?? "";
 
 interface SelectedVehicle {
@@ -54,13 +52,18 @@ function transformVehicle(v: Record<string, unknown>): SelectedVehicle {
 }
 
 export async function getVehicle(req: Request, res: Response): Promise<Response> {
-  const { device_id, user_id } = req.body as { device_id: string; user_id: number };
+  const { device_id, user_id = null } = req.body as { device_id: string; user_id?: number | null };
 
   try {
-    const result = await v3Pool.query<{ selected_car: SelectedVehicle | null }>(
-      `SELECT selected_car FROM v3_device_vehicles WHERE device_id = $1 AND user_id = $2`,
-      [device_id, user_id]
-    );
+    const result = user_id != null
+      ? await v3Pool.query<{ selected_car: SelectedVehicle | null }>(
+          `SELECT selected_car FROM v3_device_vehicles WHERE device_id = $1 AND user_id = $2`,
+          [device_id, user_id]
+        )
+      : await v3Pool.query<{ selected_car: SelectedVehicle | null }>(
+          `SELECT selected_car FROM v3_device_vehicles WHERE device_id = $1 AND user_id IS NULL`,
+          [device_id]
+        );
 
     const car = result.rows[0]?.selected_car ?? null;
     return res.json({ success: true, carFound: !!car, data: car });
@@ -71,9 +74,9 @@ export async function getVehicle(req: Request, res: Response): Promise<Response>
 }
 
 export async function selectVehicle(req: Request, res: Response): Promise<Response> {
-  const { device_id, user_id, licencePlate, licence_plate, country } = req.body as {
+  const { device_id, user_id = null, licencePlate, licence_plate, country } = req.body as {
     device_id: string;
-    user_id: number;
+    user_id?: number | null;
     licencePlate?: string;
     licence_plate?: string;
     country?: string;
@@ -83,30 +86,36 @@ export async function selectVehicle(req: Request, res: Response): Promise<Respon
   if (!plate) return res.status(400).json({ error: "Missing licencePlate" });
 
   try {
-    const response = await axios.post<{ success?: boolean; vehicles?: Record<string, Record<string, unknown>> }>(
-      `${CORENIO_BASE_URL}/api/v1.0/vehicles/search`,
-      { filters: { licenseplates: [plate.trim().toUpperCase()] }, language: "en", page: 1, limit: 1, country: country ?? "nl" },
-      { headers: { Authorization: `Bearer ${CORENIO_API_KEY}`, "Content-Type": "application/json" } }
-    );
+    const vehicles = await searchVehicleByPlate(plate.trim().toUpperCase(), country ?? "nl", req.corenioToken);
 
-    console.log("[selectVehicle] Corenio response:", JSON.stringify(response.data));
-    const vehicles = response.data?.vehicles;
-    const keys = vehicles ? Object.keys(vehicles) : [];
+    console.log("[selectVehicle] Corenio response:", JSON.stringify(vehicles));
+    const keys = Object.keys(vehicles);
 
     if (keys.length === 0) {
       return res.json({ success: true, carFound: false, data: null });
     }
 
-    const vehicle = transformVehicle(vehicles![keys[0]]);
+    const vehicle = transformVehicle(vehicles[keys[0]]);
 
-    await v3Pool.query(
-      `INSERT INTO v3_device_vehicles (device_id, user_id, selected_car, updated_at)
-       VALUES ($1, $2, $3, NOW())
-       ON CONFLICT (device_id, user_id) DO UPDATE SET
-         selected_car = EXCLUDED.selected_car,
-         updated_at   = NOW()`,
-      [device_id, user_id, JSON.stringify(vehicle)]
-    );
+    if (user_id != null) {
+      await v3Pool.query(
+        `INSERT INTO v3_device_vehicles (device_id, user_id, selected_car, updated_at)
+         VALUES ($1, $2, $3, NOW())
+         ON CONFLICT (device_id, user_id) DO UPDATE SET
+           selected_car = EXCLUDED.selected_car,
+           updated_at   = NOW()`,
+        [device_id, user_id, JSON.stringify(vehicle)]
+      );
+    } else {
+      await v3Pool.query(
+        `INSERT INTO v3_device_vehicles (device_id, user_id, selected_car, updated_at)
+         VALUES ($1, NULL, $2, NOW())
+         ON CONFLICT (device_id) WHERE user_id IS NULL DO UPDATE SET
+           selected_car = EXCLUDED.selected_car,
+           updated_at   = NOW()`,
+        [device_id, JSON.stringify(vehicle)]
+      );
+    }
 
     return res.json({ success: true, carFound: true, data: vehicle });
   } catch (err) {
@@ -116,14 +125,22 @@ export async function selectVehicle(req: Request, res: Response): Promise<Respon
 }
 
 export async function removeVehicle(req: Request, res: Response): Promise<Response> {
-  const { device_id, user_id } = req.body as { device_id: string; user_id: number };
+  const { device_id, user_id = null } = req.body as { device_id: string; user_id?: number | null };
 
   try {
-    await v3Pool.query(
-      `UPDATE v3_device_vehicles SET selected_car = NULL, updated_at = NOW()
-       WHERE device_id = $1 AND user_id = $2`,
-      [device_id, user_id]
-    );
+    if (user_id != null) {
+      await v3Pool.query(
+        `UPDATE v3_device_vehicles SET selected_car = NULL, updated_at = NOW()
+         WHERE device_id = $1 AND user_id = $2`,
+        [device_id, user_id]
+      );
+    } else {
+      await v3Pool.query(
+        `UPDATE v3_device_vehicles SET selected_car = NULL, updated_at = NOW()
+         WHERE device_id = $1 AND user_id IS NULL`,
+        [device_id]
+      );
+    }
     return res.json({ success: true, carFound: false, data: null });
   } catch (err) {
     console.error("[removeVehicle] Error:", err);

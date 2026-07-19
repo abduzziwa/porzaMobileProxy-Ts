@@ -4,6 +4,11 @@ import type { Request } from "express";
 declare module "express-serve-static-core" {
   interface Request {
     silentReAuthed?: boolean;
+    // Set once per request by v3SessionMiddleware (piggybacked on the session
+    // validation query — no extra DB round trip) when the caller has an
+    // authorised session with a stored Corenio token. Undefined for guests
+    // and for the handful of session-exempt v3 paths.
+    corenioToken?: string | null;
   }
 }
 

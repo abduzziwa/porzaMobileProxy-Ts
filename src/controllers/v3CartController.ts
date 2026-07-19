@@ -4,22 +4,37 @@ import { fetchProductsData } from "../services/v3CoreniService.js";
 import { transformProduct } from "./v3ProductsController.js";
 
 export async function addToCart(req: Request, res: Response): Promise<Response> {
-  const { user_id, product_id, quantity = 1 } = req.body as { user_id?: number; product_id?: number; quantity?: number };
+  const { user_id = null, device_id, product_id, quantity = 1 } = req.body as {
+    user_id?: number | null;
+    device_id?: string;
+    product_id?: number;
+    quantity?: number;
+  };
 
-  if (!user_id || !product_id) return res.status(400).json({ success: false, error: "Missing user_id or product_id" });
+  if (!device_id || !product_id) return res.status(400).json({ success: false, error: "Missing device_id or product_id" });
 
   const qty = Math.max(1, Number(quantity));
 
   try {
-    const result = await v3Pool.query(
-      `INSERT INTO v3_cart (user_id, product_id, quantity)
-       VALUES ($1, $2, $3)
-       ON CONFLICT (user_id, product_id)
-       DO UPDATE SET quantity = v3_cart.quantity + EXCLUDED.quantity,
-                     updated_at = NOW()
-       RETURNING product_id, quantity`,
-      [user_id, product_id, qty]
-    );
+    const result = user_id != null
+      ? await v3Pool.query(
+          `INSERT INTO v3_cart (device_id, user_id, product_id, quantity)
+           VALUES ($1, $2, $3, $4)
+           ON CONFLICT (user_id, product_id) WHERE user_id IS NOT NULL
+           DO UPDATE SET quantity = v3_cart.quantity + EXCLUDED.quantity,
+                         updated_at = NOW(), device_id = EXCLUDED.device_id
+           RETURNING product_id, quantity`,
+          [device_id, user_id, product_id, qty]
+        )
+      : await v3Pool.query(
+          `INSERT INTO v3_cart (device_id, user_id, product_id, quantity)
+           VALUES ($1, NULL, $2, $3)
+           ON CONFLICT (device_id, product_id) WHERE user_id IS NULL
+           DO UPDATE SET quantity = v3_cart.quantity + EXCLUDED.quantity,
+                         updated_at = NOW()
+           RETURNING product_id, quantity`,
+          [device_id, product_id, qty]
+        );
     return res.json({ success: true, cart_item: result.rows[0] });
   } catch (err) {
     console.error("[addToCart] Error:", err);
@@ -28,12 +43,23 @@ export async function addToCart(req: Request, res: Response): Promise<Response> 
 }
 
 export async function removeFromCart(req: Request, res: Response): Promise<Response> {
-  const { user_id, product_id } = req.body as { user_id?: number; product_id?: number };
+  const { user_id = null, device_id, product_id } = req.body as {
+    user_id?: number | null;
+    device_id?: string;
+    product_id?: number;
+  };
 
-  if (!user_id || !product_id) return res.status(400).json({ success: false, error: "Missing user_id or product_id" });
+  if (!device_id || !product_id) return res.status(400).json({ success: false, error: "Missing device_id or product_id" });
 
   try {
-    await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1 AND product_id = $2`, [user_id, product_id]);
+    if (user_id != null) {
+      await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1 AND product_id = $2`, [user_id, product_id]);
+    } else {
+      await v3Pool.query(
+        `DELETE FROM v3_cart WHERE device_id = $1 AND product_id = $2 AND user_id IS NULL`,
+        [device_id, product_id]
+      );
+    }
     return res.json({ success: true });
   } catch (err) {
     console.error("[removeFromCart] Error:", err);
@@ -42,24 +68,43 @@ export async function removeFromCart(req: Request, res: Response): Promise<Respo
 }
 
 export async function updateCart(req: Request, res: Response): Promise<Response> {
-  const { user_id, product_id, quantity } = req.body as { user_id?: number; product_id?: number; quantity?: number };
+  const { user_id = null, device_id, product_id, quantity } = req.body as {
+    user_id?: number | null;
+    device_id?: string;
+    product_id?: number;
+    quantity?: number;
+  };
 
-  if (!user_id || !product_id || quantity === undefined) {
-    return res.status(400).json({ success: false, error: "Missing user_id, product_id or quantity" });
+  if (!device_id || !product_id || quantity === undefined) {
+    return res.status(400).json({ success: false, error: "Missing device_id, product_id or quantity" });
   }
 
   try {
     if (Number(quantity) <= 0) {
-      await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1 AND product_id = $2`, [user_id, product_id]);
+      if (user_id != null) {
+        await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1 AND product_id = $2`, [user_id, product_id]);
+      } else {
+        await v3Pool.query(
+          `DELETE FROM v3_cart WHERE device_id = $1 AND product_id = $2 AND user_id IS NULL`,
+          [device_id, product_id]
+        );
+      }
       return res.json({ success: true, cart_item: null });
     }
 
-    const result = await v3Pool.query(
-      `UPDATE v3_cart SET quantity = $3, updated_at = NOW()
-       WHERE user_id = $1 AND product_id = $2
-       RETURNING product_id, quantity`,
-      [user_id, product_id, Number(quantity)]
-    );
+    const result = user_id != null
+      ? await v3Pool.query(
+          `UPDATE v3_cart SET quantity = $3, updated_at = NOW()
+           WHERE user_id = $1 AND product_id = $2
+           RETURNING product_id, quantity`,
+          [user_id, product_id, Number(quantity)]
+        )
+      : await v3Pool.query(
+          `UPDATE v3_cart SET quantity = $3, updated_at = NOW()
+           WHERE device_id = $1 AND product_id = $2 AND user_id IS NULL
+           RETURNING product_id, quantity`,
+          [device_id, product_id, Number(quantity)]
+        );
     return res.json({ success: true, cart_item: result.rows[0] ?? null });
   } catch (err) {
     console.error("[updateCart] Error:", err);
@@ -68,15 +113,24 @@ export async function updateCart(req: Request, res: Response): Promise<Response>
 }
 
 export async function getCart(req: Request, res: Response): Promise<Response> {
-  const { user_id, language = "en" } = req.body as { user_id?: number; language?: string };
+  const { user_id = null, device_id, language = "en" } = req.body as {
+    user_id?: number | null;
+    device_id?: string;
+    language?: string;
+  };
 
-  if (!user_id) return res.status(400).json({ success: false, error: "Missing user_id" });
+  if (!device_id) return res.status(400).json({ success: false, error: "Missing device_id" });
 
   try {
-    const result = await v3Pool.query(
-      `SELECT product_id, quantity FROM v3_cart WHERE user_id = $1 ORDER BY updated_at DESC`,
-      [user_id]
-    );
+    const result = user_id != null
+      ? await v3Pool.query(
+          `SELECT product_id, quantity FROM v3_cart WHERE user_id = $1 ORDER BY updated_at DESC`,
+          [user_id]
+        )
+      : await v3Pool.query(
+          `SELECT product_id, quantity FROM v3_cart WHERE device_id = $1 AND user_id IS NULL ORDER BY updated_at DESC`,
+          [device_id]
+        );
 
     if (!result.rows.length) {
       return res.json({ success: true, items: [], total_items: 0, total_quantity: 0 });
@@ -88,8 +142,13 @@ export async function getCart(req: Request, res: Response): Promise<Response> {
     const product_ids = result.rows.map((r: { product_id: number }) => r.product_id);
 
     const [raw, likedResult] = await Promise.all([
-      fetchProductsData(product_ids, language),
-      v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`, [user_id, product_ids]),
+      fetchProductsData(product_ids, language, req.corenioToken),
+      user_id != null
+        ? v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`, [user_id, product_ids])
+        : v3Pool.query(
+            `SELECT product_id FROM v3_liked_products WHERE device_id = $1 AND user_id IS NULL AND product_id = ANY($2)`,
+            [device_id, product_ids]
+          ),
     ]);
     const likedIds = new Set(likedResult.rows.map((r: { product_id: number }) => r.product_id));
     const items = raw.map((p) => ({
@@ -112,12 +171,16 @@ export async function getCart(req: Request, res: Response): Promise<Response> {
 }
 
 export async function clearCart(req: Request, res: Response): Promise<Response> {
-  const { user_id } = req.body as { user_id?: number };
+  const { user_id = null, device_id } = req.body as { user_id?: number | null; device_id?: string };
 
-  if (!user_id) return res.status(400).json({ success: false, error: "Missing user_id" });
+  if (!device_id) return res.status(400).json({ success: false, error: "Missing device_id" });
 
   try {
-    await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1`, [user_id]);
+    if (user_id != null) {
+      await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1`, [user_id]);
+    } else {
+      await v3Pool.query(`DELETE FROM v3_cart WHERE device_id = $1 AND user_id IS NULL`, [device_id]);
+    }
     return res.json({ success: true });
   } catch (err) {
     console.error("[clearCart] Error:", err);

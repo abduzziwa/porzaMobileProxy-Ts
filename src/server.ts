@@ -92,6 +92,7 @@ import express, {
 import morgan from "morgan";
 import homeRoutes from "./routes/homeRoutes.js";
 import v3Routes from "./routes/v3Routes.js";
+import v3ImagesRoutes from "./routes/v3Images.js";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -169,6 +170,7 @@ app.get("/", (req: Request, res: Response) => {
   res.sendFile(path.join(projectRoot, "danger.html"));
 });
 
+app.use("/", v3ImagesRoutes);
 app.use("/", homeRoutes);
 app.use("/", v3Routes);
 

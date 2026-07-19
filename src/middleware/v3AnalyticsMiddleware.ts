@@ -27,9 +27,23 @@ const PATH_EVENT_MAP: Record<string, string> = {
   "/v3/liked/check": "wishlist_check",
 };
 
-export function v3Analytics(req: Request, res: Response, next: NextFunction): void {
-  // device/check is already logged as 'open' in deviceCheck controller
+export async function v3Analytics(req: Request, res: Response, next: NextFunction): Promise<void> {
+  // device/check is already logged as 'open' in deviceCheck controller, which
+  // also upserts v3_devices — every other path needs that guarantee made here
+  // instead, since guest-OK paths can now be hit before device/check ever runs.
   if (req.path === "/v3/device/check") return next();
+
+  const bodyDeviceId = (req.body as Record<string, unknown>)?.device_id as string | undefined;
+  if (bodyDeviceId) {
+    try {
+      await v3Pool.query(
+        `INSERT INTO v3_devices (device_id) VALUES ($1) ON CONFLICT (device_id) DO NOTHING`,
+        [bodyDeviceId]
+      );
+    } catch (err) {
+      console.error("[v3Analytics] Failed to ensure device row:", err);
+    }
+  }
 
   const start = Date.now();
 

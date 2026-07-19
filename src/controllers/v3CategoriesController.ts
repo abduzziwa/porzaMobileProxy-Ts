@@ -46,7 +46,7 @@ export async function getCategories(req: Request, res: Response): Promise<Respon
   const { language = "en" } = req.body as { language?: string };
 
   try {
-    const raw = await fetchCategoriesByParent(ROOT_PARENT_ID, language);
+    const raw = await fetchCategoriesByParent(ROOT_PARENT_ID, language, req.corenioToken);
     const sorted = sortByOrder(raw, topLevelOrder);
     return res.json({ success: true, data: sorted.map(formatCategory) });
   } catch (err) {
@@ -64,7 +64,7 @@ export async function getSubCategories(req: Request, res: Response): Promise<Res
   }
 
   try {
-    const raw = await fetchCategoriesByParent(parent_id, language);
+    const raw = await fetchCategoriesByParent(parent_id, language, req.corenioToken);
     const orderMap = subOrder.get(String(parent_id)) ?? new Map<string, number>();
     const sorted = sortByOrder(raw, orderMap);
     return res.json({ success: true, data: sorted.map(formatCategory) });

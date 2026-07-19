@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS v3_addresses (
 
 CREATE TABLE IF NOT EXISTS v3_orders (
   id                SERIAL PRIMARY KEY,
-  user_id           INT NOT NULL REFERENCES v3_users(user_id),
+  user_id           INT REFERENCES v3_users(user_id),   -- nullable: guest orders are keyed by device_id
   device_id         VARCHAR NOT NULL,
   corenio_order_id  BIGINT,
   external_order_id VARCHAR,

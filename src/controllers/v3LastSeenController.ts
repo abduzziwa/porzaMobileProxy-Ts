@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import v3Pool from "../db/v3Client.js";
 import { fetchProductsData } from "../services/v3CoreniService.js";
 import { transformProduct } from "./v3ProductsController.js";
+import redis from "../services/v3RedisService.js";
 
 export async function addLastSeen(req: Request, res: Response): Promise<Response> {
   const { device_id, user_id, product_id } = req.body as { device_id?: string; user_id?: number; product_id?: number };
@@ -29,6 +30,13 @@ export async function addLastSeen(req: Request, res: Response): Promise<Response
        )`,
       [device_id]
     );
+
+    try {
+      const keys = await redis.keys(`v3cache:${device_id}:/v3/last-seen/get:*`);
+      if (keys.length) await redis.del(...keys);
+    } catch (err) {
+      console.error("[addLastSeen] Cache invalidation error (non-fatal):", err);
+    }
 
     return res.json({ success: true });
   } catch (err) {
@@ -60,7 +68,7 @@ export async function getLastSeen(req: Request, res: Response): Promise<Response
     const product_ids = result.rows.map((r: { product_id: number }) => r.product_id);
     const { user_id } = req.body as { user_id?: number };
     const [raw, likedResult] = await Promise.all([
-      fetchProductsData(product_ids, language),
+      fetchProductsData(product_ids, language, req.corenioToken),
       user_id
         ? v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`, [user_id, product_ids])
         : Promise.resolve({ rows: [] as { product_id: number }[] }),

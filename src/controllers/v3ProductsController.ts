@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import crypto from "crypto";
 import {
   fetchProductSearch,
   fetchProductsData,
@@ -58,7 +59,7 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
   console.log("[searchProducts] REQUEST filters:", JSON.stringify(filters, null, 2));
 
   try {
-    const searchData = await fetchProductSearch(filters, language as string, page as number, limit as number);
+    const searchData = await fetchProductSearch(filters, language as string, page as number, limit as number, req.corenioToken);
     console.log("[searchProducts] IDs from Corenio:", searchData.product_ids, "total:", searchData.total_items);
 
     let likedIds = new Set<number>();
@@ -71,7 +72,7 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
     }
 
     const products = searchData.product_ids?.length
-      ? (await fetchProductsData(searchData.product_ids, language as string).then((raw) =>
+      ? (await fetchProductsData(searchData.product_ids, language as string, req.corenioToken).then((raw) =>
           Array.isArray(raw)
             ? raw.map((p) => transformProduct(p, likedIds))
             : []
@@ -145,7 +146,7 @@ export async function getProductsData(req: Request, res: Response): Promise<Resp
 
   try {
     const [raw, likedResult] = await Promise.all([
-      fetchProductsData(product_ids, language),
+      fetchProductsData(product_ids, language, req.corenioToken),
       user_id
         ? v3Pool.query(`SELECT product_id FROM v3_liked_products WHERE user_id = $1 AND product_id = ANY($2)`, [user_id, product_ids])
         : Promise.resolve({ rows: [] as { product_id: number }[] }),
@@ -172,6 +173,14 @@ const PRIORITY_PROPERTIES = [
   "property_3954",
 ];
 
+// Filter facets for a given (filters, language) combo are identical for every
+// caller — no device_id or user_id involved — so this is shared across everyone
+// via a DB-backed cache instead of the per-device Redis cache used elsewhere.
+// A row older than this is refetched from Corenio on whichever request happens
+// to land next; no background job needed. Bump down (e.g. 30 min) for fresher
+// facets at the cost of more Corenio calls, or up for fewer calls.
+const FILTERS_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+
 export async function getProductsFilters(req: Request, res: Response): Promise<Response> {
   const { category_ids, categories, ktype_ids, language = "en" } = req.body as Record<string, unknown>;
 
@@ -180,10 +189,27 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
   if (Array.isArray(categories) && categories.length)     filters.categories   = categories;
   if (Array.isArray(ktype_ids) && ktype_ids.length)       filters.ktype_ids    = ktype_ids;
 
-  console.log("[getProductsFilters] REQUEST filters:", JSON.stringify(filters, null, 2));
+  const cacheKey = crypto
+    .createHash("sha256")
+    .update(JSON.stringify({ filters, language }))
+    .digest("hex");
 
   try {
-    const raw = await fetchProductFilters(filters, language as string);
+    const cached = await v3Pool.query<{ data: Record<string, unknown>; updated_at: string }>(
+      `SELECT data, updated_at FROM v3_filters_cache WHERE cache_key = $1`,
+      [cacheKey]
+    );
+
+    if (cached.rows.length) {
+      const age = Date.now() - new Date(cached.rows[0].updated_at).getTime();
+      if (age < FILTERS_CACHE_TTL_MS) {
+        return res.json(cached.rows[0].data);
+      }
+    }
+
+    console.log("[getProductsFilters] REQUEST filters:", JSON.stringify(filters, null, 2));
+
+    const raw = await fetchProductFilters(filters, language as string, req.corenioToken);
 
     type FilterOption = { title: string; id: number; count: number; icon: string };
     type FilterGroup  = { id: string; title: string; options: FilterOption[] };
@@ -226,7 +252,16 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
       ...rest,
     ];
 
-    return res.json({ success: true, brands, properties });
+    const payload = { success: true, brands, properties };
+
+    await v3Pool.query(
+      `INSERT INTO v3_filters_cache (cache_key, filters, language, data, updated_at)
+       VALUES ($1, $2, $3, $4, NOW())
+       ON CONFLICT (cache_key) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+      [cacheKey, JSON.stringify(filters), language, JSON.stringify(payload)]
+    );
+
+    return res.json(payload);
   } catch (err) {
     console.error("[getProductsFilters] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });
@@ -270,9 +305,9 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
     // Fallback — no context and no vehicle
     if (contextIds.length === 0 && !hasVehicle) {
       const likedSet = new Set(likedIds);
-      const fallbackSearch = await fetchProductSearch({ category_ids: [36] }, "en", 1, safeLimit);
+      const fallbackSearch = await fetchProductSearch({ category_ids: [36] }, "en", 1, safeLimit, req.corenioToken);
       const fallbackProducts = fallbackSearch.product_ids?.length
-        ? (await fetchProductsData(fallbackSearch.product_ids, "en"))
+        ? (await fetchProductsData(fallbackSearch.product_ids, "en", req.corenioToken))
             .map((p) => transformProduct(p, likedSet))
         : [];
       return res.json({ success: true, products: fallbackProducts.slice(0, safeLimit), based_on: "popular" });
@@ -281,7 +316,7 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
     // Step 2 — Get top 3 category_ids from context products
     let categoryIds: number[] = [];
     if (contextIds.length > 0) {
-      const productData = await fetchProductsData(contextIds, "en");
+      const productData = await fetchProductsData(contextIds, "en", req.corenioToken);
       const categoryCount = new Map<number, number>();
       for (const p of productData) {
         for (const c of p.categories ?? []) {
@@ -304,7 +339,7 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
       based_on = "vehicle";
     }
 
-    const searchResult = await fetchProductSearch(searchFilters, "en", 1, 30);
+    const searchResult = await fetchProductSearch(searchFilters, "en", 1, 30, req.corenioToken);
 
     // Step 4 — Exclude already seen / liked / in cart
     const filteredIds = (searchResult.product_ids ?? [])
@@ -317,7 +352,7 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
 
     // Step 5 — Fetch full product data
     const likedSet = new Set(likedIds);
-    const products = (await fetchProductsData(filteredIds, "en"))
+    const products = (await fetchProductsData(filteredIds, "en", req.corenioToken))
       .map((p) => transformProduct(p, likedSet));
 
     return res.json({ success: true, products, based_on });

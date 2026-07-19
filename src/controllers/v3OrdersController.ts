@@ -29,14 +29,14 @@ interface AddressPayload {
 
 // ── POST /v3/orders/create ────────────────────────────────
 export async function createOrder(req: Request, res: Response): Promise<Response> {
-  const { user_id, device_id, encrypted_address } = req.body as {
-    user_id?: number;
+  const { user_id = null, device_id, encrypted_address } = req.body as {
+    user_id?: number | null;
     device_id?: string;
     encrypted_address?: string;
   };
 
-  if (!user_id || !device_id || !encrypted_address) {
-    return res.status(400).json({ success: false, error: "Missing user_id, device_id or encrypted_address" });
+  if (!device_id || !encrypted_address) {
+    return res.status(400).json({ success: false, error: "Missing device_id or encrypted_address" });
   }
 
   let addr: AddressPayload;
@@ -51,10 +51,15 @@ export async function createOrder(req: Request, res: Response): Promise<Response
   }
 
   try {
-    const cartResult = await v3Pool.query<{ product_id: number; quantity: number }>(
-      `SELECT product_id, quantity FROM v3_cart WHERE user_id = $1`,
-      [user_id]
-    );
+    const cartResult = user_id != null
+      ? await v3Pool.query<{ product_id: number; quantity: number }>(
+          `SELECT product_id, quantity FROM v3_cart WHERE user_id = $1`,
+          [user_id]
+        )
+      : await v3Pool.query<{ product_id: number; quantity: number }>(
+          `SELECT product_id, quantity FROM v3_cart WHERE device_id = $1 AND user_id IS NULL`,
+          [device_id]
+        );
 
     if (!cartResult.rows.length) {
       return res.status(400).json({ success: false, error: "Cart is empty" });
@@ -90,9 +95,13 @@ export async function createOrder(req: Request, res: Response): Promise<Response
     };
     console.log("[createOrder] Sending to Corenio:", JSON.stringify(orderPayload, null, 2));
 
-    const corenioResult = await API("/sales/order", "POST", orderPayload) as { order_id: number; external_order_id: string };
+    const corenioResult = await API("/sales/order", "POST", orderPayload, req.corenioToken) as { order_id: number; external_order_id: string };
 
-    await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1`, [user_id]);
+    if (user_id != null) {
+      await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1`, [user_id]);
+    } else {
+      await v3Pool.query(`DELETE FROM v3_cart WHERE device_id = $1 AND user_id IS NULL`, [device_id]);
+    }
 
     const totalQuantity = items.reduce((sum, i) => sum + i.amount, 0);
 
@@ -102,12 +111,16 @@ export async function createOrder(req: Request, res: Response): Promise<Response
       [user_id, device_id, corenioResult.order_id, corenioResult.external_order_id ?? "", totalQuantity, JSON.stringify(items), encrypted_address]
     );
 
-    await v3Pool.query(
-      `INSERT INTO v3_addresses (user_id, encrypted_data, updated_at)
-       VALUES ($1, $2, NOW())
-       ON CONFLICT (user_id) DO UPDATE SET encrypted_data = EXCLUDED.encrypted_data, updated_at = NOW()`,
-      [user_id, encrypted_address]
-    );
+    // Saved address is an account feature — guests have nothing to save to
+    // (address/get already returns null for them, which is expected).
+    if (user_id != null) {
+      await v3Pool.query(
+        `INSERT INTO v3_addresses (user_id, encrypted_data, updated_at)
+         VALUES ($1, $2, NOW())
+         ON CONFLICT (user_id) DO UPDATE SET encrypted_data = EXCLUDED.encrypted_data, updated_at = NOW()`,
+        [user_id, encrypted_address]
+      );
+    }
 
     return res.json({ success: true, order_id: corenioResult.order_id, external_order_id: corenioResult.external_order_id });
   } catch (err) {
@@ -291,7 +304,7 @@ export async function getProxyOrderDetail(req: Request, res: Response): Promise<
 
     if (productIds.length) {
       try {
-        const products = await fetchProductsData(productIds, language);
+        const products = await fetchProductsData(productIds, language, req.corenioToken);
         const quantityMap = new Map(
           (row.items ?? []).map((i) => [Number(i.product_id), i.amount])
         );
@@ -319,6 +332,93 @@ export async function getProxyOrderDetail(req: Request, res: Response): Promise<
     });
   } catch (err) {
     console.error("[getProxyOrderDetail] Error:", err);
+    return res.status(500).json({ success: false, error: "Internal server error" });
+  }
+}
+
+// ── POST /v3/orders/guest-detail ──────────────────────────
+// Guest order lookup: no account exists, so authorise by (device_id, email)
+// matching the order's stored delivery address instead of by user_id.
+export async function getGuestOrderDetail(req: Request, res: Response): Promise<Response> {
+  const { device_id, email, order_id, language = "en" } = req.body as {
+    device_id?: string;
+    email?: string;
+    order_id?: number;
+    language?: string;
+  };
+
+  if (!device_id || !email || !order_id) {
+    return res.status(400).json({ success: false, error: "Missing device_id, email or order_id" });
+  }
+
+  try {
+    const result = await v3Pool.query<{
+      id: number;
+      corenio_order_id: number;
+      external_order_id: string;
+      status: string;
+      total_quantity: number;
+      items: { product_id: string; amount: number }[];
+      encrypted_address: string;
+      created_at: string;
+    }>(
+      `SELECT id, corenio_order_id, external_order_id, status, total_quantity, items, encrypted_address, created_at
+       FROM v3_orders WHERE id = $1 AND device_id = $2`,
+      [order_id, device_id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ success: false, error: "Order not found" });
+    }
+
+    const row = result.rows[0];
+
+    let delivery_address: AddressPayload | null = null;
+    try {
+      delivery_address = decryptData<AddressPayload>(row.encrypted_address);
+    } catch {
+      return res.status(404).json({ success: false, error: "Order not found" });
+    }
+
+    // Never reveal whether an order_id exists on this device — same 404 for
+    // "no such order" and "wrong email" so email can't be brute-forced against it.
+    if (!delivery_address.billing_email || delivery_address.billing_email.trim().toLowerCase() !== email.trim().toLowerCase()) {
+      return res.status(404).json({ success: false, error: "Order not found" });
+    }
+
+    const productIds = (row.items ?? []).map((i) => Number(i.product_id));
+    let enrichedItems: unknown[] = row.items ?? [];
+
+    if (productIds.length) {
+      try {
+        const products = await fetchProductsData(productIds, language, req.corenioToken);
+        const quantityMap = new Map(
+          (row.items ?? []).map((i) => [Number(i.product_id), i.amount])
+        );
+        enrichedItems = products.map((p) => ({
+          ...transformProduct(p),
+          quantity: quantityMap.get(Number(p.product_id)) ?? 1,
+        }));
+      } catch {
+        // Corenio unavailable — fall back to raw items
+      }
+    }
+
+    return res.json({
+      success: true,
+      order: {
+        id:                row.id,
+        corenio_order_id:  row.corenio_order_id,
+        external_order_id: row.external_order_id,
+        status:            row.status,
+        total_quantity:    row.total_quantity,
+        created_at:        row.created_at,
+        delivery_address,
+        items:             enrichedItems,
+      },
+    });
+  } catch (err) {
+    console.error("[getGuestOrderDetail] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

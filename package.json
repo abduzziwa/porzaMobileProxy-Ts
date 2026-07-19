@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "node --loader ts-node/esm src/server.ts",
-    "dev:watch": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/server.ts\""
+    "dev:watch": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/server.ts\"",
+    "test": "node --loader ts-node/esm --test src/services/*.test.ts"
   },
   "dependencies": {
     "axios": "^1.13.2",

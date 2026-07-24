@@ -8,6 +8,16 @@ const TYPESENSE_BASE_URL = process.env.TYPESENSE_BASE_URL || "https://typesense.
 const TYPESENSE_API_KEY = process.env.TYPESENSE_API_KEY || "dummy";
 const TYPESENSE_HASH = process.env.TYPESENSE_HASH || "";
 const TYPESENSE_CID = process.env.TYPESENSE_CID || "120";
+// Typesense returns image_thumb_url as a path relative to Corenio's image CDN
+// (e.g. "/assets/modules/mod_ecommerce/prod_images/...", same host/path style
+// as the product image URLs Corenio's own product/data endpoint returns), not
+// an absolute URL — resolve it here so the response carries a real absolute
+// URL. cleanImagesDeep (v3ImageTransform middleware) deliberately leaves
+// relative paths untouched, so without this the frontend would receive a bare
+// path it can't proxy through /v3/images/proxy and would have to hit the
+// Cloudflare-challenged CDN directly.
+const TYPESENSE_IMAGE_BASE_URL = process.env.TYPESENSE_IMAGE_BASE_URL || "https://de.zoekonderdeel.nl";
+const MIN_PER_PAGE = 50;
 
 interface TypesenseHit {
   document: {
@@ -37,16 +47,35 @@ interface SearchResult {
   seourl: string;
 }
 
+function resolveTypesenseImageUrl(imageThumbUrl: string | undefined): string {
+  if (!imageThumbUrl) return "";
+  if (/^https?:\/\//i.test(imageThumbUrl)) return imageThumbUrl; // already absolute
+  return `${TYPESENSE_IMAGE_BASE_URL}${imageThumbUrl.startsWith("/") ? "" : "/"}${imageThumbUrl}`;
+}
+
 export async function v3Search(req: Request, res: Response): Promise<Response> {
-  const { query, language = "en", page = 1, per_page = 20 } = req.body as {
+  const { query, language = "en", page = 1, per_page = 20, ktype_ids } = req.body as {
     query?: string;
     language?: string;
     page?: number;
     per_page?: number;
+    ktype_ids?: (number | string)[];
   };
 
   if (!query || query.trim().length < 2) {
     return res.status(400).json({ error: "Query must be at least 2 characters" });
+  }
+
+  const safePerPage = Math.max(Number(per_page) || MIN_PER_PAGE, MIN_PER_PAGE);
+
+  // When a vehicle is selected, narrow results to parts that fit it — same
+  // filter Corenio itself applies for /v3/products and /v3/products/filters.
+  // Confirmed live against the Typesense collection: each document carries
+  // connected_cars[].ktype_id, and it's genuinely filterable (a bogus id
+  // correctly returns 0 hits, not the unfiltered set).
+  let filterBy = "published:=true";
+  if (Array.isArray(ktype_ids) && ktype_ids.length) {
+    filterBy += ` && connected_cars.ktype_id:=[${ktype_ids.join(",")}]`;
   }
 
   try {
@@ -59,8 +88,8 @@ export async function v3Search(req: Request, res: Response): Promise<Response> {
             ? "title_nl,title_en,usagenumbers.usagenumber,productnumber,configurations,eancode,categories,brand,connected_cars.manufacturer,connected_cars.car_model,connected_cars.car_model_short,oenumbers.oenumber"
             : "title_en,title_nl,usagenumbers.usagenumber,productnumber,configurations,eancode,categories,brand,connected_cars.manufacturer,connected_cars.car_model,connected_cars.car_model_short,oenumbers.oenumber",
           include_fields: "id,seourl,title_en,title_nl,productnumber,eancode,categories,image_thumb_url",
-          filter_by: "published:=true",
-          per_page,
+          filter_by: filterBy,
+          per_page: safePerPage,
           page,
           hash: TYPESENSE_HASH,
           cid: TYPESENSE_CID,
@@ -87,7 +116,7 @@ export async function v3Search(req: Request, res: Response): Promise<Response> {
         sku: doc.productnumber || "",
         ean: doc.eancode || "",
         categories: doc.categories || [],
-        image: doc.image_thumb_url || "",
+        image: resolveTypesenseImageUrl(doc.image_thumb_url),
         seourl: doc.seourl || "",
       };
     });

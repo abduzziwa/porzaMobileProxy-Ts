@@ -27,6 +27,10 @@ const PATH_EVENT_MAP: Record<string, string> = {
   "/v3/liked/check": "wishlist_check",
 };
 
+// push-token routes must only ever operate on a device row created by
+// /v3/device/check — never create one, even indirectly via this auto-upsert.
+const AUTO_CREATE_DEVICE_EXEMPT_PATHS = new Set(["/v3/device/push-token"]);
+
 export async function v3Analytics(req: Request, res: Response, next: NextFunction): Promise<void> {
   // device/check is already logged as 'open' in deviceCheck controller, which
   // also upserts v3_devices — every other path needs that guarantee made here
@@ -34,7 +38,7 @@ export async function v3Analytics(req: Request, res: Response, next: NextFunctio
   if (req.path === "/v3/device/check") return next();
 
   const bodyDeviceId = (req.body as Record<string, unknown>)?.device_id as string | undefined;
-  if (bodyDeviceId) {
+  if (bodyDeviceId && !AUTO_CREATE_DEVICE_EXEMPT_PATHS.has(req.path)) {
     try {
       await v3Pool.query(
         `INSERT INTO v3_devices (device_id) VALUES ($1) ON CONFLICT (device_id) DO NOTHING`,
@@ -48,6 +52,11 @@ export async function v3Analytics(req: Request, res: Response, next: NextFunctio
   const start = Date.now();
 
   res.on("finish", () => {
+    // A 404 on an auto-create-exempt path (e.g. push-token) means the device
+    // genuinely doesn't exist — logging it here would violate the FK on
+    // v3_device_analytics.device_id, so skip rather than log a doomed insert.
+    if (AUTO_CREATE_DEVICE_EXEMPT_PATHS.has(req.path) && res.statusCode === 404) return;
+
     const body = req.body as Record<string, unknown>;
     const device_id = (body.device_id as string) || null;
     const user_id = (body.user_id as number) || null;

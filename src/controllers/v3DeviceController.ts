@@ -3,6 +3,10 @@ import v3Pool from "../db/v3Client.js";
 import { getPublicKey, decryptProxyKey } from "../services/v3CryptoService.js";
 import { corenioLogin, corenioRefresh } from "../services/v3CoreniService.js";
 
+const ALLOWED_PLATFORMS = new Set(["android", "ios", "unknown"]);
+const MAX_DEVICE_ID_LENGTH = 255;
+const MAX_FCM_TOKEN_LENGTH = 4096;
+
 export async function deviceCheck(req: Request, res: Response): Promise<Response> {
   const { device_id, proxy_key, server_key, platform, app_version, user_id } = req.body as {
     device_id: string;
@@ -104,6 +108,84 @@ export async function deviceCheck(req: Request, res: Response): Promise<Response
     }
   } catch (err) {
     console.error("[deviceCheck] Error:", (err as Error).message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+// ─── Push token registration ──────────────────────────────────────────────
+// Operates only on a device row already created by deviceCheck (POST /v3/device/check).
+// Never creates a device row itself.
+
+export async function registerPushToken(req: Request, res: Response): Promise<Response> {
+  const { device_id, fcm_token, platform } = req.body as {
+    device_id?: string;
+    fcm_token?: string;
+    platform?: string;
+  };
+
+  if (
+    typeof device_id !== "string" ||
+    device_id.trim().length === 0 ||
+    device_id.length > MAX_DEVICE_ID_LENGTH ||
+    typeof fcm_token !== "string" ||
+    fcm_token.trim().length === 0 ||
+    fcm_token.length > MAX_FCM_TOKEN_LENGTH ||
+    (platform !== undefined && !ALLOWED_PLATFORMS.has(platform))
+  ) {
+    return res.status(400).json({ error: "Invalid request" });
+  }
+
+  try {
+    const result = await v3Pool.query(
+      `UPDATE v3_devices
+       SET fcm_token = $1,
+           fcm_token_status = 'active',
+           notifications_enabled = TRUE,
+           fcm_token_updated_at = NOW(),
+           last_seen = NOW(),
+           platform = COALESCE($2, platform)
+       WHERE device_id = $3`,
+      [fcm_token, platform ?? null, device_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Device not found" });
+    }
+
+    console.log("[registerPushToken] Token registered for device:", device_id);
+    return res.status(200).json({ registered: true });
+  } catch (err) {
+    console.error("[registerPushToken] Error:", (err as Error).message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function removePushToken(req: Request, res: Response): Promise<Response> {
+  const { device_id } = req.body as { device_id?: string };
+
+  if (typeof device_id !== "string" || device_id.trim().length === 0 || device_id.length > MAX_DEVICE_ID_LENGTH) {
+    return res.status(400).json({ error: "Invalid request" });
+  }
+
+  try {
+    const result = await v3Pool.query(
+      `UPDATE v3_devices
+       SET fcm_token = NULL,
+           fcm_token_status = 'missing',
+           fcm_token_updated_at = NOW(),
+           last_seen = NOW()
+       WHERE device_id = $1`,
+      [device_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Device not found" });
+    }
+
+    console.log("[removePushToken] Token removed for device:", device_id);
+    return res.status(200).json({ unregistered: true });
+  } catch (err) {
+    console.error("[removePushToken] Error:", (err as Error).message);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

@@ -38,6 +38,7 @@ const GUEST_OK_PATHS = new Set([
   "/v3/address/get",
   "/v3/orders/create",
   "/v3/orders/guest-detail",
+  "/v3/device/push-token",
 ]);
 
 export async function v3Session(req: Request, res: Response, next: NextFunction): Promise<void> {

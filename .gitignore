@@ -10,6 +10,9 @@ logs/*.log
 *.pem
 private.pem
 public.pem
+firebase-service-account*.json
+service-account*.json
+*firebase-adminsdk*.json
 
 # Claude
 CLAUDE.md

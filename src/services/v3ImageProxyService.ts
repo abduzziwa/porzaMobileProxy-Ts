@@ -109,6 +109,9 @@ function walk(value: unknown, isImageField: boolean): unknown {
   if (Array.isArray(value)) {
     return value.map((item) => walk(item, isImageField));
   }
+  if (value instanceof Date) {
+    return value;
+  }
   if (value !== null && typeof value === "object") {
     const out: Record<string, unknown> = {};
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {

@@ -87,16 +87,17 @@
 import express, {
   type Request,
   type Response,
-  type NextFunction,
 } from "express";
 import morgan from "morgan";
 import homeRoutes from "./routes/homeRoutes.js";
 import v3Routes from "./routes/v3Routes.js";
 import v3ImagesRoutes from "./routes/v3Images.js";
+import v3InternalNotificationsRoutes from "./routes/v3InternalNotifications.js";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { logoResizeMiddleware } from "./middleware/logoResizeMiddleware.js";
+import { v3RequestLogger } from "./middleware/v3RequestLoggerMiddleware.js";
 
 const app = express();
 
@@ -118,20 +119,8 @@ app.use("/public/carlogos/thumb", logoResizeMiddleware);
 // Serve car logos at /public/carlogos/
 app.use("/public", express.static(path.join(projectRoot, "src/public")));
 
-// Intercept response for logging
-app.use((req: Request, res: Response, next: NextFunction) => {
-  const oldSend = res.send.bind(res);
-  res.send = function (body: unknown) {
-    console.log("Request/Response Log:", {
-      method: req.method,
-      url: req.url,
-      body: req.body,
-      response: body,
-    });
-    return oldSend(body);
-  };
-  next();
-});
+// Intercept response for logging (redacts sensitive routes — see v3RequestLoggerMiddleware.ts)
+app.use(v3RequestLogger);
 
 app.use(morgan("dev"));
 
@@ -171,6 +160,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/", v3ImagesRoutes);
+app.use("/", v3InternalNotificationsRoutes);
 app.use("/", homeRoutes);
 app.use("/", v3Routes);
 

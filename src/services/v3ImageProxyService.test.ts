@@ -106,3 +106,12 @@ test("cleanImagesDeep leaves a data: URL unchanged even under a recognised key",
   const output = cleanImagesDeep(input) as typeof input;
   assert.equal(output.logo, dataUrl);
 });
+
+test("cleanImagesDeep leaves a Date object unchanged instead of collapsing it to {}", () => {
+  const createdAt = new Date("2026-08-02T13:08:45.369Z");
+  const input = { id: 1, created_at: createdAt };
+  const output = cleanImagesDeep(input) as typeof input;
+  assert.ok(output.created_at instanceof Date, "created_at must still be a Date instance");
+  assert.equal(output.created_at.toISOString(), "2026-08-02T13:08:45.369Z");
+  assert.equal(JSON.stringify(output.created_at), '"2026-08-02T13:08:45.369Z"');
+});

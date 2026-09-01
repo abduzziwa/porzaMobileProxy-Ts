@@ -263,6 +263,15 @@ export async function fetchProductFilters(
 // docs.corenio.com spec exactly (pulled and verified directly, not assumed).
 // Sequencing (cart create -> items -> shipping -> finalize) and the
 // write-through cache design live in the controllers, not here.
+//
+// corenioCartAddItem/UpdateItem/RemoveItems below use /carts/{cart_id}/items
+// (no "/cart/" segment) — this is the documented, currently-working path,
+// confirmed live across postman-logs-v5/v6 (2026-09-01). Earlier test
+// rounds (v1-v3) found a server-side bug where this exact path 401'd and a
+// "/carts/cart/{cart_id}/items" workaround was needed instead — that bug
+// was fixed server-side and the paths reverted to the documented ones. If
+// these ever start failing with a generic {"error":"auth required!"} 401
+// again, that workaround is the first thing to try, not a client bug here.
 
 export interface CorenioCartCreateResult {
   cart_id: number;
@@ -351,7 +360,9 @@ export interface CorenioShippingMethod {
   icon_thumb: string;
   title: string;
   description: string;
-  price: { currency?: string; ex_vat?: number; vat?: number; total?: number };
+  // price_ex_vat comes back as a numeric string (e.g. "7.00"), not a number —
+  // confirmed against the live response, not assumed from the spec.
+  price: { currency?: string; vat_percentage?: number; price_ex_vat?: string };
 }
 
 export async function corenioCartShippingMethods(
@@ -414,13 +425,17 @@ export interface CorenioCartSummary {
 // Used once, right before finalize, purely to capture the total for our own
 // v3_orders.total_amount — this is the only endpoint that returns a price
 // breakdown for a cart. Not cached (see plan: cart state is never cached).
+//
+// Path is bare /api/v1.0/carts, NOT /carts/list — verified live across two
+// separate test rounds (postman-logs-v5/v6): /carts/list returns an empty
+// body (200, 0 bytes, text/html) while bare /carts returns real data.
 export async function corenioCartsList(
   limit: number,
   page: number,
   userToken?: string | null
 ): Promise<Record<string, CorenioCartSummary>> {
   const res = await corenioClient.get<{ carts?: Record<string, CorenioCartSummary> }>(
-    "/api/v1.0/carts/list",
+    "/api/v1.0/carts",
     { params: { limit, page }, headers: corenioHeaders(userToken) }
   );
   return res.data.carts ?? {};

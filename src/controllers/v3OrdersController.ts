@@ -269,29 +269,50 @@ export function getOrderPublicKey(_req: Request, res: Response): Response {
 // ── POST /v3/shipping/options ─────────────────────────────
 type Lang = "en" | "nl" | "de";
 
-const SHIPPING_LABELS: Record<Lang, { free: string; options: string[] }> = {
-  en: { free: "Free", options: ["PostNL", "Pick up Pelt Belgium", "Pick up Venlo", "Pick up Eindhoven", "Dachser"] },
-  nl: { free: "Gratis", options: ["PostNL", "Ophalen Pelt België", "Ophalen Venlo", "Ophalen Eindhoven", "Dachser"] },
-  de: { free: "Kostenlos", options: ["PostNL", "Abholung Pelt Belgien", "Abholung Venlo", "Abholung Eindhoven", "Dachser"] },
-};
+const FREE_LABEL: Record<Lang, string> = { en: "Free", nl: "Gratis", de: "Kostenlos" };
 
-const SHIPPING_IDS   = [1, 2, 3, 4, 8] as const;
-const SHIPPING_PRICE = [7.00, 0, 0, 0, 0] as const;
-
-export function getShippingOptions(req: Request, res: Response): Response {
-  const { language } = req.body as { language?: string };
+// Was a static, proxy-invented list (ids 1/2/3/4/8) that never matched
+// Corenio's real shipping_method_ids — only id 1 ever really existed,
+// so every other option silently 502'd at checkout. Now fetches Corenio's
+// real methods for the shopper's actual cart (same one write-through
+// /v3/cart/add already built while they were browsing) and maps them into
+// the same {id, name, price, price_label, free} shape the app already
+// expects, so no app-side change is needed to consume this fix.
+export async function getShippingOptions(req: Request, res: Response): Promise<Response> {
+  const { language, device_id, user_id = null } = req.body as {
+    language?: string;
+    device_id?: string;
+    user_id?: number | null;
+  };
   const lang: Lang = (["en", "nl", "de"].includes(language ?? "") ? language : "en") as Lang;
-  const labels = SHIPPING_LABELS[lang];
 
-  const shipping_options = SHIPPING_IDS.map((id, i) => ({
-    id,
-    name: labels.options[i],
-    price: SHIPPING_PRICE[i],
-    price_label: SHIPPING_PRICE[i] === 0 ? labels.free : `+€ ${SHIPPING_PRICE[i].toFixed(2).replace(".", ",")}`,
-    free: SHIPPING_PRICE[i] === 0,
-  }));
+  if (!device_id) return res.status(400).json({ success: false, error: "Missing device_id" });
 
-  return res.json({ success: true, language: lang, shipping_options });
+  try {
+    const cartId = await getStoredCorenioCartId({ deviceId: device_id, userId: user_id });
+    if (cartId === null) {
+      // No active cart yet — nothing to quote shipping for.
+      return res.json({ success: true, language: lang, shipping_options: [] });
+    }
+
+    const methods = await corenioCartShippingMethods(cartId, lang, req.corenioToken);
+
+    const shipping_options = methods.map((m) => {
+      const priceExVat = Number(m.price?.price_ex_vat ?? 0);
+      return {
+        id: m.id,
+        name: m.title,
+        price: priceExVat,
+        price_label: priceExVat === 0 ? FREE_LABEL[lang] : `+€ ${priceExVat.toFixed(2).replace(".", ",")}`,
+        free: priceExVat === 0,
+      };
+    });
+
+    return res.json({ success: true, language: lang, shipping_options });
+  } catch (err) {
+    console.error("[getShippingOptions] Error:", (err as Error).message);
+    return res.status(502).json({ success: false, error: "Could not fetch shipping options" });
+  }
 }
 
 // ── POST /v3/orders/proxy-list ───────────────────────────

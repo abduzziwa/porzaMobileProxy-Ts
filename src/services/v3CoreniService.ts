@@ -91,6 +91,20 @@ export interface CorenioSignupPayload {
   lastname: string;
   country?: string;
   phone?: string;
+  // Address fields — optional, additive. Needed so guest checkout can create
+  // an invisible Corenio account carrying a real address: per the live spec,
+  // GET /carts/{id}/shippingmethods/{language} computes eligibility from
+  // "the cart's contents and shipping address", and the only place an address
+  // exists anywhere in the API is here, on account creation. No Carts/Orders
+  // endpoint accepts an address itself.
+  address?: string;
+  address2?: string;
+  addressnumber?: string;
+  postalcode?: string;
+  city?: string;
+  state?: string;
+  mobphone?: string;
+  companyname?: string;
 }
 
 export interface CorenioSignupResult {
@@ -242,4 +256,222 @@ export async function fetchProductFilters(
     { headers: corenioHeaders(userToken) }
   );
   return res.data.filters ?? {};
+}
+
+// ─── Carts (replaces the removed /sales/order one-shot flow) ─────────────
+// Every function here is a thin typed wrapper matching the live
+// docs.corenio.com spec exactly (pulled and verified directly, not assumed).
+// Sequencing (cart create -> items -> shipping -> finalize) and the
+// write-through cache design live in the controllers, not here.
+
+export interface CorenioCartCreateResult {
+  cart_id: number;
+}
+
+export async function corenioCartCreate(userToken?: string | null): Promise<CorenioCartCreateResult> {
+  const res = await corenioClient.post<CorenioCartCreateResult>(
+    "/api/v1.0/carts/create",
+    {},
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioCartAddItemPayload {
+  product_id: number;
+  quantity: number;
+  configuration_id?: number;
+  user_input?: Record<string, unknown>;
+}
+
+export interface CorenioCartAddItemResult {
+  item_id: number;
+}
+
+export async function corenioCartAddItem(
+  cartId: number,
+  payload: CorenioCartAddItemPayload,
+  userToken?: string | null
+): Promise<CorenioCartAddItemResult> {
+  const res = await corenioClient.post<CorenioCartAddItemResult>(
+    `/api/v1.0/carts/${cartId}/items`,
+    payload,
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioCartUpdateItemResult {
+  cart_id: number;
+  cartitem_id: number;
+  new_quantity: number;
+}
+
+export async function corenioCartUpdateItem(
+  cartId: number,
+  cartItemId: number,
+  quantity: number,
+  userToken?: string | null
+): Promise<CorenioCartUpdateItemResult> {
+  const res = await corenioClient.patch<CorenioCartUpdateItemResult>(
+    `/api/v1.0/carts/${cartId}/items/${cartItemId}`,
+    { quantity },
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioCartRemoveItemsResult {
+  removed: number[];
+}
+
+export async function corenioCartRemoveItems(
+  cartId: number,
+  cartItemIds: number[],
+  userToken?: string | null
+): Promise<CorenioCartRemoveItemsResult> {
+  const res = await corenioClient.delete<CorenioCartRemoveItemsResult>(
+    `/api/v1.0/carts/${cartId}/items`,
+    { data: { cartitem_ids: cartItemIds }, headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export async function corenioCartDelete(cartId: number, userToken?: string | null): Promise<{ removed: number }> {
+  const res = await corenioClient.delete<{ removed: number }>(
+    `/api/v1.0/carts/${cartId}`,
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioShippingMethod {
+  id: number;
+  icon: string;
+  icon_thumb: string;
+  title: string;
+  description: string;
+  price: { currency?: string; ex_vat?: number; vat?: number; total?: number };
+}
+
+export async function corenioCartShippingMethods(
+  cartId: number,
+  language: "nl" | "en" | "de",
+  userToken?: string | null
+): Promise<CorenioShippingMethod[]> {
+  const res = await corenioClient.get<{ shipping_methods: CorenioShippingMethod[] }>(
+    `/api/v1.0/carts/${cartId}/shippingmethods/${language}`,
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data.shipping_methods ?? [];
+}
+
+export interface CorenioCartSetShippingResult {
+  shipping_method_id: number;
+  shipping_method: string;
+  currency?: string;
+  shipping_price_ex_vat: number;
+  shipping_price_vat: number;
+}
+
+export async function corenioCartSetShipping(
+  cartId: number,
+  shippingMethodId: number,
+  userToken?: string | null
+): Promise<CorenioCartSetShippingResult> {
+  const res = await corenioClient.post<CorenioCartSetShippingResult>(
+    `/api/v1.0/carts/${cartId}/shipping`,
+    { shipping_method_id: shippingMethodId },
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioCartFinalizeResult {
+  order_id: number;
+}
+
+export async function corenioCartFinalize(cartId: number, userToken?: string | null): Promise<CorenioCartFinalizeResult> {
+  const res = await corenioClient.post<CorenioCartFinalizeResult>(
+    `/api/v1.0/carts/${cartId}/finalize`,
+    {},
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioCartSummary {
+  cart_id: number;
+  helpdeskcode: string;
+  item_quantity: number;
+  item_subtotal: string;
+  shipping: string;
+  total_vat: string;
+  total_ex_vat: string;
+  total: string;
+}
+
+// Used once, right before finalize, purely to capture the total for our own
+// v3_orders.total_amount — this is the only endpoint that returns a price
+// breakdown for a cart. Not cached (see plan: cart state is never cached).
+export async function corenioCartsList(
+  limit: number,
+  page: number,
+  userToken?: string | null
+): Promise<Record<string, CorenioCartSummary>> {
+  const res = await corenioClient.get<{ carts?: Record<string, CorenioCartSummary> }>(
+    "/api/v1.0/carts/list",
+    { params: { limit, page }, headers: corenioHeaders(userToken) }
+  );
+  return res.data.carts ?? {};
+}
+
+// ─── Orders (new, replaces the removed /sales/order/* status/tracking) ───
+
+export async function corenioOrdersList(
+  params: { limit?: number; page?: number; language?: string; status?: string; date_from?: string; date_till?: string },
+  userToken?: string | null
+): Promise<{ orders: Record<string, unknown>; total_items: number; pages: number; current_page: number }> {
+  const res = await corenioClient.get<{ orders: Record<string, unknown>; total_items: number; pages: number; current_page: number }>(
+    "/api/v1.0/orders",
+    { params, headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioOrderPdfResult {
+  order_id: number;
+  filename: string;
+  pdf_base64: string;
+}
+
+export async function corenioOrderPdf(
+  orderId: number,
+  type: "order" | "invoice" | "credit",
+  userToken?: string | null
+): Promise<CorenioOrderPdfResult> {
+  const res = await corenioClient.get<CorenioOrderPdfResult>(
+    `/api/v1.0/orders/${orderId}/pdf/${type}`,
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
+}
+
+export interface CorenioPaymentLinkResult {
+  order_id: number;
+  total_unpaid: number;
+  payment_method: string;
+  payment_url: string;
+}
+
+export async function corenioOrderPaymentLink(
+  payload: { order_id: number; payment_method: number; payment_amount?: number },
+  userToken?: string | null
+): Promise<CorenioPaymentLinkResult> {
+  const res = await corenioClient.post<CorenioPaymentLinkResult>(
+    "/api/v1.0/orders/paymentlink",
+    payload,
+    { headers: corenioHeaders(userToken) }
+  );
+  return res.data;
 }

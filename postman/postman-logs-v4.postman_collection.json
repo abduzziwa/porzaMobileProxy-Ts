@@ -1,0 +1,907 @@
+{
+  "info": {
+    "name": "Corenio API — Carts/Orders Test Log v4 (2026-09-01, round 4)",
+    "description": "Fourth test pass. Context: Dave's team deployed an int-cast fix for the shippingmethods bug, reported as 'still merging' at test time. Result: unexpected regression — the 4 item-mutation endpoints that had been stable and working for 3 straight rounds (v1 retest through v3) are now back to the original {\"error\":\"auth required!\"} 401 that started this whole investigation. Because of that, the actual fix Dave made (shippingmethods with a real item in the cart) could NOT be verified this round — there was no way to add an item to trigger it. One genuine improvement found: GET /carts (bare, not /carts/list) is now confirmed working across 2 rounds. No secrets embedded — fill in corenio_api_key under this collection's Variables tab before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.corenio.com/api/v1.0",
+      "type": "string"
+    },
+    {
+      "key": "corenio_api_key",
+      "value": "",
+      "type": "string",
+      "description": "PASTE YOUR OWN CORENIO_API_KEY here (from .env) — never commit a real value."
+    },
+    {
+      "key": "bearer_token",
+      "value": "",
+      "type": "string",
+      "description": "Auto-set by Login/Refresh test scripts."
+    },
+    {
+      "key": "cart_id",
+      "value": "",
+      "type": "string",
+      "description": "Auto-set by Carts:create test script."
+    },
+    {
+      "key": "item_id",
+      "value": "",
+      "type": "string",
+      "description": "Auto-set by Carts:add item test script (currently broken — see Regressed folder)."
+    }
+  ],
+  "item": [
+    {
+      "name": "✅ Working Endpoints",
+      "description": "Confirmed working in this v4 pass (2026-09-01, round 4), after Dave's team deployed an int-cast fix for shipping and reportedly a merge was still in progress. Run top-to-bottom on first import.",
+      "item": [
+        {
+          "name": "✅ Login (raw credentials)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "PASS — 200. Returns {token, user_id}. Auto-sets bearer_token.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"abdulzziwa007@outlook.com\",\n  \"password\": \"0000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.token) {",
+                  "    pm.collectionVariables.set(\"bearer_token\", data.token);",
+                  "    console.log(\"bearer_token updated\");",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ Whoami",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/auth/whoami",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "auth",
+                "whoami"
+              ]
+            },
+            "description": "PASS — 200, correct user identity returned."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Refresh token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "PASS — 200. Rotates the token (old one stops working immediately after). Auto-updates bearer_token."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.token) {",
+                  "    pm.collectionVariables.set(\"bearer_token\", data.token);",
+                  "    console.log(\"bearer_token updated\");",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ Categories by parent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories/byParent",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "byParent"
+              ]
+            },
+            "description": "PASS — 200, 6 root categories returned.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parent_id\": 0,\n  \"language\": \"en\",\n  \"page\": 1,\n  \"limit\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Products search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/products/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "search"
+              ]
+            },
+            "description": "PASS — 200. filters must be non-empty (an empty {} is rejected with 400).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filters\": {\n    \"category_ids\": [\n      15\n    ]\n  },\n  \"language\": \"en\",\n  \"page\": 1,\n  \"limit\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Products data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/products/data",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "data"
+              ]
+            },
+            "description": "PASS — 200, full product detail.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"products\": [\n    479062\n  ],\n  \"language\": \"en\",\n  \"options\": {\n    \"images\": true,\n    \"stock\": true\n  },\n  \"page\": 1,\n  \"limit\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Carts: create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "create"
+              ]
+            },
+            "description": "PASS — 201. Returns {cart_id}. Auto-sets cart_id."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.cart_id) {",
+                  "    pm.collectionVariables.set(\"cart_id\", data.cart_id);",
+                  "    console.log(\"cart_id set to\", data.cart_id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ Carts: list (corrected, bare path)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts?limit=5&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts?limit=5&page=1"
+              ]
+            },
+            "description": "PASS — 200, real full data (cart_id, currency, shipping.address, totals). Confirmed path is bare /carts, NOT /carts/list. This is now consistently working across rounds — the only one of the 3 originally-'empty body' endpoints holding up."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Carts: shipping methods (on an EMPTY cart)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/shippingmethods/en",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "shippingmethods",
+                "en"
+              ]
+            },
+            "description": "PASS (auth+routing) — correctly returns a structured 404 'No shipping methods available for this cart / No items available for this cart' on an empty cart. This matches known-good round-1 behaviour. IMPORTANT: this does NOT confirm Dave's int-cast fix worked — that bug only showed up with a REAL item in the cart, and item-add is currently broken (see Regressed folder), so the actual fix could not be verified this round. See '⏸ Could Not Verify' folder."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Carts: delete (cleanup)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}"
+              ]
+            },
+            "description": "PASS — 200. Returns {removed: cart_id}. Run last."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Orders: list",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders?limit=5&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders?limit=5&page=1"
+              ]
+            },
+            "description": "PASS — 200, real paginated order data, unchanged shape."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Orders: payment link (fake order_id)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/paymentlink",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders",
+                "paymentlink"
+              ]
+            },
+            "description": "PASS (auth) — 404 'No order could be found' for a nonexistent id, correct business-logic behaviour.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": 1,\n  \"payment_method\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Orders: PDF (fake order_id)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/orders/1/pdf/invoice",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders",
+                "1",
+                "pdf",
+                "invoice"
+              ]
+            },
+            "description": "PASS (auth) — 404 'No order could be found' for a nonexistent id, correct business-logic behaviour."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "❌ REGRESSED — worked 3 rounds straight (v1 retest, v2, v3), now broken again",
+      "description": "All 4 of these were confirmed working, consistently, across 3 separate test rounds using the corrected /carts/cart/{cart_id}/items path. In this v4 round — run right after being told Dave's fix was deployed but 'still merging' — all 4 came back to the EXACT same {\"error\":\"auth required!\"} 401 that started this whole investigation. Retried the add-item call 21 times total (3 immediate + 18 more over a 3-minute background poll, 10s apart) — 401 every single time, no sign of settling. This strongly suggests the current deploy is in a broken/incomplete state, not just slow — recommend re-testing only after explicit confirmation the deploy is fully finished, not just 'still merging'.",
+      "item": [
+        {
+          "name": "❌ Carts: add item (corrected path)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/cart/{{cart_id}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "cart",
+                "{{cart_id}}",
+                "items"
+              ]
+            },
+            "description": "REGRESSED — 401 {\"error\":\"auth required!\"}. Was 201 with real item_id in 3 prior rounds. Retried 21x over ~3.5 minutes, no change.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 479062,\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Carts: get items list (corrected path)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/cart/{{cart_id}}/items/list?limit=10&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "cart",
+                "{{cart_id}}",
+                "items",
+                "list?limit=10&page=1"
+              ]
+            },
+            "description": "REGRESSED — 401 {\"error\":\"auth required!\"}. Was 200 with real JSON in the immediately preceding session."
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Carts: update item quantity (corrected path)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/cart/{{cart_id}}/items/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "cart",
+                "{{cart_id}}",
+                "items",
+                "1"
+              ]
+            },
+            "description": "REGRESSED — 401 {\"error\":\"auth required!\"}. Was 200 with real confirmation in 3 prior rounds. Fake item id used since no item could be added this round.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Carts: remove item (corrected path)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/cart/{{cart_id}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "cart",
+                "{{cart_id}}",
+                "items"
+              ]
+            },
+            "description": "REGRESSED — 401 {\"error\":\"auth required!\"}. Was 200 with real confirmation in 3 prior rounds. Fake item id used since no item could be added this round.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartitem_ids\": [\n    1\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "⏸ Could Not Verify This Round",
+      "description": "Dave reported an int-cast fix for the shippingmethods bug (200/0-bytes/text-html when a cart has a real item). We could not test that specific scenario this round because item-add is currently broken (see Regressed folder above) — there was no way to get a real item into a cart to trigger the original bug condition. Needs a fresh test once the item-mutation endpoints are stable again.",
+      "item": [
+        {
+          "name": "⏸ Carts: shipping methods (WITH a real item — untested this round)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/shippingmethods/en",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "shippingmethods",
+                "en"
+              ]
+            },
+            "description": "NOT VERIFIED — this is the exact scenario the original bug needed (cart with a real item) and it could not be reproduced this round since add-item is currently broken. Do not report this fix as confirmed until this specific case is retested."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

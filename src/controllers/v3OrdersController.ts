@@ -1,9 +1,28 @@
 import type { Request, Response } from "express";
+import crypto from "crypto";
+import "../types.js"; // side-effect only — registers the req.corenioToken Express augmentation
 import v3Pool from "../db/v3Client.js";
 import { decryptData, getPublicKey } from "../services/v3CryptoService.js";
-import { API } from "../services/API.js";
-import { fetchProductsData } from "../services/v3CoreniService.js";
+import {
+  fetchProductsData,
+  corenioSignup,
+  corenioLogin,
+  corenioCartShippingMethods,
+  corenioCartSetShipping,
+  corenioCartsList,
+  corenioCartFinalize,
+} from "../services/v3CoreniService.js";
+import { getStoredCorenioCartId, retireCorenioCartId, type ShopperIdentity } from "../services/v3CartSessionService.js";
 import { transformProduct } from "./v3ProductsController.js";
+
+// "€ 97,05" -> 97.05 — Corenio pre-formats currency server-side (locale
+// formatting, comma decimal separator), it never returns a raw number here.
+export function parseFormattedAmount(formatted: string): number | null {
+  const cleaned = formatted.replace(/[^\d,.-]/g, "").replace(",", ".");
+  if (!/\d/.test(cleaned)) return null;
+  const value = Number(cleaned);
+  return Number.isFinite(value) ? value : null;
+}
 
 interface AddressPayload {
   billing_firstname: string;
@@ -50,6 +69,10 @@ export async function createOrder(req: Request, res: Response): Promise<Response
     return res.status(400).json({ success: false, error: "Incomplete address data" });
   }
 
+  const { language: rawLanguage } = req.body as { language?: string };
+  const language: Lang = (["en", "nl", "de"].includes(rawLanguage ?? "") ? rawLanguage : "en") as Lang;
+  const shopper: ShopperIdentity = { deviceId: device_id, userId: user_id };
+
   try {
     const cartResult = user_id != null
       ? await v3Pool.query<{ product_id: number; quantity: number }>(
@@ -69,46 +92,112 @@ export async function createOrder(req: Request, res: Response): Promise<Response
       product_id: String(r.product_id),
       amount: Number(r.quantity),
     }));
+    const totalQuantity = items.reduce((sum, i) => sum + i.amount, 0);
 
-    const useDifferentShipping = !!addr.shipping_different;
+    // The Corenio cart already exists and already holds these exact items —
+    // built up incrementally by /v3/cart/add while the shopper was browsing.
+    // If it's missing here, our own v3_cart and Corenio have gone out of
+    // sync; safer to fail than to silently finalize an empty/wrong cart.
+    const cartId = await getStoredCorenioCartId(shopper);
+    if (cartId === null) {
+      console.error("[createOrder] No Corenio cart_id on file for this shopper despite non-empty local cart");
+      return res.status(502).json({ success: false, error: "Cart is out of sync, please try again" });
+    }
 
-    const receiver = {
-      companyname: (useDifferentShipping ? addr.shipping_companyname : addr.billing_companyname) ?? "",
-      firstname: (useDifferentShipping ? addr.shipping_firstname : undefined) ?? addr.billing_firstname,
-      lastname: (useDifferentShipping ? addr.shipping_lastname : undefined) ?? addr.billing_lastname,
-      address: (useDifferentShipping ? addr.shipping_address : undefined) ?? addr.billing_address,
-      address2: "",
-      addressnumber: (useDifferentShipping ? addr.shipping_addressnumber : undefined) ?? addr.billing_addressnumber,
-      postalcode: (useDifferentShipping ? addr.shipping_postalcode : undefined) ?? addr.billing_postalcode,
-      city: (useDifferentShipping ? addr.shipping_city : undefined) ?? addr.billing_city,
-      state: "",
-      country: "Netherlands",
-      email: addr.billing_email,
-      phone: (useDifferentShipping ? addr.shipping_phone : undefined) ?? addr.billing_phone,
-    };
+    // Shipping-method eligibility is address-dependent per Corenio's own
+    // spec ("based on its contents and shipping address"), and address only
+    // ever exists on a Corenio account (nowhere in the Carts API itself).
+    // A logged-in user's account already has one; a guest gets an invisible
+    // one created here, Corenio-side only — never written to our own
+    // v3_users/v3_device_sessions, so this stays a guest in our own system.
+    let corenioToken = req.corenioToken;
+    if (user_id == null) {
+      try {
+        const guestPassword = crypto.randomBytes(24).toString("hex");
+        await corenioSignup({
+          username: addr.billing_email,
+          email: addr.billing_email,
+          password: guestPassword,
+          firstname: addr.billing_firstname,
+          lastname: addr.billing_lastname,
+          address: addr.billing_address,
+          addressnumber: addr.billing_addressnumber,
+          postalcode: addr.billing_postalcode,
+          city: addr.billing_city,
+          country: "NL",
+          phone: addr.billing_phone,
+          companyname: addr.billing_companyname,
+        });
+        const login = await corenioLogin(addr.billing_email, guestPassword);
+        corenioToken = login.token;
+      } catch (err) {
+        console.error("[createOrder] Guest account provisioning failed:", (err as Error).message);
+        return res.status(502).json({ success: false, error: "Could not process order" });
+      }
+    }
 
-    const orderPayload = {
-      external_order_id: "",
-      items,
-      shipping: { shipping_option_id: addr.shipping_option_id, receiver },
-      user_email: addr.billing_email,
-    };
-    console.log("[createOrder] Sending to Corenio:", JSON.stringify(orderPayload, null, 2));
+    // Match the app's shipping_option_id against Corenio's real methods for
+    // this cart. KNOWN GAP: our shipping_option_id values are proxy-invented
+    // (see getShippingOptions below) and have not yet been verified to line
+    // up with Corenio's real shipping_method_id values — this match is
+    // expected to need correcting once that's confirmed against a live call.
+    let shippingMethods;
+    try {
+      shippingMethods = await corenioCartShippingMethods(cartId, language, corenioToken);
+    } catch (err) {
+      console.error("[createOrder] Failed to fetch shipping methods:", (err as Error).message);
+      return res.status(502).json({ success: false, error: "Could not process order" });
+    }
+    const matchedMethod = shippingMethods.find((m) => m.id === addr.shipping_option_id);
+    if (!matchedMethod) {
+      console.error("[createOrder] shipping_option_id", addr.shipping_option_id, "did not match any Corenio shipping method — mapping needs verification");
+      return res.status(502).json({ success: false, error: "Selected shipping method is unavailable" });
+    }
 
-    const corenioResult = await API("/sales/order", "POST", orderPayload, req.corenioToken) as { order_id: number; external_order_id: string };
+    try {
+      await corenioCartSetShipping(cartId, matchedMethod.id, corenioToken);
+    } catch (err) {
+      console.error("[createOrder] Failed to set shipping method:", (err as Error).message);
+      return res.status(502).json({ success: false, error: "Could not process order" });
+    }
+
+    // Capture the total for our own revenue tracking before finalize —
+    // best-effort, non-critical: a failure here must not block the order.
+    let totalAmount: number | null = null;
+    let currency = "EUR";
+    try {
+      const carts = await corenioCartsList(30, 1, corenioToken);
+      const summary = carts[String(cartId)];
+      if (summary) {
+        totalAmount = parseFormattedAmount(summary.total);
+      }
+    } catch (err) {
+      console.error("[createOrder] Failed to capture cart total (non-blocking):", (err as Error).message);
+    }
+
+    let finalizeResult;
+    try {
+      finalizeResult = await corenioCartFinalize(cartId, corenioToken);
+    } catch (err) {
+      console.error("[createOrder] Finalize failed:", (err as Error).message);
+      return res.status(502).json({ success: false, error: "Could not process order" });
+    }
 
     if (user_id != null) {
       await v3Pool.query(`DELETE FROM v3_cart WHERE user_id = $1`, [user_id]);
     } else {
       await v3Pool.query(`DELETE FROM v3_cart WHERE device_id = $1 AND user_id IS NULL`, [device_id]);
     }
-
-    const totalQuantity = items.reduce((sum, i) => sum + i.amount, 0);
+    await retireCorenioCartId(shopper);
 
     await v3Pool.query(
-      `INSERT INTO v3_orders (user_id, device_id, corenio_order_id, external_order_id, total_quantity, items, encrypted_address)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [user_id, device_id, corenioResult.order_id, corenioResult.external_order_id ?? "", totalQuantity, JSON.stringify(items), encrypted_address]
+      `INSERT INTO v3_orders
+         (user_id, device_id, corenio_order_id, external_order_id, corenio_cart_id, currency, total_amount, total_quantity, items, encrypted_address)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        user_id, device_id, finalizeResult.order_id, null, cartId, currency, totalAmount,
+        totalQuantity, JSON.stringify(items), encrypted_address,
+      ]
     );
 
     // Saved address is an account feature — guests have nothing to save to
@@ -122,7 +211,9 @@ export async function createOrder(req: Request, res: Response): Promise<Response
       );
     }
 
-    return res.json({ success: true, order_id: corenioResult.order_id, external_order_id: corenioResult.external_order_id });
+    // external_order_id no longer exists on the new finalize response (it
+    // only returns order_id) — key kept for response-shape compatibility.
+    return res.json({ success: true, order_id: finalizeResult.order_id, external_order_id: null });
   } catch (err) {
     console.error("[createOrder] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });

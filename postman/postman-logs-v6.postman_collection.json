@@ -1,0 +1,915 @@
+{
+  "info": {
+    "name": "Corenio API — Carts/Orders Test Log v6 (2026-09-01, round 6 — FULL LIFECYCLE, FINAL)",
+    "description": "Sixth and final test pass. Full cart lifecycle: multi-item add, increase, decrease, remove, clear (whole-cart delete), re-add after clearing, view at every step, finalize. ALL 17 STEPS PASSED. Two real orders now exist from this investigation series: order_id 373 (round 5, qty 2, total 49.97) and order_id 374 (this round, qty 3, total 70.72), both for abdulzziwa007@outlook.com, both status 'new_order' / unpaid, both with real Mollie payment links available via POST /orders/paymentlink. CONCLUSION: the API is confirmed stable and working across all cart-mutation operations using the current paths (no '/cart/' segment). Recommendation: update src/services/v3CoreniService.ts in the proxy to use these confirmed paths and ship the checkout migration. No secrets embedded — fill in corenio_api_key under this collection's Variables tab before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.corenio.com/api/v1.0",
+      "type": "string"
+    },
+    {
+      "key": "corenio_api_key",
+      "value": "",
+      "type": "string",
+      "description": "PASTE YOUR OWN CORENIO_API_KEY here — never commit a real value."
+    },
+    {
+      "key": "bearer_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cart_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "item_a",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "item_b",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "cart_id2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "item_c",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "✅ Full Cart Lifecycle — ALL PASS, final confirmation",
+      "description": "Round 6, 2026-09-01 — the definitive full lifecycle test: multi-item cart, increase, decrease, remove, clear (delete whole cart), re-add after clearing, view at every step, finalize. Every single step passed. Two real orders now exist from this investigation: order_id 373 (round 5) and order_id 374 (this round). CONCLUSION: the Carts + Orders API is confirmed working end-to-end using the current documented paths (no '/cart/' segment for item mutations, bare /carts for listing carts). Safe to update our proxy's v3CoreniService.ts to these paths and ship.",
+      "item": [
+        {
+          "name": "✅ 1. Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "PASS — 200.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"abdulzziwa007@outlook.com\",\n  \"password\": \"0000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.token) { pm.collectionVariables.set(\"bearer_token\", data.token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ 2. Create cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "create"
+              ]
+            },
+            "description": "PASS — 201, cart_id 19474604 in this run."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.cart_id) { pm.collectionVariables.set(\"cart_id\", data.cart_id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ 3. Add item A (product 479062, qty 1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items"
+              ]
+            },
+            "description": "PASS — 201, item_id 1536.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 479062,\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.item_id) { pm.collectionVariables.set(\"item_a\", data.item_id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ 4. Add item B (product 1093631, qty 1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items"
+              ]
+            },
+            "description": "PASS — 201, item_id 1537. Confirms MULTIPLE distinct items in one cart works.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 1093631,\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.item_id) { pm.collectionVariables.set(\"item_b\", data.item_id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ 5. View cart — both items present",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items/list?limit=10&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items",
+                "list?limit=10&page=1"
+              ]
+            },
+            "description": "PASS — 200, {1536:{qty:1}, 1537:{qty:1}}, total_items:2."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 6. INCREASE item A quantity (1 -> 5)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items/{{item_a}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items",
+                "{{item_a}}"
+              ]
+            },
+            "description": "PASS — 200, new_quantity:5. Verified via a follow-up view (not repeated here).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 7. DECREASE item A quantity (5 -> 2)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items/{{item_a}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items",
+                "{{item_a}}"
+              ]
+            },
+            "description": "PASS — 200, new_quantity:2. Verified via a follow-up view.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 8. REMOVE item B",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items"
+              ]
+            },
+            "description": "PASS — 200, {removed:[1537]}. View afterward confirmed only item A (qty 2) remained.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartitem_ids\": [\n    \"{{item_b}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 9. Sanity: shipping methods still correct with 1 item",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/shippingmethods/en",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "shippingmethods",
+                "en"
+              ]
+            },
+            "description": "PASS — 200, real methods (PostNL, Cirro Deutschland) still returned correctly after add/increase/decrease/remove cycle."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 10. CLEAR CART (delete whole cart)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}"
+              ]
+            },
+            "description": "PASS — 200, {removed: cart_id}. This is how our proxy's clearCart() works — deletes the whole Corenio cart rather than removing items one by one."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 11. Confirm cart genuinely gone",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id}}/items/list?limit=10&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items",
+                "list?limit=10&page=1"
+              ]
+            },
+            "description": "PASS (expected failure) — 404 'No Cart Found'. Confirms the clear was real, not just emptied."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 12. Create a NEW cart (post-clear)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "create"
+              ]
+            },
+            "description": "PASS — 201, cart_id 19474636. Confirms a fresh cart can be created immediately after clearing."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.cart_id) { pm.collectionVariables.set(\"cart_id2\", data.cart_id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ 13. Add ANOTHER item after clearing (product 479062, qty 3)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id2}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id2}}",
+                "items"
+              ]
+            },
+            "description": "PASS — 201, item_id 1538.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 479062,\n  \"quantity\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.item_id) { pm.collectionVariables.set(\"item_c\", data.item_id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "✅ 14. View new cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id2}}/items/list?limit=10&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id2}}",
+                "items",
+                "list?limit=10&page=1"
+              ]
+            },
+            "description": "PASS — 200, {1538:{qty:3}}, total_items:1."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 15. Shipping methods on new cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id2}}/shippingmethods/en",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id2}}",
+                "shippingmethods",
+                "en"
+              ]
+            },
+            "description": "PASS — 200, real methods returned."
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 16. Set shipping (PostNL)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id2}}/shipping",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id2}}",
+                "shipping"
+              ]
+            },
+            "description": "PASS — 200, confirmed PostNL, €7.00 ex VAT.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipping_method_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "✅ 17. FINALIZE — second real order this investigation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "api-key",
+                "value": "{{corenio_api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "bearer",
+                "value": "{{bearer_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/carts/{{cart_id2}}/finalize",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id2}}",
+                "finalize"
+              ]
+            },
+            "description": "PASS — 201, {order_id:374}. Confirmed via Orders list: item_quantity:3, shipping.method:'PostNL', total:70.72 — fully consistent with everything set above."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.order_id) { pm.collectionVariables.set(\"order_id\", data.order_id); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

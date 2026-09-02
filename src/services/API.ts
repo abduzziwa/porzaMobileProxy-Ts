@@ -8,6 +8,8 @@ export async function API(
 ): Promise<Record<string, unknown>> {
   const baseUrl = "https://api.corenio.com/api/v1.0";
 
+  console.log(`[Corenio] -> ${method} ${endpoint}`);
+
   const response = await fetch(`${baseUrl}${endpoint}`, {
     method,
     headers: {
@@ -20,9 +22,10 @@ export async function API(
 
   if (!response.ok) {
     const errorBody = await response.text();
-    console.error(`[API] ${method} ${endpoint} → ${response.status}`, errorBody);
+    console.error(`[Corenio] <- ${response.status} ${method} ${endpoint}`, errorBody);
     throw new Error(`API error: ${response.status} ${response.statusText} — ${errorBody}`);
   }
 
+  console.log(`[Corenio] <- ${response.status} ${method} ${endpoint}`);
   return (await response.json()) as Record<string, unknown>;
 }

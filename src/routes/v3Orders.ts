@@ -1,5 +1,5 @@
 import express from "express";
-import { createOrder, getOrders, getOrderDetail, getProxyOrderList, getProxyOrderDetail, getGuestOrderDetail, getSavedAddress, getShippingOptions, getOrderPublicKey } from "../controllers/v3OrdersController.js";
+import { createOrder, getOrders, getOrderDetail, getProxyOrderList, getProxyOrderDetail, getGuestOrderDetail, getSavedAddress, getShippingOptions, getOrderPublicKey, requestPaymentLink, getPaymentStatus } from "../controllers/v3OrdersController.js";
 
 const router = express.Router();
 
@@ -9,6 +9,8 @@ router.post("/v3/orders/detail", getOrderDetail);
 router.post("/v3/orders/proxy-list", getProxyOrderList);
 router.post("/v3/orders/proxy-detail", getProxyOrderDetail);
 router.post("/v3/orders/guest-detail", getGuestOrderDetail);
+router.post("/v3/orders/pay", requestPaymentLink);
+router.post("/v3/orders/payment-status", getPaymentStatus);
 router.post("/v3/address/get", getSavedAddress);
 router.post("/v3/shipping/options", getShippingOptions);
 router.post("/v3/order/getPublicKey", getOrderPublicKey);

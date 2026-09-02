@@ -28,14 +28,14 @@ export async function v3Cache(req: Request, res: Response, next: NextFunction): 
   try {
     const cached = await redis.get(key);
     if (cached) {
-      console.log(`[v3Cache] ✅ HIT  ${req.path} — served from Redis (device: ${device})`);
+      console.log(`[CACHE] HIT ${req.path} — served from Redis (device: ${device})`);
       res.setHeader("X-Cache", "HIT");
       res.json(JSON.parse(cached));
       return;
     }
-    console.log(`[v3Cache] ❌ MISS ${req.path} — fetching from Corenio (device: ${device})`);
+    console.log(`[CACHE] MISS ${req.path} — falling through (device: ${device})`);
   } catch (err) {
-    console.error("[v3Cache] Redis read error:", err);
+    console.error("[CACHE] Redis read error:", err);
   }
 
   // Cache miss — intercept res.json to store the response
@@ -44,8 +44,8 @@ export async function v3Cache(req: Request, res: Response, next: NextFunction): 
     res.setHeader("X-Cache", "MISS");
     if (res.statusCode === 200) {
       redis.setex(key, ttl, JSON.stringify(body))
-        .then(() => console.log(`[v3Cache] 💾 STORED ${req.path} (TTL: ${ttl}s)`))
-        .catch((err: Error) => console.error("[v3Cache] Redis write error:", err));
+        .then(() => console.log(`[CACHE] STORED ${req.path} (TTL: ${ttl}s)`))
+        .catch((err: Error) => console.error("[CACHE] Redis write error:", err));
     }
     return originalJson(body);
   };

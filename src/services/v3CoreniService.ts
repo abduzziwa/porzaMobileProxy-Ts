@@ -15,25 +15,25 @@ const corenioClient = axios.create({
   },
 });
 
-// Tags every outgoing Corenio call in PM2 logs with [Corenio], regardless of
+// Tags every outgoing Corenio call in PM2 logs with [CORENIO_API], regardless of
 // which function above made it — one place instead of a log line per call
 // site. Method + path + status only, matching the rest of this codebase's
 // logging discipline: never the request/response body (could carry
 // passwords, tokens, or full addresses) and never headers (carry the API
 // key and per-user bearer token).
 corenioClient.interceptors.request.use((config) => {
-  console.log(`[Corenio] -> ${(config.method ?? "?").toUpperCase()} ${config.url}`);
+  console.log(`[CORENIO_API] -> ${(config.method ?? "?").toUpperCase()} ${config.url}`);
   return config;
 });
 corenioClient.interceptors.response.use(
   (response) => {
-    console.log(`[Corenio] <- ${response.status} ${(response.config.method ?? "?").toUpperCase()} ${response.config.url}`);
+    console.log(`[CORENIO_API] <- ${response.status} ${(response.config.method ?? "?").toUpperCase()} ${response.config.url}`);
     return response;
   },
   (error) => {
     const status = error.response?.status ?? "ERROR";
     const method = (error.config?.method ?? "?").toUpperCase();
-    console.log(`[Corenio] <- ${status} ${method} ${error.config?.url}`);
+    console.log(`[CORENIO_API] <- ${status} ${method} ${error.config?.url}`);
     return Promise.reject(error);
   }
 );

@@ -12,6 +12,7 @@ import {
   corenioCartsList,
   corenioCartFinalize,
   corenioGetOrder,
+  corenioOrderPaymentLink,
 } from "../services/v3CoreniService.js";
 import { getStoredCorenioCartId, retireCorenioCartId, type ShopperIdentity } from "../services/v3CartSessionService.js";
 import { transformProduct } from "./v3ProductsController.js";
@@ -581,5 +582,109 @@ export async function getSavedAddress(req: Request, res: Response): Promise<Resp
   } catch (err) {
     console.error("[getSavedAddress] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });
+  }
+}
+
+// order_id here is always the real Corenio order_id (what createOrder()
+// already returns to the app) — never our own local v3_orders.id.
+async function ownsOrder(orderId: number, userId: number): Promise<boolean> {
+  const result = await v3Pool.query(
+    `SELECT 1 FROM v3_orders WHERE corenio_order_id = $1 AND user_id = $2`,
+    [orderId, userId]
+  );
+  return result.rows.length > 0;
+}
+
+// Fixed at "Online Payments" (Corenio payment_method id 3) — the hosted-
+// checkout option that lets the customer pick their own method (iDEAL,
+// card, Apple Pay, Google Pay, etc.) on Mollie's own page. Verified live:
+// this is the only payment_method value we've seen return a real Mollie
+// checkout URL. Deliberately not exposed as a request parameter — the app
+// never needs to know Corenio's internal payment-method ID scheme.
+const HOSTED_CHECKOUT_PAYMENT_METHOD = 3;
+
+// ── POST /v3/orders/pay ───────────────────────────────────
+export async function requestPaymentLink(req: Request, res: Response): Promise<Response> {
+  const { user_id, order_id } = req.body as { user_id?: number; order_id?: number };
+
+  if (!user_id || !Number.isInteger(order_id)) {
+    return res.status(400).json({ success: false, error: "Missing or invalid user_id or order_id" });
+  }
+
+  try {
+    if (!(await ownsOrder(order_id as number, user_id))) {
+      return res.status(404).json({ success: false, error: "Order not found" });
+    }
+
+    const link = await corenioOrderPaymentLink(
+      { order_id: order_id as number, payment_method: HOSTED_CHECKOUT_PAYMENT_METHOD },
+      req.corenioToken
+    );
+
+    console.log(`[CORENIO_API -> DATABASE] orders/pay: Corenio issued a payment link for order ${order_id}`);
+    return res.json({
+      success: true,
+      payment_url: link.payment_url,
+      total_unpaid: link.total_unpaid,
+      payment_method: link.payment_method,
+    });
+  } catch (err) {
+    console.error("[requestPaymentLink] Error:", (err as Error).message);
+    return res.status(502).json({ success: false, error: "Could not create payment link" });
+  }
+}
+
+export type PaymentStatus = "paid" | "pending" | "failed" | "cancelled" | "expired" | "unknown";
+
+// Pure — testable without hitting Corenio. "paid" is decided by the
+// numeric total_paid/total comparison (fields we've verified live), never
+// by matching an exact status string — we have never observed what
+// Corenio's real "paid" status string actually is (no test order has been
+// paid yet), so relying on numbers here is the only reliable signal.
+// Anything not clearly cancelled/expired/failed defaults to "pending" —
+// matches the explicit requirement that an unrecognised state must never
+// be shown as failed.
+export function normalizePaymentStatus(
+  order: { status: string; total: number; total_paid: number } | null
+): PaymentStatus {
+  if (!order) return "unknown"; // not found — may just be outside Corenio's
+  // narrow recent-orders visibility window (verified: as short as a few
+  // hours), NOT proof the order failed. Never treat "unknown" as "failed".
+  if (order.total > 0 && order.total_paid >= order.total) return "paid";
+  const s = order.status.toLowerCase();
+  if (s.includes("cancel")) return "cancelled";
+  if (s.includes("expir")) return "expired";
+  if (s.includes("fail")) return "failed";
+  return "pending";
+}
+
+// ── POST /v3/orders/payment-status ────────────────────────
+export async function getPaymentStatus(req: Request, res: Response): Promise<Response> {
+  const { user_id, order_id } = req.body as { user_id?: number; order_id?: number };
+
+  if (!user_id || !Number.isInteger(order_id)) {
+    return res.status(400).json({ success: false, error: "Missing or invalid user_id or order_id" });
+  }
+
+  try {
+    if (!(await ownsOrder(order_id as number, user_id))) {
+      return res.status(404).json({ success: false, error: "Order not found" });
+    }
+
+    const liveOrder = await corenioGetOrder(order_id as number, req.corenioToken);
+    const status = normalizePaymentStatus(liveOrder);
+
+    return res.json({
+      success: true,
+      status,
+      total: liveOrder?.total ?? null,
+      total_paid: liveOrder?.total_paid ?? null,
+      currency: liveOrder?.currency ?? null,
+    });
+  } catch (err) {
+    console.error("[getPaymentStatus] Error:", (err as Error).message);
+    // A failed check is not a failed payment — never report "failed" for a
+    // network/upstream error, only for a real Corenio status match above.
+    return res.json({ success: true, status: "unknown", total: null, total_paid: null, currency: null });
   }
 }

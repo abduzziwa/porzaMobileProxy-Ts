@@ -11,6 +11,7 @@ import {
   corenioCartSetShipping,
   corenioCartsList,
   corenioCartFinalize,
+  corenioGetOrder,
 } from "../services/v3CoreniService.js";
 import { getStoredCorenioCartId, retireCorenioCartId, type ShopperIdentity } from "../services/v3CartSessionService.js";
 import { transformProduct } from "./v3ProductsController.js";
@@ -212,9 +213,34 @@ export async function createOrder(req: Request, res: Response): Promise<Response
       );
     }
 
+    // Pull the just-created order back from Corenio live (not our own DB —
+    // our v3_orders row is essentials-only by design) so the confirmation
+    // screen can show real status/total instead of just a bare id. Corenio
+    // has no "get one order" endpoint, so this pages GET /orders and finds
+    // it by id — a freshly finalized order is always the most recent, so
+    // it's reliably on page 1. Best-effort: the order is already placed and
+    // paid-for status doesn't change this response's success — if this
+    // lookup fails or the order isn't found yet, fall back to the bare id
+    // exactly as before rather than failing an already-successful checkout.
+    let order: { status: string; total: number; currency: string; item_count: number; item_quantity: number } | undefined;
+    try {
+      const liveOrder = await corenioGetOrder(finalizeResult.order_id, corenioToken);
+      if (liveOrder) {
+        order = {
+          status: liveOrder.status,
+          total: liveOrder.total,
+          currency: liveOrder.currency,
+          item_count: liveOrder.item_count,
+          item_quantity: liveOrder.item_quantity,
+        };
+      }
+    } catch (err) {
+      console.error("[createOrder] Failed to fetch live order for confirmation (non-blocking):", (err as Error).message);
+    }
+
     // external_order_id no longer exists on the new finalize response (it
     // only returns order_id) — key kept for response-shape compatibility.
-    return res.json({ success: true, order_id: finalizeResult.order_id, external_order_id: null });
+    return res.json({ success: true, order_id: finalizeResult.order_id, external_order_id: null, order });
   } catch (err) {
     console.error("[createOrder] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });

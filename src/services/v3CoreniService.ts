@@ -466,15 +466,60 @@ export async function corenioCartsList(
 
 // ─── Orders (new, replaces the removed /sales/order/* status/tracking) ───
 
+// Real shape, verified live against production Corenio (2026-09-01) — the
+// OpenAPI spec left this undocumented ("OrderListDTO", no fixed schema).
+// No per-line-item array — only item_count/item_quantity aggregates.
+export interface CorenioOrder {
+  order_id: number;
+  currency: string;
+  status: string;
+  billing: {
+    email: string;
+    firstname: string;
+    lastname: string;
+    companyname: string;
+    address_street: string;
+    address_housenumber: string;
+    postalcode: string;
+    city: string;
+    country: string;
+    country_id: number;
+    country_code: string;
+    [key: string]: unknown;
+  };
+  shipping: {
+    method: string;
+    price_ex_vat: unknown;
+    address: Record<string, string>;
+  };
+  item_count: number;
+  item_quantity: number;
+  total_vat: number;
+  total_ex_vat: number;
+  total_paid: number;
+  total: number;
+}
+
 export async function corenioOrdersList(
   params: { limit?: number; page?: number; language?: string; status?: string; date_from?: string; date_till?: string },
   userToken?: string | null
-): Promise<{ orders: Record<string, unknown>; total_items: number; pages: number; current_page: number }> {
-  const res = await corenioClient.get<{ orders: Record<string, unknown>; total_items: number; pages: number; current_page: number }>(
+): Promise<{ orders: Record<string, CorenioOrder>; total_items: number; pages: number; current_page: number }> {
+  const res = await corenioClient.get<{ orders: Record<string, CorenioOrder>; total_items: number; pages: number; current_page: number }>(
     "/api/v1.0/orders",
     { params, headers: corenioHeaders(userToken) }
   );
   return res.data;
+}
+
+// Corenio has no "get one order by id" endpoint — GET /orders only supports
+// limit/page/language/status/date_from/date_till, never an order_id filter.
+// A just-finalized order is always the most recent, so it's reliably on
+// page 1 at the max page size — this is a live lookup, not a DB read, used
+// right after finalize to enrich the checkout response with real Corenio
+// data instead of just the bare order_id.
+export async function corenioGetOrder(orderId: number, userToken?: string | null): Promise<CorenioOrder | null> {
+  const { orders } = await corenioOrdersList({ limit: 30, page: 1 }, userToken);
+  return orders[String(orderId)] ?? null;
 }
 
 export interface CorenioOrderPdfResult {

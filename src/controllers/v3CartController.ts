@@ -121,6 +121,7 @@ export async function addToCart(req: Request, res: Response): Promise<Response> 
       corenioItemId = added.item_id;
     }
 
+    console.log(`[CORENIO_API -> DATABASE] cart/add: Corenio confirmed item ${corenioItemId} (qty ${newQuantity}) — writing to v3_cart`);
     const cacheRow = await upsertCacheRow(shopper, product_id, newQuantity, cartId, corenioItemId);
     return res.json({ success: true, cart_item: cacheRow });
   } catch (err) {
@@ -146,6 +147,7 @@ export async function removeFromCart(req: Request, res: Response): Promise<Respo
 
     if (cartId !== null && cached?.corenioItemId != null) {
       await corenioCartRemoveItems(cartId, [cached.corenioItemId], req.corenioToken);
+      console.log(`[CORENIO_API -> DATABASE] cart/remove: Corenio confirmed removal of item ${cached.corenioItemId} — deleting from v3_cart`);
     }
     // Either nothing stored on either side, or a cache row that was never
     // pushed to Corenio (unreconciled merge) — either way there is nothing
@@ -180,6 +182,7 @@ export async function updateCart(req: Request, res: Response): Promise<Response>
       const cartId = await getStoredCorenioCartId(shopper);
       if (cartId !== null && cached?.corenioItemId != null) {
         await corenioCartRemoveItems(cartId, [cached.corenioItemId], req.corenioToken);
+        console.log(`[CORENIO_API -> DATABASE] cart/update (qty<=0): Corenio confirmed removal of item ${cached.corenioItemId} — deleting from v3_cart`);
       }
       await deleteCacheRow(shopper, product_id);
       return res.json({ success: true, cart_item: null });
@@ -204,6 +207,7 @@ export async function updateCart(req: Request, res: Response): Promise<Response>
       corenioItemId = added.item_id;
     }
 
+    console.log(`[CORENIO_API -> DATABASE] cart/update: Corenio confirmed item ${corenioItemId} (qty ${quantity}) — writing to v3_cart`);
     const cacheRow = await upsertCacheRow(shopper, product_id, Number(quantity), cartId, corenioItemId);
     return res.json({ success: true, cart_item: cacheRow });
   } catch (err) {
@@ -283,6 +287,7 @@ export async function clearCart(req: Request, res: Response): Promise<Response> 
     const cartId = await getStoredCorenioCartId(shopper);
     if (cartId !== null) {
       await corenioCartDelete(cartId, req.corenioToken);
+      console.log(`[CORENIO_API -> DATABASE] cart/clear: Corenio confirmed cart ${cartId} deleted — clearing v3_cart`);
     }
 
     if (user_id != null) {

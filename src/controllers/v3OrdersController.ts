@@ -190,6 +190,7 @@ export async function createOrder(req: Request, res: Response): Promise<Response
     }
     await retireCorenioCartId(shopper);
 
+    console.log(`[CORENIO_API -> DATABASE] orders/create: Corenio confirmed order ${finalizeResult.order_id} — writing to v3_orders`);
     await v3Pool.query(
       `INSERT INTO v3_orders
          (user_id, device_id, corenio_order_id, external_order_id, corenio_cart_id, currency, total_amount, total_quantity, items, encrypted_address)

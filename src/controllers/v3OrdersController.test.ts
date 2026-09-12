@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseFormattedAmount, normalizePaymentStatus } from "./v3OrdersController.js";
+import { parseFormattedAmount, normalizePaymentStatus, resolveNewestOrderId } from "./v3OrdersController.js";
 
 test("parses a Euro-formatted amount with comma decimal separator", () => {
   assert.equal(parseFormattedAmount("€ 97,05"), 97.05);
@@ -58,4 +58,22 @@ test("normalizePaymentStatus: unrecognised status defaults to pending, not faile
 
 test("normalizePaymentStatus: zero total never counts as paid even if total_paid is also 0", () => {
   assert.equal(normalizePaymentStatus({ status: "new_order", total: 0, total_paid: 0 }), "pending");
+});
+
+// ── resolveNewestOrderId ─────────────────────────────────────
+
+test("resolveNewestOrderId: picks the highest numeric key regardless of object insertion order", () => {
+  // Object keys are inserted out of numeric order on purpose — JS would
+  // normally iterate integer-like keys ascending regardless, so this also
+  // guards against relying on iteration order instead of an explicit max.
+  const orders = { "390": {}, "397": {}, "394": {} };
+  assert.equal(resolveNewestOrderId(orders), 397);
+});
+
+test("resolveNewestOrderId: a single order returns that order's id", () => {
+  assert.equal(resolveNewestOrderId({ "42": {} }), 42);
+});
+
+test("resolveNewestOrderId: returns null for an empty orders object", () => {
+  assert.equal(resolveNewestOrderId({}), null);
 });

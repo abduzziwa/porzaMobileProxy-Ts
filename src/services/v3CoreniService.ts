@@ -106,6 +106,17 @@ export async function corenioForgotPassword(email: string): Promise<void> {
   await corenioClient.post("/api/v1.0/users/auth/forgot-password", { email }, { headers: corenioHeaders() });
 }
 
+// Field names verified live against this install's own usergroup config
+// (2026-09-06, via the bare-username probe technique the Corenio doc
+// documents). REQUIRED here (beyond always-required username): firstname,
+// lastname, address, country, state, phone, mobphone, sex, companyinfo.
+// Two of those don't match the generic API doc's field names — confirmed by
+// probe, not guessed: this install checks "sex", not "gender", and
+// "companyinfo", not "companyname" — sending the doc's names satisfies
+// nothing; Corenio just silently ignores the unrecognised key and still
+// reports the real one missing. addressnumber/postalcode/city are NOT
+// required (bare "address" alone satisfies the check) but are obviously
+// still needed for a deliverable address.
 export interface CorenioSignupPayload {
   username: string;
   email: string;
@@ -127,7 +138,30 @@ export interface CorenioSignupPayload {
   city?: string;
   state?: string;
   mobphone?: string;
+  // Two distinct, easily-confused fields (per a partner-supplied integration
+  // note — unverified against this install by us, but safe to honor either
+  // way): companyinfo is validation-only, never surfaced anywhere, and any
+  // non-empty placeholder satisfies the required-field check on this
+  // install. companyname is what actually shows in Corenio's own admin
+  // customer search — leave it empty for a private individual, set it for a
+  // real B2B signup. Never copy one into the other.
+  companyinfo?: string;
   companyname?: string;
+  chambercommerce?: string;
+  eori_number?: string;
+  vatnumber?: string;
+  // The required-field check (confirmed live, 2026-09-06) only checks for
+  // the presence of "sex", not "gender" — sending "sex" alone with no
+  // "gender" key does NOT produce a false missing-field error, contrary to
+  // a partner note claiming otherwise. Whether persistence additionally
+  // needs "gender" alongside it is unverified (would require completing a
+  // real signup, which we've deliberately avoided so far) — both are sent
+  // below as a costless precaution. Corenio only recognises "male"/"female"
+  // (or 1/0) on either field — anything else is stored back unvalidated
+  // rather than rejected (confirmed live), so callers must restrict to
+  // these two before sending, not rely on Corenio to catch bad input.
+  sex?: "male" | "female";
+  gender?: "male" | "female";
 }
 
 export interface CorenioSignupResult {
@@ -140,6 +174,44 @@ export async function corenioSignup(payload: CorenioSignupPayload): Promise<Core
     headers: corenioHeaders(),
   });
   return res.data;
+}
+
+// Corenio's signup 400s come in two shapes that look identical at the HTTP
+// level (both status 400) but mean opposite things for the frontend:
+//   missing required field(s) -> error_message.details is a comma STRING,
+//     e.g. "firstname,lastname,country"
+//   bad/duplicate field value  -> error_message.details is an OBJECT,
+//     e.g. { "username": "Allready exists" } (that's Corenio's own typo,
+//     matched verbatim below rather than relied on for string-matching)
+// Blindly treating "any 400" as "email already registered" (the previous
+// behaviour) misreports a validation failure as a duplicate-account error.
+export type CorenioSignupErrorType = "missing_fields" | "email_taken" | "invalid_fields";
+
+export interface CorenioSignupErrorInfo {
+  type: CorenioSignupErrorType;
+  fields?: string[];                  // missing_fields
+  details?: Record<string, string>;   // email_taken / invalid_fields
+}
+
+export function parseCorenioSignupError(err: unknown): CorenioSignupErrorInfo | null {
+  if (!axios.isAxiosError(err) || err.response?.status !== 400) return null;
+
+  const data = err.response.data as { error_message?: { details?: unknown } } | undefined;
+  const details = data?.error_message?.details;
+
+  if (typeof details === "string") {
+    return { type: "missing_fields", fields: details.split(",").map((f) => f.trim()).filter(Boolean) };
+  }
+
+  if (details && typeof details === "object") {
+    const detailsObj = details as Record<string, string>;
+    if (typeof detailsObj.username === "string") {
+      return { type: "email_taken", details: detailsObj };
+    }
+    return { type: "invalid_fields", details: detailsObj };
+  }
+
+  return null;
 }
 
 export interface RawCategory {
@@ -265,7 +337,20 @@ export async function fetchProductsData(
     { headers: corenioHeaders(userToken) }
   );
   console.log("[fetchProductsData] RAW Corenio response:", JSON.stringify(res.data, null, 2));
-  return Object.values(res.data?.products ?? {});
+
+  // Corenio's response is an object keyed by product_id — JS always iterates
+  // integer-like object keys in ascending numeric order regardless of the
+  // actual response order, so a bare Object.values() silently discards
+  // whatever order the caller requested (recency for recently-viewed,
+  // relevance rank for search, liked-at for liked products, cart order,
+  // order line-item order — every one of this function's callers passes an
+  // intentionally ordered id list). Re-order explicitly to match product_ids
+  // instead. A product_id Corenio didn't return (e.g. discontinued) is
+  // simply dropped, matching the previous behavior.
+  const productsById = res.data?.products ?? {};
+  return product_ids
+    .map((id) => productsById[String(id)])
+    .filter((p): p is CorenioProduct => p !== undefined);
 }
 
 export async function fetchProductFilters(
@@ -509,6 +594,15 @@ export async function corenioOrdersList(
     { params, headers: corenioHeaders(userToken) }
   );
   return res.data;
+}
+
+// Corenio's list endpoint doesn't return 200+empty when an account has no
+// orders — it returns 404 with error_message.details "No Orders Found"
+// (verified live, 2026-09-11). That's a real, confirmed signal — distinct
+// from a network blip, timeout, or 5xx — so callers can trust it as "this
+// account genuinely has zero orders right now," not just "couldn't check."
+export function isCorenioNoOrdersFoundError(err: unknown): boolean {
+  return axios.isAxiosError(err) && err.response?.status === 404;
 }
 
 // Corenio has no "get one order by id" endpoint — GET /orders only supports

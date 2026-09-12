@@ -8,6 +8,7 @@ import {
   type CorenioFilterGroup,
 } from "../services/v3CoreniService.js";
 import v3Pool from "../db/v3Client.js";
+import redis from "../services/v3RedisService.js";
 
 // ─── Brand logo URL ───────────────────────────────────────
 const BRAND_LOGO_URL = process.env.BRAND_LOGO_URL || "";
@@ -174,12 +175,18 @@ const PRIORITY_PROPERTIES = [
 ];
 
 // Filter facets for a given (filters, language) combo are identical for every
-// caller — no device_id or user_id involved — so this is shared across everyone
-// via a DB-backed cache instead of the per-device Redis cache used elsewhere.
+// caller — no device_id or user_id involved — so this is shared across everyone,
+// via a two-tier cache: Redis first (fast, in-memory), Postgres behind it
+// (durable, survives a Redis flush/restart). Both are keyed identically —
+// sha256(filters+language), no device_id — unlike the per-device Redis cache
+// used elsewhere, so a Redis miss still shares the Postgres hit across every
+// caller instead of degrading into a per-device cache.
 // A row older than this is refetched from Corenio on whichever request happens
 // to land next; no background job needed. Bump down (e.g. 30 min) for fresher
 // facets at the cost of more Corenio calls, or up for fewer calls.
 const FILTERS_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+const FILTERS_REDIS_TTL_SECONDS = FILTERS_CACHE_TTL_MS / 1000;
+const filtersRedisKey = (cacheKey: string) => `v3filters:${cacheKey}`;
 
 export async function getProductsFilters(req: Request, res: Response): Promise<Response> {
   const { category_ids, categories, ktype_ids, language = "en" } = req.body as Record<string, unknown>;
@@ -193,8 +200,19 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
     .createHash("sha256")
     .update(JSON.stringify({ filters, language }))
     .digest("hex");
+  const redisKey = filtersRedisKey(cacheKey);
 
   try {
+    // L1: Redis — same shared key as Postgres, just faster. A read error here
+    // (Redis down, etc.) falls through to Postgres rather than failing the
+    // request — Redis is a speed optimization, never a hard dependency.
+    try {
+      const redisHit = await redis.get(redisKey);
+      if (redisHit) return res.json(JSON.parse(redisHit));
+    } catch (err) {
+      console.error("[getProductsFilters] Redis read error (non-fatal, falling back to Postgres):", (err as Error).message);
+    }
+
     const cached = await v3Pool.query<{ data: Record<string, unknown>; updated_at: string }>(
       `SELECT data, updated_at FROM v3_filters_cache WHERE cache_key = $1`,
       [cacheKey]
@@ -203,6 +221,10 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
     if (cached.rows.length) {
       const age = Date.now() - new Date(cached.rows[0].updated_at).getTime();
       if (age < FILTERS_CACHE_TTL_MS) {
+        // Warm Redis so the next identical request (from any user) skips
+        // Postgres entirely — fire-and-forget, doesn't delay this response.
+        redis.setex(redisKey, FILTERS_REDIS_TTL_SECONDS, JSON.stringify(cached.rows[0].data))
+          .catch((err: Error) => console.error("[getProductsFilters] Redis write error (non-fatal):", err.message));
         return res.json(cached.rows[0].data);
       }
     }
@@ -260,6 +282,8 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
        ON CONFLICT (cache_key) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
       [cacheKey, JSON.stringify(filters), language, JSON.stringify(payload)]
     );
+    redis.setex(redisKey, FILTERS_REDIS_TTL_SECONDS, JSON.stringify(payload))
+      .catch((err: Error) => console.error("[getProductsFilters] Redis write error (non-fatal):", err.message));
 
     return res.json(payload);
   } catch (err) {

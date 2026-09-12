@@ -1,5 +1,5 @@
 import express from "express";
-import { deviceCheck, registerPushToken, removePushToken } from "../controllers/v3DeviceController.js";
+import { deviceCheck, registerPushToken, removePushToken, updateDeviceLanguage } from "../controllers/v3DeviceController.js";
 import { authLogin, authSignup, authLogout, getActiveSessions, forgotPassword, getMe } from "../controllers/v3AuthController.js";
 import { getVehicle, selectVehicle, removeVehicle } from "../controllers/v3CarController.js";
 import { v3Search } from "../controllers/v3SearchController.js";
@@ -32,6 +32,7 @@ router.use("/", v3NotificationsRouter);
 router.post("/v3/device/check", deviceCheck);
 router.post("/v3/device/push-token", registerPushToken);
 router.delete("/v3/device/push-token", removePushToken);
+router.post("/v3/device/language", updateDeviceLanguage);
 
 // ─── Auth ────────────────────────────────────────────────
 router.post("/v3/auth/login", authLogin);

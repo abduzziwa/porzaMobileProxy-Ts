@@ -62,3 +62,33 @@ export function decryptData<T = Record<string, unknown>>(encrypted: string): T {
 
   return JSON.parse(decrypted) as T;
 }
+
+// Hybrid encrypt-to-self — mirrors decryptData's envelope exactly (RSA-OAEP
+// wraps a fresh AES-256-GCM key), using our OWN public key so our own
+// private key can read it back later via decryptData. For data we capture
+// server-side (e.g. the address collected at signup) that needs to land in
+// the same encrypted_data columns/shape the app's own client-encrypted
+// payloads already use, so existing decrypt call sites (getSavedAddress)
+// work on either source unmodified.
+export function encryptData(data: unknown): string {
+  const aesKey = crypto.randomBytes(32);
+  const iv = crypto.randomBytes(12);
+
+  const cipher = crypto.createCipheriv("aes-256-gcm", aesKey, iv);
+  const ct = Buffer.concat([cipher.update(JSON.stringify(data), "utf8"), cipher.final()]);
+  const tg = cipher.getAuthTag();
+
+  const ek = crypto.publicEncrypt(
+    { key: PUBLIC_KEY, padding: crypto.constants.RSA_PKCS1_OAEP_PADDING, oaepHash: "sha256" },
+    aesKey
+  );
+
+  const envelope = {
+    ek: ek.toString("base64"),
+    iv: iv.toString("base64"),
+    ct: ct.toString("base64"),
+    tg: tg.toString("base64"),
+  };
+
+  return Buffer.from(JSON.stringify(envelope), "utf8").toString("base64");
+}

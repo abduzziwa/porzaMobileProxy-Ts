@@ -6,18 +6,25 @@ import { corenioLogin, corenioRefresh } from "../services/v3CoreniService.js";
 const ALLOWED_PLATFORMS = new Set(["android", "ios", "unknown"]);
 const MAX_DEVICE_ID_LENGTH = 255;
 const MAX_FCM_TOKEN_LENGTH = 4096;
+const ALLOWED_LANGUAGES = new Set(["en", "nl", "de"]);
 
 export async function deviceCheck(req: Request, res: Response): Promise<Response> {
-  const { device_id, proxy_key, server_key, platform, app_version, user_id } = req.body as {
+  const { device_id, proxy_key, server_key, platform, app_version, language, user_id } = req.body as {
     device_id: string;
     proxy_key?: string;
     server_key?: string;
     platform?: string;
     app_version?: string;
+    language?: string;
     user_id?: number;
   };
 
   if (!device_id) return res.status(400).json({ error: "Missing device_id" });
+
+  // language: only store a value we can actually pick copy for — an
+  // unrecognised code silently keeps whatever was there before (or the
+  // column default) rather than being written as garbage.
+  const safeLanguage = language && ALLOWED_LANGUAGES.has(language) ? language : null;
 
   // 1. Upsert device + log 'open' — single transaction
   const client = await v3Pool.connect();
@@ -25,14 +32,15 @@ export async function deviceCheck(req: Request, res: Response): Promise<Response
     await client.query("BEGIN");
 
     await client.query(
-      `INSERT INTO v3_devices (device_id, platform, app_version, open_count, last_seen)
-       VALUES ($1, $2, $3, 1, NOW())
+      `INSERT INTO v3_devices (device_id, platform, app_version, language, open_count, last_seen)
+       VALUES ($1, $2, $3, COALESCE($4, 'en'), 1, NOW())
        ON CONFLICT (device_id) DO UPDATE SET
          last_seen    = NOW(),
          open_count   = v3_devices.open_count + 1,
          platform     = COALESCE(EXCLUDED.platform, v3_devices.platform),
-         app_version  = COALESCE(EXCLUDED.app_version, v3_devices.app_version)`,
-      [device_id, platform ?? null, app_version ?? null]
+         app_version  = COALESCE(EXCLUDED.app_version, v3_devices.app_version),
+         language     = COALESCE($4, v3_devices.language)`,
+      [device_id, platform ?? null, app_version ?? null, safeLanguage]
     );
 
     await client.query(
@@ -108,6 +116,38 @@ export async function deviceCheck(req: Request, res: Response): Promise<Response
     }
   } catch (err) {
     console.error("[deviceCheck] Error:", (err as Error).message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+// Called when the user changes the app's language mid-session — deviceCheck
+// only refreshes language on the next app open, which could be a long way
+// off; this lets the app push the change immediately so any notification
+// sent in between (order confirmed, payment received, etc.) already goes
+// out in the right language.
+export async function updateDeviceLanguage(req: Request, res: Response): Promise<Response> {
+  const { device_id, language } = req.body as { device_id?: string; language?: string };
+
+  if (typeof device_id !== "string" || device_id.trim().length === 0 || device_id.length > MAX_DEVICE_ID_LENGTH) {
+    return res.status(400).json({ error: "Invalid request" });
+  }
+  if (typeof language !== "string" || !ALLOWED_LANGUAGES.has(language)) {
+    return res.status(400).json({ error: "Invalid language" });
+  }
+
+  try {
+    const result = await v3Pool.query(
+      `UPDATE v3_devices SET language = $1, last_seen = NOW() WHERE device_id = $2`,
+      [language, device_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Device not found" });
+    }
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("[updateDeviceLanguage] Error:", (err as Error).message);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

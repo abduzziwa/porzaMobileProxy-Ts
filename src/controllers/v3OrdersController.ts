@@ -31,6 +31,17 @@ export function parseFormattedAmount(formatted: string): number | null {
   return Number.isFinite(value) ? value : null;
 }
 
+// Pure — testable without hitting Corenio. Corenio's finalize endpoint
+// returns an empty body (verified live, 2026-09), so the order id has to be
+// inferred from this user's own order list right after finalize instead —
+// the highest numeric key is reliably the one just placed. Returns null for
+// an empty map so the caller can distinguish "no orders at all" from a real id.
+export function resolveNewestOrderId(orders: Record<string, unknown>): number | null {
+  const ids = Object.keys(orders).map(Number).filter((n) => !Number.isNaN(n));
+  if (!ids.length) return null;
+  return Math.max(...ids);
+}
+
 // Live financial truth for an order comes only from Corenio — Corenio can
 // adjust pricing after creation (discounts, corrections, partial payment),
 // and we never store a local copy of totals, so there is no local fallback
@@ -373,9 +384,9 @@ export async function createOrder(req: Request, res: Response): Promise<Response
     let liveOrder: import("../services/v3CoreniService.js").CorenioOrder | null = null;
     try {
       const { orders } = await corenioOrdersList({ limit: 5, page: 1 }, corenioToken);
-      const ids = Object.keys(orders).map(Number).filter((n) => !Number.isNaN(n));
-      if (!ids.length) throw new Error("No orders returned for this user right after finalize");
-      orderId = Math.max(...ids);
+      const resolvedId = resolveNewestOrderId(orders);
+      if (resolvedId === null) throw new Error("No orders returned for this user right after finalize");
+      orderId = resolvedId;
       liveOrder = orders[String(orderId)] ?? null;
     } catch (err) {
       console.error("[createOrder] ORDER PLACED ON CORENIO BUT ID COULD NOT BE RESOLVED — order will not appear in v3_orders:", (err as Error).message);

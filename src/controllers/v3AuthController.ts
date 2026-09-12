@@ -43,6 +43,26 @@ async function mergeGuestDataIntoAccount(device_id: string, user_id: number): Pr
 
 const ALLOWED_LANGUAGES = new Set(["en", "nl", "de"]);
 
+// Pure — testable without hitting Corenio. Mirrors this install's
+// live-verified usergroup requirements for /users/create (confirmed
+// 2026-09-06 via the bare-username probe). Returns the field names missing,
+// in the same order they're checked, for a direct 400 response — an empty
+// string counts as missing, not just undefined/null.
+export function findMissingSignupFields(fields: {
+  country?: string;
+  state?: string;
+  phone?: string;
+  mobphone?: string;
+  sex?: string;
+  companyinfo?: string;
+  address?: string;
+}): string[] {
+  return ([
+    ["country", fields.country], ["state", fields.state], ["phone", fields.phone], ["mobphone", fields.mobphone],
+    ["sex", fields.sex], ["companyinfo", fields.companyinfo], ["address", fields.address],
+  ] as const).filter(([, v]) => !v).map(([k]) => k);
+}
+
 export async function authLogin(req: Request, res: Response): Promise<Response> {
   const { token: proxyKey, device_id, platform, app_version, language } = req.body as {
     token?: string;
@@ -167,10 +187,7 @@ export async function authSignup(req: Request, res: Response): Promise<Response>
   // /users/create (confirmed 2026-09-06 via the bare-username probe) — fail
   // fast locally with the exact field list rather than round-tripping to
   // Corenio for something we already know is incomplete.
-  const missingRequired = ([
-    ["country", country], ["state", state], ["phone", phone], ["mobphone", mobphone],
-    ["sex", sex], ["companyinfo", companyinfo], ["address", address],
-  ] as const).filter(([, v]) => !v).map(([k]) => k);
+  const missingRequired = findMissingSignupFields({ country, state, phone, mobphone, sex, companyinfo, address });
   if (missingRequired.length) {
     return res.status(400).json({ success: false, error: "missing_fields", fields: missingRequired });
   }

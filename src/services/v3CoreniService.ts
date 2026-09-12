@@ -344,13 +344,14 @@ export async function fetchProductsData(
   // whatever order the caller requested (recency for recently-viewed,
   // relevance rank for search, liked-at for liked products, cart order,
   // order line-item order — every one of this function's callers passes an
-  // intentionally ordered id list). Re-order explicitly to match product_ids
-  // instead. A product_id Corenio didn't return (e.g. discontinued) is
-  // simply dropped, matching the previous behavior.
-  const productsById = res.data?.products ?? {};
-  return product_ids
-    .map((id) => productsById[String(id)])
-    .filter((p): p is CorenioProduct => p !== undefined);
+  // intentionally ordered id list). Re-order explicitly instead.
+  return reorderByRequestedIds(product_ids, res.data?.products ?? {});
+}
+
+// Pure — testable without hitting Corenio. A product_id Corenio didn't
+// return (e.g. discontinued) is simply dropped, matching prior behavior.
+export function reorderByRequestedIds<T>(ids: number[], byId: Record<string, T>): T[] {
+  return ids.map((id) => byId[String(id)]).filter((v): v is T => v !== undefined);
 }
 
 export async function fetchProductFilters(

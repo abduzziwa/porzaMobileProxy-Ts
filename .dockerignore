@@ -1,0 +1,21 @@
+node_modules
+dist
+.git
+.github
+
+# Secrets — real keys are mounted at deploy time, never baked into the image
+.env
+*.pem
+
+# Dev/test/tooling — not part of the runtime image
+*.test.ts
+.claude
+CLAUDE.md
+graphify-out
+*.log
+logs
+
+# Editor/OS noise
+.vscode
+.idea
+.DS_Store

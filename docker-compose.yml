@@ -1,0 +1,64 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      # Host 3001 -> container 3000. Not 3000:3000 — this same server
+      # already runs the real production process on host port 3000.
+      - "3001:3000"
+    env_file:
+      - .env
+    environment:
+      # Override just the host/port secrets from .env — .env points at the
+      # real VPS's Postgres/Redis, compose needs the service names instead.
+      PG_HOST: postgres
+      PG_PORT: "5432"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    volumes:
+      # RSA keys: bind-mounted for local dev convenience only — production
+      # gets these from a Kubernetes Secret instead (see k8s/base/), never
+      # baked into the image or committed to the repo.
+      - ./public.pem:/app/public.pem:ro
+      - ./private.pem:/app/private.pem:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    # No host port mapping — this server already runs native Postgres on
+    # 5432. Reachable from the app container via the "postgres" service
+    # name on the internal compose network only, which is all it needs.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Schema/migrations under src/db/*.sql are NOT auto-applied here —
+      # they don't have a guaranteed dependency order (Schema vs Migration
+      # files), so run them manually against this container the same way
+      # they've been applied throughout this project: psql -f <file>.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    # No host port mapping — this server already runs native Redis on
+    # 6379. Reachable from the app container via the "redis" service name
+    # on the internal compose network only.
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

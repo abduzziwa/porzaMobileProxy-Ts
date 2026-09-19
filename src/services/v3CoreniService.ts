@@ -262,8 +262,22 @@ export interface CorenioProductSearchResponse {
   items_per_page: number;
 }
 
+export interface CorenioProductProperty {
+  name: string;
+  shortname?: string;
+  description?: string;
+  units?: string;
+  value: string;
+  value_description?: string;
+  value_shortname?: string;
+  is_filter?: boolean;
+  icon?: string;
+  image?: string;
+}
+
 export interface CorenioProduct {
   product_id: unknown;
+  title?: string;
   sku?: string;
   eancode?: string;
   seourl?: string;
@@ -276,8 +290,11 @@ export interface CorenioProduct {
   brand?: { id?: unknown; name?: string; logo?: string };
   images?: { id?: number; url?: string; url_thumb?: string }[];
   oenumbers?: { manufacturer: string; number: string }[];
-  usageNumbers?: { usage_number: string; usagenumber_type: string }[];
+  usageNumbers?: { usage_number: string; usagenumber_type: string | null }[];
   categories?: { category: { id?: unknown; pid?: unknown; name?: string; seo_path?: string } }[];
+  // General product specs (material, thickness, fitting position, etc.) —
+  // only present when the request asked for options.properties=true.
+  properties?: CorenioProductProperty[];
 }
 
 export interface CorenioFilterGroup {
@@ -330,6 +347,11 @@ export async function fetchProductsData(
         stock: true,
         categories: true,
         brand: true,
+        // General specs (material, thickness, fitting position, etc.) —
+        // confirmed live: NOT vehicle-dependent despite Corenio's own docs
+        // suggesting otherwise, present/absent purely by per-product catalog
+        // completeness. No vehicle_id needed to get this.
+        properties: true,
       },
       page: 1,
       limit: product_ids.length,
@@ -365,6 +387,27 @@ export async function fetchProductFilters(
     { headers: corenioHeaders(userToken) }
   );
   return res.data.filters ?? {};
+}
+
+// Corenio's /products/search and /products/search/filters both respond
+// with HTTP 404 (body: { error_message: { code: 404, details: "No
+// Products Found" } }) when a filter combination legitimately matches
+// nothing — not a broken endpoint or a real failure, just an unusual way
+// of representing an empty result. Callers use this to tell a normal empty
+// search apart from a genuine failure (auth, 5xx, network), so it can
+// surface as an empty result to the app instead of a 500.
+export function isCorenioNoResultsError(err: unknown): boolean {
+  return axios.isAxiosError(err) && err.response?.status === 404;
+}
+
+// Corenio enforces a burst rate limit well below the generous quota its own
+// x-ratelimit-* headers advertise (confirmed live: ~20 req/sec triggers a
+// 429 within ~10s, recovering within ~2 minutes, while x-ratelimit-remaining
+// stayed at 499 the whole time — that header is not a reliable signal for
+// this). Used by the filters warmup job to back off and retry rather than
+// give up or, worse, keep hammering a live 429.
+export function isCorenioRateLimitError(err: unknown): boolean {
+  return axios.isAxiosError(err) && err.response?.status === 429;
 }
 
 // ─── Carts (replaces the removed /sales/order one-shot flow) ─────────────

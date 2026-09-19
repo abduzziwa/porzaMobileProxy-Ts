@@ -1,10 +1,13 @@
 import type { Request, Response } from "express";
 import crypto from "crypto";
+import "../types.js"; // side-effect only — registers the req.corenioToken Express augmentation
 import {
   fetchProductSearch,
   fetchProductsData,
   fetchProductFilters,
+  isCorenioNoResultsError,
   type CorenioProduct,
+  type CorenioProductProperty,
   type CorenioFilterGroup,
 } from "../services/v3CoreniService.js";
 import v3Pool from "../db/v3Client.js";
@@ -36,6 +39,18 @@ export function getBrandLogos(req: Request, res: Response): Response {
 }
 
 // ─── searchProducts ───────────────────────────────────────
+
+// Sorting lives entirely server-side, on purpose: the frontend renders
+// whatever order this returns and never re-sorts client-side. That's what
+// keeps sort priority changeable by redeploying the backend alone — no app
+// build, no store review — even after a version is already live on
+// customers' phones. Lower number = shown first. Pure/testable.
+export function productSortPriority(p: { in_stock: boolean; fitting_position: string | null }): number {
+  if (p.in_stock && p.fitting_position) return 0;
+  if (p.in_stock) return 1;
+  if (p.fitting_position) return 2;
+  return 3;
+}
 
 export async function searchProducts(req: Request, res: Response): Promise<Response> {
   const {
@@ -80,6 +95,12 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
         ))
       : [];
 
+    // In-stock + known fitting position first, then in-stock alone, then the
+    // rest — Corenio's own ordering (relevance/popularity) stays intact
+    // within each tier. Array.prototype.sort is stable in Node, so this
+    // doesn't shuffle ties.
+    products.sort((a, b) => productSortPriority(a) - productSortPriority(b));
+
     console.log("[searchProducts] RESPONSE products count:", products.length);
 
     return res.json({
@@ -91,6 +112,17 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
       items_per_page: searchData.items_per_page,
     });
   } catch (err) {
+    if (isCorenioNoResultsError(err)) {
+      console.log("[searchProducts] Corenio: no products matched these filters");
+      return res.json({
+        success: true,
+        products: [],
+        total_items: 0,
+        pages: 0,
+        current_page: page as number,
+        items_per_page: limit as number,
+      });
+    }
     console.error("[searchProducts] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
@@ -98,13 +130,54 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
 
 // ─── getProductsData ──────────────────────────────────────
 
+export interface CleanProductProperty {
+  name: string;
+  value: string;
+  units: string;
+  icon: string;
+}
+
+// Corenio fully localizes property NAMES, not just values — confirmed live
+// against the same real product in all 3 supported app languages:
+//   en: "fitting position" | nl: "passende positie" | de: "Einbaulage"
+// Matching on the English string alone silently returns null for every
+// non-English request even when the data exists. One entry per supported
+// language — add here if a 4th language is ever added.
+const FITTING_POSITION_NAMES = new Set(["fitting position", "passende positie", "einbaulage"]);
+
+// Corenio's "fitting position" is pulled out into its own dedicated field —
+// the single highest-priority spec for this app — everything else stays in
+// the general properties list. `description` is deliberately dropped
+// entirely: on "fitting position" specifically it's several KB of generic
+// marketing HTML (identical boilerplate on every product that has it, not
+// product-specific content) — verified live, not worth ever sending to the
+// app. Pure/testable — no Corenio call, just reshaping what's already there.
+export function extractProductProperties(
+  raw: CorenioProductProperty[] | undefined
+): { fitting_position: string | null; properties: CleanProductProperty[] } {
+  const all = raw ?? [];
+  const fitting = all.find((p) => FITTING_POSITION_NAMES.has(p.name?.toLowerCase() ?? ""));
+  const rest = all.filter((p) => !FITTING_POSITION_NAMES.has(p.name?.toLowerCase() ?? ""));
+  return {
+    fitting_position: fitting?.value ?? null,
+    properties: rest.map((p) => ({
+      name: p.name,
+      value: p.value,
+      units: p.units ?? "",
+      icon: p.icon ?? "",
+    })),
+  };
+}
+
 export function transformProduct(raw: CorenioProduct, likedIds: Set<number> = new Set()) {
   const priceExVat = parseFloat(raw.prices?.consumer_ex_vat ?? "0") || 0;
   const vatPct = Number(raw.vat_percentage ?? 0);
   const priceIncVat = Math.round(priceExVat * (1 + vatPct / 100) * 100) / 100;
+  const { fitting_position, properties } = extractProductProperties(raw.properties);
 
   return {
     product_id: raw.product_id,
+    name: raw.title ?? "",
     sku: raw.sku ?? "",
     ean: raw.eancode ?? "",
     seo_url: raw.seourl ?? "",
@@ -123,10 +196,18 @@ export function transformProduct(raw: CorenioProduct, likedIds: Set<number> = ne
     external_stock: raw.externalStock ?? 0,
     call_to_order: ((raw.internalStock ?? 0) === 0 && (raw.externalStock ?? 0) === 0) || priceExVat === 0 ? CUSTOMER_CARE_NUMBER : null,
     favourite: likedIds.has(Number(raw.product_id)),
+    fitting_position,
+    properties,
     image: raw.images?.[0]?.url_thumb ?? null,
     images: (raw.images ?? []).map((img) => ({ id: img.id, url: img.url, url_thumb: img.url_thumb })),
     oe_numbers: (raw.oenumbers ?? []).map((oe) => ({ manufacturer: oe.manufacturer, number: oe.number })),
-    usage_numbers: (raw.usageNumbers ?? []).map((u) => ({ usage_number: u.usage_number, usagenumber_type: u.usagenumber_type })),
+    // usagenumber_type comes back from Corenio with stray leading whitespace
+    // (e.g. " IC Index") — confirmed straight from their raw response, not
+    // introduced by us. Never meaningful to preserve in a display label.
+    usage_numbers: (raw.usageNumbers ?? []).map((u) => ({
+      usage_number: u.usage_number,
+      usagenumber_type: u.usagenumber_type?.trim() || null,
+    })),
     categories: (raw.categories ?? []).map((c) => ({
       id: c.category?.id,
       pid: c.category?.pid,
@@ -188,6 +269,83 @@ const FILTERS_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const FILTERS_REDIS_TTL_SECONDS = FILTERS_CACHE_TTL_MS / 1000;
 const filtersRedisKey = (cacheKey: string) => `v3filters:${cacheKey}`;
 
+export interface FiltersPayload {
+  success: true;
+  brands: { title: string; options: { title: string; id: number; count: number; icon: string; logo: string }[] } | null;
+  properties: { id: string; title: string; options: { title: string; id: number; count: number; icon: string }[] }[];
+}
+
+// Does the actual Corenio call + transform + cache write (both Postgres and
+// Redis). Shared by getProductsFilters (on a cache miss) and the background
+// warmup job (src/jobs/v3FiltersWarmupJob.ts) — one code path, so the cache
+// a real request populates and the cache the warmup job pre-populates are
+// byte-identical in shape. Throws on a genuine Corenio failure (including
+// isCorenioNoResultsError for "no filters for this combination") — callers
+// decide how to handle that themselves.
+export async function refreshFiltersCache(
+  filters: Record<string, unknown>,
+  language: string
+): Promise<FiltersPayload> {
+  const cacheKey = crypto.createHash("sha256").update(JSON.stringify({ filters, language })).digest("hex");
+  const redisKey = filtersRedisKey(cacheKey);
+
+  const raw = await fetchProductFilters(filters, language);
+
+  type FilterOption = { title: string; id: number; count: number; icon: string };
+  type FilterGroup  = { id: string; title: string; options: FilterOption[] };
+
+  // Corenio mixes filter groups with pagination fields at root level — only keep valid groups
+  const groups = Object.values(raw).filter(
+    (g): g is CorenioFilterGroup =>
+      typeof g === "object" && g !== null && "id" in g && Array.isArray((g as CorenioFilterGroup).filters)
+  );
+
+  let brands: FiltersPayload["brands"] = null;
+  const priorityMap = new Map<string, FilterGroup>();
+  const rest: FilterGroup[] = [];
+
+  for (const group of groups) {
+    const options = group.filters
+      .filter((f: CorenioFilterGroup["filters"][0]) => f.count > 0)
+      .sort((a: CorenioFilterGroup["filters"][0], b: CorenioFilterGroup["filters"][0]) => b.count - a.count)
+      .map((f: CorenioFilterGroup["filters"][0]) => ({ title: f.title, id: f.id, count: f.count, icon: f.icon ?? "" }));
+
+    if (!options.length) continue;
+
+    const cleaned: FilterGroup = { id: group.id, title: group.title, options };
+
+    if (group.id === "brands") {
+      const brandOptions = options.map((o) => ({
+        ...o,
+        logo: brandLogoUrl(o.id),
+      }));
+      brands = { title: group.title, options: brandOptions };
+    } else if (PRIORITY_PROPERTIES.includes(group.id)) {
+      priorityMap.set(group.id, cleaned);
+    } else {
+      rest.push(cleaned);
+    }
+  }
+
+  const properties = [
+    ...(PRIORITY_PROPERTIES.map((id) => priorityMap.get(id)).filter(Boolean) as FilterGroup[]),
+    ...rest,
+  ];
+
+  const payload: FiltersPayload = { success: true, brands, properties };
+
+  await v3Pool.query(
+    `INSERT INTO v3_filters_cache (cache_key, filters, language, data, updated_at)
+     VALUES ($1, $2, $3, $4, NOW())
+     ON CONFLICT (cache_key) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+    [cacheKey, JSON.stringify(filters), language, JSON.stringify(payload)]
+  );
+  redis.setex(redisKey, FILTERS_REDIS_TTL_SECONDS, JSON.stringify(payload))
+    .catch((err: Error) => console.error("[refreshFiltersCache] Redis write error (non-fatal):", err.message));
+
+  return payload;
+}
+
 export async function getProductsFilters(req: Request, res: Response): Promise<Response> {
   const { category_ids, categories, ktype_ids, language = "en" } = req.body as Record<string, unknown>;
 
@@ -231,62 +389,13 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
 
     console.log("[getProductsFilters] REQUEST filters:", JSON.stringify(filters, null, 2));
 
-    const raw = await fetchProductFilters(filters, language as string, req.corenioToken);
-
-    type FilterOption = { title: string; id: number; count: number; icon: string };
-    type FilterGroup  = { id: string; title: string; options: FilterOption[] };
-
-    // Corenio mixes filter groups with pagination fields at root level — only keep valid groups
-    const groups = Object.values(raw).filter(
-      (g): g is CorenioFilterGroup =>
-        typeof g === "object" && g !== null && "id" in g && Array.isArray((g as CorenioFilterGroup).filters)
-    );
-
-    let brands: { title: string; options: FilterOption[] } | null = null;
-    const priorityMap = new Map<string, FilterGroup>();
-    const rest: FilterGroup[] = [];
-
-    for (const group of groups) {
-      const options = group.filters
-        .filter((f: CorenioFilterGroup["filters"][0]) => f.count > 0)
-        .sort((a: CorenioFilterGroup["filters"][0], b: CorenioFilterGroup["filters"][0]) => b.count - a.count)
-        .map((f: CorenioFilterGroup["filters"][0]) => ({ title: f.title, id: f.id, count: f.count, icon: f.icon ?? "" }));
-
-      if (!options.length) continue;
-
-      const cleaned: FilterGroup = { id: group.id, title: group.title, options };
-
-      if (group.id === "brands") {
-        const brandOptions = options.map((o) => ({
-          ...o,
-          logo: brandLogoUrl(o.id),
-        }));
-        brands = { title: group.title, options: brandOptions };
-      } else if (PRIORITY_PROPERTIES.includes(group.id)) {
-        priorityMap.set(group.id, cleaned);
-      } else {
-        rest.push(cleaned);
-      }
-    }
-
-    const properties = [
-      ...PRIORITY_PROPERTIES.map((id) => priorityMap.get(id)).filter(Boolean),
-      ...rest,
-    ];
-
-    const payload = { success: true, brands, properties };
-
-    await v3Pool.query(
-      `INSERT INTO v3_filters_cache (cache_key, filters, language, data, updated_at)
-       VALUES ($1, $2, $3, $4, NOW())
-       ON CONFLICT (cache_key) DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
-      [cacheKey, JSON.stringify(filters), language, JSON.stringify(payload)]
-    );
-    redis.setex(redisKey, FILTERS_REDIS_TTL_SECONDS, JSON.stringify(payload))
-      .catch((err: Error) => console.error("[getProductsFilters] Redis write error (non-fatal):", err.message));
-
+    const payload = await refreshFiltersCache(filters, language as string);
     return res.json(payload);
   } catch (err) {
+    if (isCorenioNoResultsError(err)) {
+      console.log("[getProductsFilters] Corenio: no filters available for these filters");
+      return res.json({ success: true, brands: null, properties: [] });
+    }
     console.error("[getProductsFilters] Error:", err);
     return res.status(500).json({ success: false, error: "Internal server error" });
   }

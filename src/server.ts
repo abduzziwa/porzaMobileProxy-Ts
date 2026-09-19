@@ -98,6 +98,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { logoResizeMiddleware } from "./middleware/logoResizeMiddleware.js";
 import { v3RequestLogger } from "./middleware/v3RequestLoggerMiddleware.js";
+import { scheduleFiltersWarmup } from "./jobs/v3FiltersWarmupJob.js";
+import { scheduleAccountPurge } from "./jobs/v3AccountPurgeJob.js";
 
 const app = express();
 
@@ -166,4 +168,6 @@ app.use("/", v3Routes);
 
 app.listen(3000, "0.0.0.0", () => {
   console.log("Server running on port 3000");
+  scheduleFiltersWarmup();
+  scheduleAccountPurge();
 });

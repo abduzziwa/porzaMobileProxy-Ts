@@ -33,6 +33,14 @@ const en: TranslationSet = {
     title: "Password Reset Requested",
     body: () => "We received a request to reset your password. If this wasn't you, please contact support.",
   },
+  account_deletion_requested: {
+    title: "Account Deletion Requested",
+    body: () => "We've received a request to delete your account. If this wasn't you, please contact support immediately.",
+  },
+  account_reactivated: {
+    title: "Account Reactivated",
+    body: () => "Your account deletion request has been cancelled and your account is active again. Welcome back!",
+  },
 };
 
 export default en;

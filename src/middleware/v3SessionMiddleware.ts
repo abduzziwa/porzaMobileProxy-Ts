@@ -7,10 +7,16 @@ const EXEMPT_PATHS = new Set([
   "/v3/auth/login",
   "/v3/auth/signup",
   "/v3/auth/forgot-password",
+  // A deleted account has no valid session left — this re-verifies via
+  // credentials the same way login does, not a session check.
+  "/v3/auth/reactivate-account",
   // Language is a device-level setting, not an account action — a guest
   // browsing without ever logging in still has a language. Needs no
   // identity at all, same category as device/check.
   "/v3/device/language",
+  // A legal document link needs no identity at all — same category as
+  // device/check.
+  "/v3/legal/privacy-policy",
 ]);
 
 // Endpoints a guest (device_id only, user_id: null) may call — browsing, cart,

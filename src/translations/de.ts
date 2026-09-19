@@ -33,6 +33,14 @@ const de: TranslationSet = {
     title: "Passwort-Zurücksetzung angefordert",
     body: () => "Wir haben eine Anfrage zum Zurücksetzen deines Passworts erhalten. Falls du das nicht warst, kontaktiere bitte den Support.",
   },
+  account_deletion_requested: {
+    title: "Kontolöschung angefordert",
+    body: () => "Wir haben eine Anfrage zur Löschung deines Kontos erhalten. Falls du das nicht warst, kontaktiere bitte sofort den Support.",
+  },
+  account_reactivated: {
+    title: "Konto reaktiviert",
+    body: () => "Deine Anfrage zur Kontolöschung wurde storniert und dein Konto ist wieder aktiv. Willkommen zurück!",
+  },
 };
 
 export default de;

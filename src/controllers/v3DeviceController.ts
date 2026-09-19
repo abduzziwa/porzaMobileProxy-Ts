@@ -64,8 +64,13 @@ export async function deviceCheck(req: Request, res: Response): Promise<Response
 
   // 3. Verify session exists
   try {
-    const sessionResult = await v3Pool.query<{ user_id: number }>(
-      `SELECT ds.authorised, ds.server_key, u.user_id
+    const sessionResult = await v3Pool.query<{
+      user_id: number;
+      deleted: boolean;
+      deletion_purge_at: string | null;
+      deletion_purged_at: string | null;
+    }>(
+      `SELECT ds.authorised, ds.server_key, u.user_id, u.deleted, u.deletion_purge_at, u.deletion_purged_at
        FROM v3_device_sessions ds
        JOIN v3_users u ON ds.user_id = u.user_id
        WHERE ds.device_id = $1 AND ds.proxy_key = $2 AND ds.server_key = $3`,
@@ -74,6 +79,22 @@ export async function deviceCheck(req: Request, res: Response): Promise<Response
 
     if (sessionResult.rows.length === 0) {
       return res.json({ authorised: false, public_key: getPublicKey() });
+    }
+
+    // Deleted accounts are blocked immediately on the very next app open —
+    // this is the primary "tell the app to sign out and wipe local data"
+    // signal, since deviceCheck runs on every launch regardless of whether
+    // push notifications are enabled/permitted. deletion_purge_at lets the
+    // app show a countdown; permanently_purged (once deletion_purged_at is
+    // set) tells it to stop showing one and hide any "reactivate" option.
+    if (sessionResult.rows[0].deleted) {
+      return res.status(403).json({
+        authorised: false,
+        account_deleted: true,
+        deletion_purge_at: sessionResult.rows[0].deletion_purge_at,
+        permanently_purged: sessionResult.rows[0].deletion_purged_at !== null,
+        error: "This account is no longer able to be recovered. It is in the deletion process and cannot be recovered.",
+      });
     }
 
     const { user_id } = sessionResult.rows[0];

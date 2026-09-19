@@ -1,9 +1,10 @@
 import express from "express";
 import { deviceCheck, registerPushToken, removePushToken, updateDeviceLanguage } from "../controllers/v3DeviceController.js";
-import { authLogin, authSignup, authLogout, getActiveSessions, forgotPassword, getMe } from "../controllers/v3AuthController.js";
+import { authLogin, authSignup, authLogout, getActiveSessions, forgotPassword, getMe, deleteAccount, reactivateAccount } from "../controllers/v3AuthController.js";
 import { getVehicle, selectVehicle, removeVehicle } from "../controllers/v3CarController.js";
 import { v3Search } from "../controllers/v3SearchController.js";
 import { getCategories, getSubCategories } from "../controllers/v3CategoriesController.js";
+import { getPrivacyPolicy } from "../controllers/v3LegalController.js";
 import { v3Analytics } from "../middleware/v3AnalyticsMiddleware.js";
 import { v3Session } from "../middleware/v3SessionMiddleware.js";
 import { v3ImageTransform } from "../middleware/v3ImageTransformMiddleware.js";
@@ -34,10 +35,23 @@ router.post("/v3/device/push-token", registerPushToken);
 router.delete("/v3/device/push-token", removePushToken);
 router.post("/v3/device/language", updateDeviceLanguage);
 
+// ─── Legal ───────────────────────────────────────────────
+// GET, not POST — needs to open directly in a browser/webview from a link/
+// button, same as every other privacy-policy link on the internet.
+router.get("/v3/legal/privacy-policy", getPrivacyPolicy);
+
 // ─── Auth ────────────────────────────────────────────────
 router.post("/v3/auth/login", authLogin);
 router.post("/v3/auth/signup", authSignup);
 router.post("/v3/auth/logout", authLogout);
+// Not in EXEMPT_PATHS or GUEST_OK_PATHS on purpose — v3Session's default
+// path (full authorised-session check) is exactly the security bar this
+// needs: only a currently logged-in account can delete itself.
+router.post("/v3/auth/delete-account", deleteAccount);
+// EXEMPT (see v3SessionMiddleware) — a deleted account has no valid session
+// left to check; this re-verifies identity via credentials instead, the
+// same way login itself does.
+router.post("/v3/auth/reactivate-account", reactivateAccount);
 router.post("/v3/auth/sessions", getActiveSessions);
 router.post("/v3/auth/me", getMe);
 router.post("/v3/auth/forgot-password", forgotPassword);

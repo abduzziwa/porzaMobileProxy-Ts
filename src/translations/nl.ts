@@ -33,6 +33,14 @@ const nl: TranslationSet = {
     title: "Wachtwoord reset aangevraagd",
     body: () => "We hebben een verzoek ontvangen om je wachtwoord opnieuw in te stellen. Als jij dit niet was, neem dan contact op met support.",
   },
+  account_deletion_requested: {
+    title: "Accountverwijdering aangevraagd",
+    body: () => "We hebben een verzoek ontvangen om je account te verwijderen. Als jij dit niet was, neem dan onmiddellijk contact op met support.",
+  },
+  account_reactivated: {
+    title: "Account gereactiveerd",
+    body: () => "Je verzoek tot accountverwijdering is geannuleerd en je account is weer actief. Welkom terug!",
+  },
 };
 
 export default nl;

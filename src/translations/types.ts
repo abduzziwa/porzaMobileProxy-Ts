@@ -10,7 +10,9 @@ export type NotificationEvent =
   | "order_expired"
   | "order_failed"
   | "new_device_login"
-  | "password_reset_requested";
+  | "password_reset_requested"
+  | "account_deletion_requested"
+  | "account_reactivated";
 
 export type Lang = "en" | "nl" | "de";
 

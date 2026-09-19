@@ -14,6 +14,10 @@ firebase-service-account*.json
 service-account*.json
 *firebase-adminsdk*.json
 
+# Real Kubernetes secrets (filled-in from k8s/secret.example.yaml) — never
+# committed, applied directly with kubectl instead
+k8s/secret.yaml
+
 # Claude
 CLAUDE.md
 .claude/

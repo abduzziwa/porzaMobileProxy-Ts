@@ -1,28 +1,52 @@
 services:
+  # One-shot: generates a fresh RSA-OAEP keypair into the rsa_keys volume on
+  # first run only (skips if a keypair is already there). This is what lets
+  # a brand-new machine go straight to `docker compose up` with no manual
+  # `openssl` step — a named volume (not a host bind-mount) so it works
+  # identically on Linux/Mac/Windows without host/container UID mismatches.
+  keygen:
+    image: alpine/openssl:latest
+    entrypoint: sh
+    command:
+      - -c
+      - |
+        set -e
+        if [ -f /keys/private.pem ]; then
+          echo "[keygen] RSA keypair already exists, skipping."
+        else
+          echo "[keygen] Generating RSA-OAEP keypair (first run only)..."
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out /keys/private.pem
+          openssl rsa -pubout -in /keys/private.pem -out /keys/public.pem
+        fi
+    volumes:
+      - rsa_keys:/keys
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      # Host 3001 -> container 3000. Not 3000:3000 — this same server
-      # already runs the real production process on host port 3000.
-      - "3001:3000"
+      # Defaults to the app's standard port 3000. Override with APP_PORT in
+      # .env only if something else on the host already holds 3000 (e.g.
+      # this VPS also runs a native PM2 copy on 3000 during testing).
+      - "${APP_PORT:-3000}:3000"
     env_file:
       - .env
     environment:
-      # Override just the host/port secrets from .env — .env points at the
-      # real VPS's Postgres/Redis, compose needs the service names instead.
+      # Override just the host/port/key values from .env — .env's own
+      # values point at wherever the non-Docker deployment runs, compose
+      # needs the service names and the generated-keypair path instead.
       PG_HOST: postgres
       PG_PORT: "5432"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      RSA_PUBLIC_KEY_PATH: /app/keys/public.pem
+      RSA_PRIVATE_KEY_PATH: /app/keys/private.pem
     volumes:
-      # RSA keys: bind-mounted for local dev convenience only — production
-      # gets these from a Kubernetes Secret instead (see k8s/base/), never
-      # baked into the image or committed to the repo.
-      - ./public.pem:/app/public.pem:ro
-      - ./private.pem:/app/private.pem:ro
+      - rsa_keys:/app/keys:ro
     depends_on:
+      keygen:
+        condition: service_completed_successfully
       postgres:
         condition: service_healthy
       redis:
@@ -34,15 +58,31 @@ services:
       POSTGRES_DB: ${PG_DB}
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
-    # No host port mapping — this server already runs native Postgres on
-    # 5432. Reachable from the app container via the "postgres" service
-    # name on the internal compose network only, which is all it needs.
+    # No host port mapping needed — only the app container talks to this,
+    # via the "postgres" service name on the internal compose network.
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      # Schema/migrations under src/db/*.sql are NOT auto-applied here —
-      # they don't have a guaranteed dependency order (Schema vs Migration
-      # files), so run them manually against this container the same way
-      # they've been applied throughout this project: psql -f <file>.
+      # Postgres's official image runs every script here, in filename
+      # order, but ONLY the very first time (empty data dir) — exactly
+      # what a zero-setup fresh machine needs. Numbered explicitly because
+      # v3Schema.sql creates v3_devices/v3_users, which the other five
+      # files have foreign keys against; alphabetical order alone would
+      # run v3CartSchema.sql (and others) before v3Schema.sql and fail.
+      - ./src/db/v3Schema.sql:/docker-entrypoint-initdb.d/01-v3Schema.sql:ro
+      - ./src/db/v3FiltersCacheSchema.sql:/docker-entrypoint-initdb.d/02-v3FiltersCacheSchema.sql:ro
+      - ./src/db/v3LastSeenSchema.sql:/docker-entrypoint-initdb.d/03-v3LastSeenSchema.sql:ro
+      - ./src/db/v3LikedSchema.sql:/docker-entrypoint-initdb.d/04-v3LikedSchema.sql:ro
+      - ./src/db/v3CartSchema.sql:/docker-entrypoint-initdb.d/05-v3CartSchema.sql:ro
+      - ./src/db/v3VehicleSchema.sql:/docker-entrypoint-initdb.d/06-v3VehicleSchema.sql:ro
+      # Migrations — all idempotent (IF NOT EXISTS), applied after every base
+      # table above exists since several alter tables the schema files create.
+      - ./src/db/v3CartCorenioMigration.sql:/docker-entrypoint-initdb.d/07-v3CartCorenioMigration.sql:ro
+      - ./src/db/v3GuestCheckoutMigration.sql:/docker-entrypoint-initdb.d/08-v3GuestCheckoutMigration.sql:ro
+      - ./src/db/v3NotificationHistoryMigration.sql:/docker-entrypoint-initdb.d/09-v3NotificationHistoryMigration.sql:ro
+      - ./src/db/v3OrdersEssentialsMigration.sql:/docker-entrypoint-initdb.d/10-v3OrdersEssentialsMigration.sql:ro
+      - ./src/db/v3PaymentNotificationMigration.sql:/docker-entrypoint-initdb.d/11-v3PaymentNotificationMigration.sql:ro
+      - ./src/db/v3PushNotificationsMigration.sql:/docker-entrypoint-initdb.d/12-v3PushNotificationsMigration.sql:ro
+      - ./src/db/v3DeviceLanguageMigration.sql:/docker-entrypoint-initdb.d/13-v3DeviceLanguageMigration.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
       interval: 5s
@@ -51,9 +91,8 @@ services:
 
   redis:
     image: redis:7-alpine
-    # No host port mapping — this server already runs native Redis on
-    # 6379. Reachable from the app container via the "redis" service name
-    # on the internal compose network only.
+    # No host port mapping needed — only the app container talks to this,
+    # via the "redis" service name on the internal compose network.
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -62,3 +101,4 @@ services:
 
 volumes:
   postgres_data:
+  rsa_keys:

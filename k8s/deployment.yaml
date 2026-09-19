@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: porza-proxy
+  namespace: porza-proxy
+spec:
+  # hostNetwork below pins this to exactly 1 replica on a single-node
+  # cluster — a second pod on the same node would fail to bind the same
+  # host port. See k8s/README.md for what it takes to go beyond this.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: porza-proxy
+  template:
+    metadata:
+      labels:
+        app: porza-proxy
+    spec:
+      # Shares the host's entire network namespace — the pod binds host
+      # port 3000 directly, and 127.0.0.1 inside the container resolves to
+      # the host's own loopback (where Postgres/Redis already listen).
+      # This is what makes the cutover byte-for-byte identical to PM2 from
+      # nginx's perspective: nothing there needs to change.
+      hostNetwork: true
+      # Required whenever hostNetwork is true — without this, in-cluster
+      # DNS resolution (e.g. for pulling the image, or any future internal
+      # service lookup) breaks.
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: porza-proxy
+          image: ghcr.io/abduzziwa/porzamobileproxy-ts:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: porza-proxy-config
+            - secretRef:
+                name: porza-proxy-secrets
+          volumeMounts:
+            - name: rsa-keys
+              mountPath: /etc/secrets
+              readOnly: true
+          resources:
+            # Sized from this app's real, observed footprint (~208MB under
+            # docker-compose with Puppeteer's browser + 3 tabs running) —
+            # not a guess. Limits leave headroom for Chromium spikes without
+            # letting one pod starve the rest of this 2-core/8GB host.
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1.5Gi"
+          # No dedicated health endpoint exists yet (worth adding — a real
+          # /healthz that checks DB/Redis connectivity would be stronger
+          # than this). A bare TCP check on the app's own port is a safe,
+          # conservative default: confirms the process is accepting
+          # connections without false-failing on a transient DB/Redis blip.
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: rsa-keys
+          secret:
+            secretName: porza-proxy-rsa-keys
+            defaultMode: 0400

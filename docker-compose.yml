@@ -83,6 +83,8 @@ services:
       - ./src/db/v3PaymentNotificationMigration.sql:/docker-entrypoint-initdb.d/11-v3PaymentNotificationMigration.sql:ro
       - ./src/db/v3PushNotificationsMigration.sql:/docker-entrypoint-initdb.d/12-v3PushNotificationsMigration.sql:ro
       - ./src/db/v3DeviceLanguageMigration.sql:/docker-entrypoint-initdb.d/13-v3DeviceLanguageMigration.sql:ro
+      - ./src/db/v3AccountDeletionMigration.sql:/docker-entrypoint-initdb.d/14-v3AccountDeletionMigration.sql:ro
+      - ./src/db/v3AdminDashboardSchema.sql:/docker-entrypoint-initdb.d/15-v3AdminDashboardSchema.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
       interval: 5s

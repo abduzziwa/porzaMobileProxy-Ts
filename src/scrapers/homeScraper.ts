@@ -785,7 +785,7 @@ export async function getApiWithParams(
     }
     return await response.text();
   } catch (error) {
-    console.error("getApiWithParams error:", error);
+    console.error("getApiWithParams error:", (error instanceof Error ? error.message : String(error)));
     throw error;
   }
 }
@@ -820,7 +820,7 @@ export async function getApiWithParamsLogin(
     if (contentType.includes("application/json")) return await response.json();
     return await response.text();
   } catch (error) {
-    console.error("getApiWithParamsLogin error:", error);
+    console.error("getApiWithParamsLogin error:", (error instanceof Error ? error.message : String(error)));
     throw error;
   }
 }
@@ -1039,9 +1039,9 @@ async function shutdown(): Promise<void> {
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 process.on("uncaughtException", (err) => {
-  console.error("Uncaught exception:", err);
+  console.error("Uncaught exception:", (err instanceof Error ? err.message : String(err)));
   void shutdown();
 });
 process.on("unhandledRejection", (err) => {
-  console.error("Unhandled rejection:", err);
+  console.error("Unhandled rejection:", (err instanceof Error ? err.message : String(err)));
 });

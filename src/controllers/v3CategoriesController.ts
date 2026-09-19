@@ -50,7 +50,7 @@ export async function getCategories(req: Request, res: Response): Promise<Respon
     const sorted = sortByOrder(raw, topLevelOrder);
     return res.json({ success: true, data: sorted.map(formatCategory) });
   } catch (err) {
-    console.error("[getCategories] Error:", err);
+    console.error("[getCategories] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -69,7 +69,7 @@ export async function getSubCategories(req: Request, res: Response): Promise<Res
     const sorted = sortByOrder(raw, orderMap);
     return res.json({ success: true, data: sorted.map(formatCategory) });
   } catch (err) {
-    console.error("[getSubCategories] Error:", err);
+    console.error("[getSubCategories] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

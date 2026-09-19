@@ -35,7 +35,7 @@ export async function v3Cache(req: Request, res: Response, next: NextFunction): 
     }
     console.log(`[CACHE] MISS ${req.path} — falling through (device: ${device})`);
   } catch (err) {
-    console.error("[CACHE] Redis read error:", err);
+    console.error("[CACHE] Redis read error:", (err instanceof Error ? err.message : String(err)));
   }
 
   // Cache miss — intercept res.json to store the response
@@ -45,7 +45,7 @@ export async function v3Cache(req: Request, res: Response, next: NextFunction): 
     if (res.statusCode === 200) {
       redis.setex(key, ttl, JSON.stringify(body))
         .then(() => console.log(`[CACHE] STORED ${req.path} (TTL: ${ttl}s)`))
-        .catch((err: Error) => console.error("[CACHE] Redis write error:", err));
+        .catch((err: Error) => console.error("[CACHE] Redis write error:", err.message));
     }
     return originalJson(body);
   };

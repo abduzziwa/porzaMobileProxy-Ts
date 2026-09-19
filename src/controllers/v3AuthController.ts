@@ -37,7 +37,7 @@ async function mergeGuestDataIntoAccount(device_id: string, user_id: number): Pr
     );
     await v3Pool.query(`DELETE FROM v3_device_vehicles WHERE device_id = $1 AND user_id IS NULL`, [device_id]);
   } catch (err) {
-    console.error("[mergeGuestDataIntoAccount] Error (non-fatal):", err);
+    console.error("[mergeGuestDataIntoAccount] Error (non-fatal):", err instanceof Error ? err.message : String(err));
   }
 }
 
@@ -165,7 +165,7 @@ export async function authLogin(req: Request, res: Response): Promise<Response> 
     if (isInvalidCreds) {
       return res.json({ authorised: false, error: "invalid_credentials" });
     }
-    console.error("[authLogin] Error:", err);
+    console.error("[authLogin] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -342,7 +342,7 @@ export async function authSignup(req: Request, res: Response): Promise<Response>
     if (signupError?.type === "invalid_fields") {
       return res.status(400).json({ success: false, error: "invalid_fields", details: signupError.details });
     }
-    console.error("[authSignup] Error:", err);
+    console.error("[authSignup] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -365,7 +365,7 @@ export async function getMe(req: Request, res: Response): Promise<Response> {
     const data = await corenioWhoami(result.rows[0].corenio_token as string);
     return res.json({ success: true, user: data });
   } catch (err) {
-    console.error("[getMe] Error:", err);
+    console.error("[getMe] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -413,7 +413,7 @@ export async function getActiveSessions(req: Request, res: Response): Promise<Re
 
     return res.json({ success: true, total: sessions.length, sessions });
   } catch (err) {
-    console.error("[getActiveSessions] Error:", err);
+    console.error("[getActiveSessions] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -487,13 +487,13 @@ export async function deleteAccount(req: Request, res: Response): Promise<Respon
     const corenioToken = sessions.rows[0]?.corenio_token;
     if (corenioToken) {
       corenioLogout(corenioToken).catch((err) =>
-        console.error("[deleteAccount] Corenio logout failed (non-blocking):", err)
+        console.error("[deleteAccount] Corenio logout failed (non-blocking):", err instanceof Error ? err.message : String(err))
       );
     }
     for (const { device_id: sessionDeviceId } of sessions.rows) {
       redis.keys(`v3cache:${sessionDeviceId}:*`)
         .then((keys) => { if (keys.length) return redis.del(...keys); })
-        .catch((err) => console.error("[deleteAccount] Redis cache clear failed (non-blocking):", err));
+        .catch((err) => console.error("[deleteAccount] Redis cache clear failed (non-blocking):", err instanceof Error ? err.message : String(err)));
     }
 
     // Audit trail — who requested it, from which device, when.
@@ -510,7 +510,7 @@ export async function deleteAccount(req: Request, res: Response): Promise<Respon
     // Confirmation notification — also doubles as a security alert: if this
     // wasn't actually the account owner, this is their signal to act.
     notifyUser({ userId: user_id, event: "account_deletion_requested" }).catch((err) =>
-      console.error("[deleteAccount] Confirmation notification failed (non-blocking):", err)
+      console.error("[deleteAccount] Confirmation notification failed (non-blocking):", err instanceof Error ? err.message : String(err))
     );
 
     console.log(`[deleteAccount] user_id=${user_id} device_id=${device_id} purge_at=${result.rows[0].deletion_purge_at}`);
@@ -520,7 +520,7 @@ export async function deleteAccount(req: Request, res: Response): Promise<Respon
       deletion_purge_at: result.rows[0].deletion_purge_at,
     });
   } catch (err) {
-    console.error("[deleteAccount] Error:", err);
+    console.error("[deleteAccount] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -621,7 +621,7 @@ export async function reactivateAccount(req: Request, res: Response): Promise<Re
     );
 
     notifyUser({ userId: user_id, event: "account_reactivated" }).catch((err) =>
-      console.error("[reactivateAccount] Confirmation notification failed (non-blocking):", err)
+      console.error("[reactivateAccount] Confirmation notification failed (non-blocking):", err instanceof Error ? err.message : String(err))
     );
 
     console.log(`[reactivateAccount] user_id=${user_id} device_id=${device_id}`);
@@ -634,7 +634,7 @@ export async function reactivateAccount(req: Request, res: Response): Promise<Re
     if (isInvalidCreds) {
       return res.json({ success: false, error: "invalid_credentials" });
     }
-    console.error("[reactivateAccount] Error:", err);
+    console.error("[reactivateAccount] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -657,7 +657,7 @@ export async function authLogout(req: Request, res: Response): Promise<Response>
     // Call Corenio logout if we have a token — fire and forget, don't block on failure
     if (userResult.rows.length && userResult.rows[0].corenio_token) {
       corenioLogout(userResult.rows[0].corenio_token as string).catch((err) =>
-        console.error("[authLogout] Corenio logout failed (non-blocking):", err)
+        console.error("[authLogout] Corenio logout failed (non-blocking):", err instanceof Error ? err.message : String(err))
       );
     }
 
@@ -674,7 +674,7 @@ export async function authLogout(req: Request, res: Response): Promise<Response>
 
     return res.json({ success: true });
   } catch (err) {
-    console.error("[authLogout] Error:", err);
+    console.error("[authLogout] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

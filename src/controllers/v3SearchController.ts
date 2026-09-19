@@ -123,7 +123,7 @@ export async function v3Search(req: Request, res: Response): Promise<Response> {
 
     return res.json({ success: true, total: found, page, results });
   } catch (err) {
-    console.error("[v3Search] Error:", err);
+    console.error("[v3Search] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ error: "Internal server error" });
   }
 }

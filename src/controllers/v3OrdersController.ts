@@ -441,7 +441,7 @@ export async function createOrder(req: Request, res: Response): Promise<Response
 
     return res.json({ success: true, order_id: orderId, external_order_id: null, order });
   } catch (err) {
-    console.error("[createOrder] Error:", err);
+    console.error("[createOrder] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -601,7 +601,7 @@ export async function getProxyOrderList(req: Request, res: Response): Promise<Re
 
     return res.json({ success: true, total: orders.length, orders });
   } catch (err) {
-    console.error("[getProxyOrderList] Error:", err);
+    console.error("[getProxyOrderList] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -710,7 +710,7 @@ export async function getProxyOrderDetail(req: Request, res: Response): Promise<
       },
     });
   } catch (err) {
-    console.error("[getProxyOrderDetail] Error:", err);
+    console.error("[getProxyOrderDetail] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -824,7 +824,7 @@ export async function getGuestOrderDetail(req: Request, res: Response): Promise<
       },
     });
   } catch (err) {
-    console.error("[getGuestOrderDetail] Error:", err);
+    console.error("[getGuestOrderDetail] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -857,7 +857,7 @@ export async function getSavedAddress(req: Request, res: Response): Promise<Resp
     const address = await fetchSavedAddress(user_id);
     return res.json({ success: true, address });
   } catch (err) {
-    console.error("[getSavedAddress] Error:", err);
+    console.error("[getSavedAddress] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

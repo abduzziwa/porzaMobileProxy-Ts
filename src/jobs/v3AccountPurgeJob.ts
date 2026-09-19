@@ -44,7 +44,7 @@ export async function purgeExpiredDeletedAccounts(): Promise<void> {
 export function scheduleAccountPurge(): void {
   cron.schedule("0 4 * * *", () => {
     console.log("[AccountPurge] Scheduled daily purge starting...");
-    purgeExpiredDeletedAccounts().catch((err) => console.error("[AccountPurge] Scheduled run failed:", err));
+    purgeExpiredDeletedAccounts().catch((err) => console.error("[AccountPurge] Scheduled run failed:", err instanceof Error ? err.message : String(err)));
   });
   console.log("[AccountPurge] Daily purge scheduled for 04:00 server time.");
 }

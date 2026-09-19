@@ -9,7 +9,7 @@ async function invalidateLikedCache(device_id: string): Promise<void> {
     const keys = await redis.keys(`v3cache:${device_id}:/v3/liked/get:*`);
     if (keys.length) await redis.del(...keys);
   } catch (err) {
-    console.error("[invalidateLikedCache] Error (non-fatal):", err);
+    console.error("[invalidateLikedCache] Error (non-fatal):", err instanceof Error ? err.message : String(err));
   }
 }
 
@@ -50,7 +50,7 @@ export async function toggleLiked(req: Request, res: Response): Promise<Response
       return res.json({ success: true, liked: true });
     }
   } catch (err) {
-    console.error("[toggleLiked] Error:", err);
+    console.error("[toggleLiked] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -83,7 +83,7 @@ export async function getLiked(req: Request, res: Response): Promise<Response> {
 
     return res.json({ success: true, products, total: products.length });
   } catch (err) {
-    console.error("[getLiked] Error:", err);
+    console.error("[getLiked] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -111,7 +111,7 @@ export async function checkLiked(req: Request, res: Response): Promise<Response>
       liked_ids: result.rows.map((r: { product_id: number }) => r.product_id),
     });
   } catch (err) {
-    console.error("[checkLiked] Error:", err);
+    console.error("[checkLiked] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

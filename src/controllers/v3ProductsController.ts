@@ -123,7 +123,7 @@ export async function searchProducts(req: Request, res: Response): Promise<Respo
         items_per_page: limit as number,
       });
     }
-    console.error("[searchProducts] Error:", err);
+    console.error("[searchProducts] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -239,7 +239,7 @@ export async function getProductsData(req: Request, res: Response): Promise<Resp
     console.log("[getProductsData] RESPONSE products count:", products.length);
     return res.json({ success: true, products });
   } catch (err) {
-    console.error("[getProductsData] Error:", err);
+    console.error("[getProductsData] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -396,7 +396,7 @@ export async function getProductsFilters(req: Request, res: Response): Promise<R
       console.log("[getProductsFilters] Corenio: no filters available for these filters");
       return res.json({ success: true, brands: null, properties: [] });
     }
-    console.error("[getProductsFilters] Error:", err);
+    console.error("[getProductsFilters] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -490,7 +490,7 @@ export async function getRelevantProducts(req: Request, res: Response): Promise<
 
     return res.json({ success: true, products, based_on });
   } catch (err) {
-    console.error("[getRelevantProducts] Error:", err);
+    console.error("[getRelevantProducts] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

@@ -45,7 +45,7 @@ export async function v3Analytics(req: Request, res: Response, next: NextFunctio
         [bodyDeviceId]
       );
     } catch (err) {
-      console.error("[v3Analytics] Failed to ensure device row:", err);
+      console.error("[v3Analytics] Failed to ensure device row:", (err instanceof Error ? err.message : String(err)));
     }
   }
 
@@ -79,7 +79,7 @@ export async function v3Analytics(req: Request, res: Response, next: NextFunctio
          VALUES ($1, $2, $3, $4, $5)`,
         [device_id, user_id, event, req.path, JSON.stringify(meta)]
       )
-      .catch((err) => console.error("[v3Analytics] Failed to log:", err));
+      .catch((err) => console.error("[v3Analytics] Failed to log:", err instanceof Error ? err.message : String(err)));
   });
 
   next();

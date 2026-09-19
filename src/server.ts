@@ -97,7 +97,6 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { logoResizeMiddleware } from "./middleware/logoResizeMiddleware.js";
-import { v3RequestLogger } from "./middleware/v3RequestLoggerMiddleware.js";
 import { scheduleFiltersWarmup } from "./jobs/v3FiltersWarmupJob.js";
 import { scheduleAccountPurge } from "./jobs/v3AccountPurgeJob.js";
 
@@ -121,9 +120,13 @@ app.use("/public/carlogos/thumb", logoResizeMiddleware);
 // Serve car logos at /public/carlogos/
 app.use("/public", express.static(path.join(projectRoot, "src/public")));
 
-// Intercept response for logging (redacts sensitive routes — see v3RequestLoggerMiddleware.ts)
-app.use(v3RequestLogger);
-
+// Short one-line request logs (method, path, status, timing) only — no
+// body/response content. The previous v3RequestLogger middleware logged
+// every request AND response body in full, which meant live, usable
+// server_key/proxy_key tokens from /v3/auth/login (and signup, reactivate)
+// were being written to disk in plaintext on every login. Removed entirely
+// rather than patched — morgan already covers the "short one-line message
+// per request" need on its own, so there was nothing worth keeping.
 app.use(morgan("dev"));
 
 app.get("/", (req: Request, res: Response) => {

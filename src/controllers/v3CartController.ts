@@ -271,7 +271,7 @@ export async function getCart(req: Request, res: Response): Promise<Response> {
       total_quantity,
     });
   } catch (err) {
-    console.error("[getCart] Error:", err);
+    console.error("[getCart] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

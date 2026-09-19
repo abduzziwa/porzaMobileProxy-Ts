@@ -13,7 +13,7 @@ export async function getCart(req: Request, res: Response): Promise<Response> {
     const cart = await getVariable(url, cartId, cookie, "", "cart", false, 10000);
     return res.status(200).json({ success: true, data: cart });
   } catch (error) {
-    console.error("[API][getCart] Error:", error);
+    console.error("[API][getCart] Error:", (error instanceof Error ? error.message : String(error)));
     return res.status(500).json({ success: false, error: "Internal server error", message: (error as Error).message });
   }
 }

@@ -94,7 +94,7 @@ export async function v3Session(req: Request, res: Response, next: NextFunction)
     req.corenioToken = result.rows[0].corenio_token;
     next();
   } catch (err) {
-    console.error("[v3Session] Error:", err);
+    console.error("[v3Session] Error:", (err instanceof Error ? err.message : String(err)));
     res.status(500).json({ error: "Internal server error" });
   }
 }

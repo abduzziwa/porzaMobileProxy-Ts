@@ -44,7 +44,7 @@ export async function homeController(req: Request, res: Response): Promise<Respo
     const catalogData = formatCategories(rawData);
     return res.status(200).json({ success: true, data: catalogData, cached: false });
   } catch (error) {
-    console.error("Error in homeController:", error);
+    console.error("Error in homeController:", (error instanceof Error ? error.message : String(error)));
     return res.status(500).json({ error: "Internal server error", message: (error as Error).message });
   }
 }

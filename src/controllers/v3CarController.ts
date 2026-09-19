@@ -68,7 +68,7 @@ export async function getVehicle(req: Request, res: Response): Promise<Response>
     const car = result.rows[0]?.selected_car ?? null;
     return res.json({ success: true, carFound: !!car, data: car });
   } catch (err) {
-    console.error("[getVehicle] Error:", err);
+    console.error("[getVehicle] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -119,7 +119,7 @@ export async function selectVehicle(req: Request, res: Response): Promise<Respon
 
     return res.json({ success: true, carFound: true, data: vehicle });
   } catch (err) {
-    console.error("[selectVehicle] Error:", err);
+    console.error("[selectVehicle] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -143,7 +143,7 @@ export async function removeVehicle(req: Request, res: Response): Promise<Respon
     }
     return res.json({ success: true, carFound: false, data: null });
   } catch (err) {
-    console.error("[removeVehicle] Error:", err);
+    console.error("[removeVehicle] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ error: "Internal server error" });
   }
 }

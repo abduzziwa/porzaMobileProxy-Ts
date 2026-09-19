@@ -35,12 +35,12 @@ export async function addLastSeen(req: Request, res: Response): Promise<Response
       const keys = await redis.keys(`v3cache:${device_id}:/v3/last-seen/get:*`);
       if (keys.length) await redis.del(...keys);
     } catch (err) {
-      console.error("[addLastSeen] Cache invalidation error (non-fatal):", err);
+      console.error("[addLastSeen] Cache invalidation error (non-fatal):", err instanceof Error ? err.message : String(err));
     }
 
     return res.json({ success: true });
   } catch (err) {
-    console.error("[addLastSeen] Error:", err);
+    console.error("[addLastSeen] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
@@ -78,7 +78,7 @@ export async function getLastSeen(req: Request, res: Response): Promise<Response
 
     return res.json({ success: true, products, total: products.length });
   } catch (err) {
-    console.error("[getLastSeen] Error:", err);
+    console.error("[getLastSeen] Error:", (err instanceof Error ? err.message : String(err)));
     return res.status(500).json({ success: false, error: "Internal server error" });
   }
 }

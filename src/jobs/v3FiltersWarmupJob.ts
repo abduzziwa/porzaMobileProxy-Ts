@@ -139,7 +139,7 @@ export async function warmAllFilters(): Promise<void> {
 export function scheduleFiltersWarmup(): void {
   cron.schedule("0 3,15 * * *", () => {
     console.log("[FiltersWarmup] Scheduled 12-hourly refresh starting...");
-    warmAllFilters().catch((err) => console.error("[FiltersWarmup] Scheduled run failed:", err));
+    warmAllFilters().catch((err) => console.error("[FiltersWarmup] Scheduled run failed:", err instanceof Error ? err.message : String(err)));
   });
   console.log("[FiltersWarmup] Refresh scheduled for 03:00 and 15:00 server time (every 12h).");
 }
